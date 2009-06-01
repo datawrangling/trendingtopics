@@ -1,0 +1,9 @@
+staging:
+  aws_access_key: ABC123
+  aws_secret_access_key: abc123abc123abc123abc123
+  bucket_base_name: yourbucket
+
+production:
+  aws_access_key: DEF456
+  aws_secret_access_key: def456def456def456def456
+  bucket_base_name: yourbucket

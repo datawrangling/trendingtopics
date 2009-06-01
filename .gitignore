@@ -1,0 +1,9 @@
+log/*.log
+tmp/**/*
+doc/api
+doc/app
+config/config.yml
+config/deploy.rb
+config/s3.yml
+config/database.yml
+
