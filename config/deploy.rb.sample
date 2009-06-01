@@ -27,15 +27,15 @@ set :rails_env, "production"
 # NOTE: Some of these should be omitted if not needed.
 set :ec2onrails_config, {
   # S3 bucket and "subdir" used by the ec2onrails:db:restore task
-  :restore_from_bucket => "your-bucket",
-  :restore_from_bucket_subdir => "database",
+  # :restore_from_bucket => "your-bucket",
+  # :restore_from_bucket_subdir => "database",
   
   # S3 bucket and "subdir" used by the ec2onrails:db:archive task
   # This does not affect the automatic backup of your MySQL db to S3, it's
   # just for manually archiving a db snapshot to a different bucket if 
   # desired.
-  :archive_to_bucket => "your-other-bucket",
-  :archive_to_bucket_subdir => "db-archive/#{Time.new.strftime('%Y-%m-%d--%H-%M-%S')}",
+  # :archive_to_bucket => "your-other-bucket",
+  # :archive_to_bucket_subdir => "db-archive/#{Time.new.strftime('%Y-%m-%d--%H-%M-%S')}",
   
   # Set a root password for MySQL. Run "cap ec2onrails:db:set_root_password"
   # to enable this. This is optional, and after doing this the
@@ -43,7 +43,7 @@ set :ec2onrails_config, {
   # connections on the public network interface (you should block the MySQL
   # port with the firewall anyway). 
   # If you don't care about setting the mysql root password then remove this.
-  :mysql_root_password => "your-mysql-root-password",
+  # :mysql_root_password => "your-mysql-root-password",
   
   # Any extra Ubuntu packages to install if desired
   # If you don't want to install extra packages then remove this.

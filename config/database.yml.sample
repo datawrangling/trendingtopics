@@ -38,11 +38,12 @@ test:
   socket: /tmp/mysql.sock
 
 production:
+  host: db_primary
   adapter: mysql
   encoding: utf8
   reconnect: false
   database: trendingtopics_production
   pool: 5
-  username: root
-  password: 
+  username: sample
+  password: sample
   socket: /tmp/mysql.sock
