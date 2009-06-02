@@ -1,0 +1,23 @@
+<p>
+  <b>Page:</b>
+  <%=h @daily_timeline.page %>
+</p>
+
+<p>
+  <b>Dates:</b>
+  <%=h @daily_timeline.dates %>
+</p>
+
+<p>
+  <b>Pageviews:</b>
+  <%=h @daily_timeline.pageviews %>
+</p>
+
+<p>
+  <b>Total pageviews:</b>
+  <%=h @daily_timeline.total_pageviews %>
+</p>
+
+
+<%= link_to 'Edit', edit_daily_timeline_path(@daily_timeline) %> |
+<%= link_to 'Back', daily_timelines_path %>

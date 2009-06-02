@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  page: 
+  dates: MyText
+  pageviews: MyText
+  total_pageviews: 1
+
+two:
+  page: 
+  dates: MyText
+  pageviews: MyText
+  total_pageviews: 1

@@ -127,8 +127,10 @@ LINES TERMINATED BY '\n'
 -- scaffolding created a model that generated a "pages" table:
 -- script/generate scaffold Page url:string title:string page_latest:integer 
 
+-- script/generate scaffold DailyTimeline page:references dates:text pageviews:text total_pageviews:integer
+
 -- other models:  
--- DailyTimeline
+
 -- DailyTrend
 -- MonthlyTrend
 

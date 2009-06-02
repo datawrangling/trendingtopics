@@ -1,0 +1,27 @@
+<h1>New daily_timeline</h1>
+
+<% form_for(@daily_timeline) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :page %><br />
+    <%= f.text_field :page %>
+  </p>
+  <p>
+    <%= f.label :dates %><br />
+    <%= f.text_area :dates %>
+  </p>
+  <p>
+    <%= f.label :pageviews %><br />
+    <%= f.text_area :pageviews %>
+  </p>
+  <p>
+    <%= f.label :total_pageviews %><br />
+    <%= f.text_field :total_pageviews %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', daily_timelines_path %>

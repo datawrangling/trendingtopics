@@ -1,0 +1,26 @@
+<h1>Listing daily_timelines</h1>
+
+<table>
+  <tr>
+    <th>Page</th>
+    <th>Dates</th>
+    <th>Pageviews</th>
+    <th>Total pageviews</th>
+  </tr>
+
+<% @daily_timelines.each do |daily_timeline| %>
+  <tr>
+    <td><%=h daily_timeline.page %></td>
+    <td><%=h daily_timeline.dates %></td>
+    <td><%=h daily_timeline.pageviews %></td>
+    <td><%=h daily_timeline.total_pageviews %></td>
+    <td><%= link_to 'Show', daily_timeline %></td>
+    <td><%= link_to 'Edit', edit_daily_timeline_path(daily_timeline) %></td>
+    <td><%= link_to 'Destroy', daily_timeline, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New daily_timeline', new_daily_timeline_path %>
