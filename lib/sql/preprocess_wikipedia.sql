@@ -79,7 +79,7 @@ from page original_page,
   redirect
 where rd_from = original_page.page_id
 and rd_title = final_page.page_title
-INTO OUTFILE '/mnt/wikidata/wikidump/page_lookup_redirects.txt';
+INTO OUTFILE 'page_lookup_redirects.txt';
 -- Query OK, 3401301 rows affected (12 min 4.92 sec)
 
 -- at this point any "true" non-redirect pages will be missing from the map table.
@@ -96,7 +96,7 @@ SELECT page.page_title redirect_title,
   page.page_latest
   FROM page LEFT JOIN redirect ON page.page_id = redirect.rd_from
   WHERE redirect.rd_from IS NULL
-  INTO OUTFILE '/mnt/wikidata/wikidump/page_lookup_nonredirects.txt';
+  INTO OUTFILE 'page_lookup_nonredirects.txt';
 -- Query OK, 2821319 rows affected (1 min 3.48 sec)
 
 -- we can cat the result of this query with page_lookup_redirects.txt to get
@@ -147,6 +147,16 @@ LINES TERMINATED BY '\n'
 (url, title, id, page_latest);
 -- Query OK, 2821319 rows affected (30.29 sec)
 
+-- 
+-- LOAD DATA LOCAL INFILE '/mnt/wikidata/wikidump/pages_sample.txt'
+-- INTO TABLE pages
+-- FIELDS TERMINATED BY '\t'
+-- LINES TERMINATED BY '\n'
+-- (id, url, title, page_latest);
+
+
+
+
 
 -- create a MYSQL index on the title field
 create index pages_title_index on pages (title(64));
@@ -154,6 +164,18 @@ create index pages_title_index on pages (title(64));
 
 set foreign_key_checks=1; 
 set unique_checks=1;
+
+--sed -i -e 's/\x01/   /g' daily_timelines_sample.txt
+
+LOAD DATA LOCAL INFILE '/mnt/wikidata/wikidump/daily_timelines_sample.txt'
+INTO TABLE daily_timelines
+FIELDS TERMINATED BY '\t'
+LINES TERMINATED BY '\n'
+(page_id, dates, pageviews, total_pageviews);
+
+
+
+
 
 -- mysql> select * from pages where title like 'Barack Obama';
 -- +--------+--------------+--------------+-------------+------------+------------+
@@ -281,5 +303,9 @@ set unique_checks=1;
 -- | 3151646 | B._Obama                                       | Barack Obama |  534366 |   276223690 | 
 -- +---------+------------------------------------------------+--------------+---------+-------------+
 -- 110 rows in set (11.15 sec)
+
+
+
+
 
 
