@@ -1,0 +1,17 @@
+development:
+  rails_application_port: 3000
+  admin_user: REPLACEME
+  admin_password: REPLACEME
+  protocol: http  
+
+test:
+  rails_application_port: 3000
+  admin_user: REPLACEME
+  admin_password: REPLACEME
+  protocol: http        
+
+production:
+  rails_application_port: 3000
+  admin_user: REPLACEME
+  admin_password: REPLACEME
+  protocol: http

@@ -1,0 +1,18 @@
+<p>
+  <b>Url:</b>
+  <%=h @page.url %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%=h @page.title %>
+</p>
+
+<p>
+  <b>Page latest:</b>
+  <%=h @page.page_latest %>
+</p>
+
+
+<%= link_to 'Edit', edit_page_path(@page) %> |
+<%= link_to 'Back', pages_path %>
