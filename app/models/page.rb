@@ -1,7 +1,6 @@
 class Page < ActiveRecord::Base
   has_one :daily_timeline
   named_scope :title_like, lambda { |query| { :conditions => ['title like ?', "#{query}%"], :order => '`total_pageviews` DESC', :limit => 20 } }
-
   
   def normed_daily_pageviews
     @pageviews = JSON.parse(self.daily_timeline.pageviews)
@@ -17,7 +16,7 @@ class Page < ActiveRecord::Base
     return sorted_pageviews
   end
   
-  def chart
+  def sparkline
     # todo: move the data fetching out to the model
     # prepare some nice charts here 
     # dataset = GC4R::API::GoogleChartDataset.new :data => (1..30).map{ rand(100) }, :color => '0000FF'   
@@ -29,5 +28,16 @@ class Page < ActiveRecord::Base
     @chart.data = data
     return @chart
   end  
+  
+  def timeline
+    rawdates = JSON.parse(self.daily_timeline.dates)
+    pageviews = JSON.parse(self.daily_timeline.pageviews)
+        
+    @data ={}
+    rawdates.each_with_index do |date, index|
+      @data[DateTime.strptime( date.to_s, "%Y%m%d")] = {:page_views => pageviews[index]}
+    end
+    return @data
+  end
   
 end

@@ -1,4 +1,9 @@
-<h1>Top Wikipedia Articles (Last 30 Days)</h1>
+<h2> Top Article this month:</h2>
+<div id = "timeline_chart">
+ <%= render :partial => "timeline"  %>
+</div>
+
+<h2>Top Wikipedia Articles (Last 30 Days)</h2>
 
 <table>
   <tr>
@@ -12,7 +17,7 @@
   <tr>
     <td><%= index +1 %></td>
     <td><%= number_with_delimiter(page.total_pageviews, ',') %></td>  
-    <td><%= link_to page.title, page  %><BR><%= image_tag page.chart.to_url %> </td>
+    <td><%= link_to page.title, page  %><BR><%= image_tag page.sparkline.to_url %> </td>
     <td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td>
   </tr>
 <% end %>

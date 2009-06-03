@@ -12,7 +12,8 @@ class PagesController < ApplicationController
   
   def index
     @pages = Page.paginate :page => params[:page], :order => 'total_pageviews DESC'  
-
+    @page = Page.first(:order => 'total_pageviews desc')
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @pages }
@@ -23,25 +24,6 @@ class PagesController < ApplicationController
   # GET /pages/1.xml
   def show
     @page = Page.find(params[:id])
-
-    # @data = {
-    #   1.day.ago => { :foo=>123, :bar=>100 },
-    #   2.day.ago => { :foo=>345, :bar=>200 },
-    #   3.day.ago => { :foo=>445, :bar=>120 }, 
-    #   4.day.ago => { :foo=>425, :bar=>140 }, 
-    #   5.day.ago => { :foo=>515, :bar=>107 }                    
-    # }
-
-    rawdates = JSON.parse(@page.daily_timeline.dates)
-    pageviews = JSON.parse(@page.daily_timeline.pageviews)
-    
-    # TODO: move this out to the model
-    
-    @data ={}
-    rawdates.each_with_index do |date, index|
-      @data[DateTime.strptime( date.to_s, "%Y%m%d")] = {:page_views => pageviews[index]}
-    end
-
 
     respond_to do |format|
       format.html # show.html.erb

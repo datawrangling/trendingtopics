@@ -1,7 +1,8 @@
 
-<%= inline_annotated_timeline @data, 600, 400, 'div_id_to_create' %>
 
-
+<div id = "timeline_chart">
+ <%= render :partial => "timeline"  %>
+</div>
 <p>
   <b>Url:</b>
   <%=h @page.url %>
