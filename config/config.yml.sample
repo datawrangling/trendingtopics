@@ -2,16 +2,22 @@ development:
   rails_application_port: 3000
   admin_user: REPLACEME
   admin_password: REPLACEME
+  articles_per_page: 20  
+  tracker_id: ""  
   protocol: http  
 
 test:
   rails_application_port: 3000
   admin_user: REPLACEME
   admin_password: REPLACEME
+  articles_per_page: 20 
+  tracker_id: ""   
   protocol: http        
 
 production:
   rails_application_port: 3000
   admin_user: REPLACEME
   admin_password: REPLACEME
+  articles_per_page: 20
+  tracker_id: "UA-REPLACEME"
   protocol: http

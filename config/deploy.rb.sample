@@ -1,22 +1,31 @@
 # This is a sample Capistrano config file for EC2 on Rails.
 # It should be edited and customized.
 
-set :application, "yourapp"
 
-set :repository, "http://svn.foo.com/svn/#{application}/trunk"
+set :application, "trendingtopics"
+
+set :scm, :git
+set :repository, "git@github.com:datawrangling/trendingtopics.git"
+set :branch, "master"
+default_run_options[:shell] = false
+
+set :deploy_via, :copy
+set :git_shallow_clone, 1
+set :normalize_asset_timestamps, false
+
 
 # NOTE: for some reason Capistrano requires you to have both the public and
 # the private key in the same folder, the public key should have the 
 # extension ".pub".
-ssh_options[:keys] = ["#{ENV['HOME']}/.ssh/your-ec2-key"]
+ssh_options[:keys] = ["#{ENV['HOME']}/.ssh/id_rsa-gsg-keypair"]
 
 # Your EC2 instances. Use the ec2-xxx....amazonaws.com hostname, not
 # any other name (in case you have your own DNS alias) or it won't
 # be able to resolve to the internal IP address.
-role :web,      "ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com"
-role :app,      "ec2-34-xx-xx-xx.z-1.compute-1.amazonaws.com"
-role :db,       "ec2-56-xx-xx-xx.z-1.compute-1.amazonaws.com", :primary => true
-role :memcache, "ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com"
+role :web,      "ec2-XXX-XXX-XXX-XX.compute-1.amazonaws.com"
+role :app,      "ec2-XXX-XXX-XXX-XX.compute-1.amazonaws.com"
+role :db,       "ec2-XXX-XXX-XXX-XX.compute-1.amazonaws.com", :primary => true
+role :memcache, "ec2-XXX-XXX-XXX-XX.compute-1.amazonaws.com"
 
 # Whatever you set here will be taken set as the default RAILS_ENV value
 # on the server. Your app and your hourly/daily/weekly/monthly scripts
@@ -52,7 +61,7 @@ set :ec2onrails_config, {
   # Any extra RubyGems to install if desired: can be "gemname" or if a 
   # particular version is desired "gemname -v 1.0.1"
   # If you don't want to install extra rubygems then remove this
-  :rubygems => ["rmagick", "rfacebook -v 0.9.7"],
+  :rubygems => ["rails -v 2.3.2", "mislav-will_paginate -v 2.3.8", "ya2yaml", "json", "rubaidh-google_analytics"],
   
   # Set the server timezone. run "cap -e ec2onrails:server:set_timezone" for 
   # details
@@ -65,7 +74,7 @@ set :ec2onrails_config, {
   # server's filesystem. 
   # If you don't need to deploy customized config files to the server then
   # remove this.
-  :server_config_files_root => "../server_config",
+  :server_config_files_root => "server_config",
   
   # If config files are deployed, some services might need to be restarted.
   # If you don't need to deploy customized config files to the server then
@@ -75,11 +84,33 @@ set :ec2onrails_config, {
   # Set an email address to forward admin mail messages to. If you don't
   # want to receive mail from the server (e.g. monit alert messages) then
   # remove this.
-  :admin_mail_forward_address => "you@yourdomain.com",
+  :admin_mail_forward_address => "replaceme@myemail.com",
   
   # Set this if you want SSL to be enabled on the web server. The SSL cert 
   # and key files need to exist on the server, The cert file should be in
   # /etc/ssl/certs/default.pem and the key file should be in
   # /etc/ssl/private/default.key (see :server_config_files_root).
-  :enable_ssl => true
+  # :enable_ssl => true
 }
+
+# Paths to non versioned configuration files on deployment server
+set :nonvc_configs, ['config/config.yml', 'config/s3.yml', 'config/database.yml']
+
+desc "Copies non versioned configuration files after setup"
+task :copy_nonvconfig, :roles => [:app] do
+  host = find_servers_for_task(current_task).first.host
+  privkey = ssh_options[:keys][0]
+  # ensure config folder is in shared_path
+  run "mkdir -p #{shared_path}/config"
+  nonvc_configs.each do |config|
+    run_local "scp -i '#{privkey}' #{config} app@#{host}:#{shared_path}/config"
+  end
+end
+
+desc "Moves over server config files after deploying the code"
+task :update_config, :roles => [:app] do
+  run "cp -Rf #{shared_path}/config/* #{current_path}/config"
+end
+
+after 'deploy:update_code', :copy_nonvconfig
+after 'deploy:symlink', :update_config
