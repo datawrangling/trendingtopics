@@ -15,7 +15,7 @@
 
 <% @pages.each_with_index do |page, index| %>
   <tr>
-    <td><%= index +1 %></td>
+    <td><%= index + 1 + 10*(params[:page].to_i - 1) %></td>
     <td><%= number_with_delimiter(page.total_pageviews, ',') %></td>  
     <td><%= link_to page.title, page  %><BR><%= image_tag page.sparkline.to_url %> </td>
     <td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td>

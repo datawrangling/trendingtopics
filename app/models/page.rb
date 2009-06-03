@@ -17,10 +17,6 @@ class Page < ActiveRecord::Base
   end
   
   def sparkline
-    # todo: move the data fetching out to the model
-    # prepare some nice charts here 
-    # dataset = GC4R::API::GoogleChartDataset.new :data => (1..30).map{ rand(100) }, :color => '0000FF'   
-
     dataset = GC4R::API::GoogleChartDataset.new :data => self.normed_daily_pageviews, :color => '0000FF'
     data = GC4R::API::GoogleChartData.new :datasets => dataset , :min => 0, :max => 120
     # @chart = GoogleBarChart.new :width => 120, :height => 12

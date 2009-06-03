@@ -11,7 +11,7 @@ class PagesController < ApplicationController
   end  
   
   def index
-    @pages = Page.paginate :page => params[:page], :order => 'total_pageviews DESC'  
+    @pages = Page.paginate :page => params[:page], :order => 'total_pageviews DESC', :per_page => 10  
     @page = Page.first(:order => 'total_pageviews desc')
     
     respond_to do |format|
