@@ -11,7 +11,7 @@ class PagesController < ApplicationController
   end  
   
   def index
-    @pages = Page.paginate :page => params[:page], :order => 'total_pageviews DESC', :per_page => 10  
+    @pages = Page.paginate :page => params[:page], :order => 'total_pageviews DESC', :per_page => APP_CONFIG['articles_per_page']  
     @page = Page.first(:order => 'total_pageviews desc')
     unless params[:page]
       params[:page]='1'
