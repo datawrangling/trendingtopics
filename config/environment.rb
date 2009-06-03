@@ -15,7 +15,9 @@ Rails::Initializer.run do |config|
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
 
   # Specify gems that this application depends on and have them installed with rake gems:install
-  # config.gem "bj"
+  config.gem "ya2yaml"
+  config.gem "json"
+  config.gem "will_paginate"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
@@ -40,5 +42,7 @@ Rails::Initializer.run do |config|
   # config.i18n.default_locale = :de
 end
 
-require "will_paginate" 
-require 'json'
+# require 'rubygems' 
+# require 'Ya2YAML'
+# require "will_paginate" 
+# require 'json'
