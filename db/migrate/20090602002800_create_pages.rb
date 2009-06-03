@@ -4,6 +4,7 @@ class CreatePages < ActiveRecord::Migration
       t.string :url
       t.string :title
       t.integer :page_latest
+      t.integer :total_pageviews
 
       t.timestamps
     end

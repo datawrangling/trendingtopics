@@ -4,6 +4,7 @@ pages_001:
   id: "307"
   page_latest: "276151059"
   title: "Abraham Lincoln"
+  total_pageviews: "563253"
   updated_at: ~
   url: Abraham_Lincoln
 pages_002: 
@@ -11,6 +12,7 @@ pages_002:
   id: "3383"
   page_latest: "276041269"
   title: Brazil
+  total_pageviews: "553679"
   updated_at: ~
   url: Brazil
 pages_003: 
@@ -18,6 +20,7 @@ pages_003:
   id: "5860"
   page_latest: "275944726"
   title: "Cinco de Mayo"
+  total_pageviews: "946162"
   updated_at: ~
   url: Cinco_de_Mayo
 pages_004: 
@@ -25,6 +28,7 @@ pages_004:
   id: "11867"
   page_latest: "275723576"
   title: Germany
+  total_pageviews: "620890"
   updated_at: ~
   url: Germany
 pages_005: 
@@ -32,6 +36,7 @@ pages_005:
   id: "14187"
   page_latest: "275998376"
   title: "Henry VIII of England"
+  total_pageviews: "1219866"
   updated_at: ~
   url: Henry_VIII_of_England
 pages_006: 
@@ -39,6 +44,7 @@ pages_006:
   id: "14533"
   page_latest: "276202069"
   title: India
+  total_pageviews: "800360"
   updated_at: ~
   url: India
 pages_007: 
@@ -46,6 +52,7 @@ pages_007:
   id: "15573"
   page_latest: "274971629"
   title: Japan
+  total_pageviews: "712178"
   updated_at: ~
   url: Japan
 pages_008: 
@@ -53,6 +60,7 @@ pages_008:
   id: "18079"
   page_latest: "275879325"
   title: "Leonardo da Vinci"
+  total_pageviews: "553149"
   updated_at: ~
   url: Leonardo_da_Vinci
 pages_009: 
@@ -60,6 +68,7 @@ pages_009:
   id: "19961"
   page_latest: "276057336"
   title: "Manchester United F.C."
+  total_pageviews: "552272"
   updated_at: ~
   url: Manchester_United_F.C.
 pages_010: 
@@ -67,6 +76,7 @@ pages_010:
   id: "20308"
   page_latest: "276198099"
   title: "Mary Cassatt"
+  total_pageviews: "855489"
   updated_at: ~
   url: Mary_Cassatt
 pages_011: 
@@ -74,6 +84,7 @@ pages_011:
   id: "26805"
   page_latest: "275633036"
   title: Sex
+  total_pageviews: "705733"
   updated_at: ~
   url: Sex
 pages_012: 
@@ -81,6 +92,7 @@ pages_012:
   id: "29812"
   page_latest: "276191373"
   title: "The Beatles"
+  total_pageviews: "3698173"
   updated_at: ~
   url: The_Beatles
 pages_013: 
@@ -88,6 +100,7 @@ pages_013:
   id: "31341"
   page_latest: "275649510"
   title: "Tupac Shakur"
+  total_pageviews: "550779"
   updated_at: ~
   url: Tupac_Shakur
 pages_014: 
@@ -95,6 +108,7 @@ pages_014:
   id: "31717"
   page_latest: "275963924"
   title: "United Kingdom"
+  total_pageviews: "802631"
   updated_at: ~
   url: United_Kingdom
 pages_015: 
@@ -102,6 +116,7 @@ pages_015:
   id: "32476"
   page_latest: "272590541"
   title: Vagina
+  total_pageviews: "721870"
   updated_at: ~
   url: Vagina
 pages_016: 
@@ -109,6 +124,7 @@ pages_016:
   id: "32611"
   page_latest: "275030377"
   title: "Vietnam War"
+  total_pageviews: "667861"
   updated_at: ~
   url: Vietnam_War
 pages_017: 
@@ -116,6 +132,7 @@ pages_017:
   id: "32851"
   page_latest: "276104701"
   title: Wiki
+  total_pageviews: "4249022"
   updated_at: ~
   url: Wiki
 pages_018: 
@@ -123,6 +140,7 @@ pages_018:
   id: "32897"
   page_latest: "276131427"
   title: "William Shakespeare"
+  total_pageviews: "598200"
   updated_at: ~
   url: William_Shakespeare
 pages_019: 
@@ -130,6 +148,7 @@ pages_019:
   id: "32927"
   page_latest: "276191173"
   title: "World War II"
+  total_pageviews: "1062289"
   updated_at: ~
   url: World_War_II
 pages_020: 
@@ -137,6 +156,7 @@ pages_020:
   id: "34218"
   page_latest: "276223922"
   title: X-Men
+  total_pageviews: "627954"
   updated_at: ~
   url: X-Men
 pages_021: 
@@ -144,6 +164,7 @@ pages_021:
   id: "39027"
   page_latest: "276196700"
   title: "Mike Tyson"
+  total_pageviews: "612481"
   updated_at: ~
   url: Mike_Tyson
 pages_022: 
@@ -151,6 +172,7 @@ pages_022:
   id: "44220"
   page_latest: "275719387"
   title: "UEFA Champions League"
+  total_pageviews: "569712"
   updated_at: ~
   url: UEFA_Champions_League
 pages_023: 
@@ -158,6 +180,7 @@ pages_023:
   id: "46276"
   page_latest: "276129029"
   title: "Mother's Day"
+  total_pageviews: "1210086"
   updated_at: ~
   url: Mother's_Day
 pages_024: 
@@ -165,6 +188,7 @@ pages_024:
   id: "52726"
   page_latest: "276065561"
   title: "Green Day"
+  total_pageviews: "623908"
   updated_at: ~
   url: Green_Day
 pages_025: 
@@ -172,6 +196,7 @@ pages_025:
   id: "56191"
   page_latest: "274610044"
   title: "Memorial Day"
+  total_pageviews: "994475"
   updated_at: ~
   url: Memorial_Day
 pages_026: 
@@ -179,6 +204,7 @@ pages_026:
   id: "68187"
   page_latest: "275980923"
   title: "FC Barcelona"
+  total_pageviews: "552787"
   updated_at: ~
   url: FC_Barcelona
 pages_027: 
@@ -186,6 +212,7 @@ pages_027:
   id: "167748"
   page_latest: "272893886"
   title: "List of sex positions"
+  total_pageviews: "598510"
   updated_at: ~
   url: List_of_sex_positions
 pages_028: 
@@ -193,6 +220,7 @@ pages_028:
   id: "168540"
   page_latest: "276173425"
   title: "Lil Wayne"
+  total_pageviews: "756309"
   updated_at: ~
   url: Lil_Wayne
 pages_029: 
@@ -200,6 +228,7 @@ pages_029:
   id: "184420"
   page_latest: "276132117"
   title: "Deadpool (comics)"
+  total_pageviews: "1950979"
   updated_at: ~
   url: Deadpool_(comics)
 pages_030: 
@@ -207,6 +236,7 @@ pages_030:
   id: "191890"
   page_latest: "276221777"
   title: "American Idol"
+  total_pageviews: "768574"
   updated_at: ~
   url: American_Idol
 pages_031: 
@@ -214,6 +244,7 @@ pages_031:
   id: "217226"
   page_latest: "276169943"
   title: "Scrubs (TV series)"
+  total_pageviews: "1081968"
   updated_at: ~
   url: Scrubs_(TV_series)
 pages_032: 
@@ -221,6 +252,7 @@ pages_032:
   id: "232190"
   page_latest: "276071813"
   title: Naruto
+  total_pageviews: "640869"
   updated_at: ~
   url: Naruto
 pages_033: 
@@ -228,6 +260,7 @@ pages_033:
   id: "232581"
   page_latest: "275587757"
   title: "Gambit (comics)"
+  total_pageviews: "611737"
   updated_at: ~
   url: Gambit_(comics)
 pages_034: 
@@ -235,6 +268,7 @@ pages_034:
   id: "235959"
   page_latest: "275960847"
   title: "Farrah Fawcett"
+  total_pageviews: "936154"
   updated_at: ~
   url: Farrah_Fawcett
 pages_035: 
@@ -242,6 +276,7 @@ pages_035:
   id: "240940"
   page_latest: "275862499"
   title: "LeBron James"
+  total_pageviews: "585555"
   updated_at: ~
   url: LeBron_James
 pages_036: 
@@ -249,6 +284,7 @@ pages_036:
   id: "302602"
   page_latest: "276191713"
   title: "Wolverine (comics)"
+  total_pageviews: "1096349"
   updated_at: ~
   url: Wolverine_(comics)
 pages_037: 
@@ -256,6 +292,7 @@ pages_037:
   id: "310570"
   page_latest: "276126666"
   title: "Sabretooth (comics)"
+  total_pageviews: "771359"
   updated_at: ~
   url: Sabretooth_(comics)
 pages_038: 
@@ -263,6 +300,7 @@ pages_038:
   id: "326123"
   page_latest: "276190944"
   title: "Windows 7"
+  total_pageviews: "558485"
   updated_at: ~
   url: Windows_7
 pages_039: 
@@ -270,6 +308,7 @@ pages_039:
   id: "534366"
   page_latest: "276223690"
   title: "Barack Obama"
+  total_pageviews: "777663"
   updated_at: ~
   url: Barack_Obama
 pages_040: 
@@ -277,6 +316,7 @@ pages_040:
   id: "621063"
   page_latest: "275756647"
   title: "America's Next Top Model"
+  total_pageviews: "570444"
   updated_at: ~
   url: America's_Next_Top_Model
 pages_041: 
@@ -284,6 +324,7 @@ pages_041:
   id: "747573"
   page_latest: "275630952"
   title: Waterboarding
+  total_pageviews: "550877"
   updated_at: ~
   url: Waterboarding
 pages_042: 
@@ -291,6 +332,7 @@ pages_042:
   id: "916099"
   page_latest: "275851408"
   title: "Manny Pacquiao"
+  total_pageviews: "753063"
   updated_at: ~
   url: Manny_Pacquiao
 pages_043: 
@@ -298,6 +340,7 @@ pages_043:
   id: "966943"
   page_latest: "276154726"
   title: "List of Family Guy episodes"
+  total_pageviews: "612739"
   updated_at: ~
   url: List_of_Family_Guy_episodes
 pages_044: 
@@ -305,6 +348,7 @@ pages_044:
   id: "1092923"
   page_latest: "276141737"
   title: Google
+  total_pageviews: "606370"
   updated_at: ~
   url: Google
 pages_045: 
@@ -312,6 +356,7 @@ pages_045:
   id: "1273596"
   page_latest: "276211540"
   title: "House (TV series)"
+  total_pageviews: "817837"
   updated_at: ~
   url: House_(TV_series)
 pages_046: 
@@ -319,6 +364,7 @@ pages_046:
   id: "1516915"
   page_latest: "272028898"
   title: "Swine influenza"
+  total_pageviews: "2780419"
   updated_at: ~
   url: Swine_influenza
 pages_047: 
@@ -326,6 +372,7 @@ pages_047:
   id: "1769827"
   page_latest: "276163147"
   title: "Megan Fox"
+  total_pageviews: "649596"
   updated_at: ~
   url: Megan_Fox
 pages_048: 
@@ -333,6 +380,7 @@ pages_048:
   id: "1809036"
   page_latest: "276220204"
   title: "List of House episodes"
+  total_pageviews: "836053"
   updated_at: ~
   url: List_of_House_episodes
 pages_049: 
@@ -340,6 +388,7 @@ pages_049:
   id: "2005448"
   page_latest: "275627277"
   title: "Prison Break"
+  total_pageviews: "657557"
   updated_at: ~
   url: Prison_Break
 pages_050: 
@@ -347,6 +396,7 @@ pages_050:
   id: "2095829"
   page_latest: "273495412"
   title: "Sonia Sotomayor"
+  total_pageviews: "930946"
   updated_at: ~
   url: Sonia_Sotomayor
 pages_051: 
@@ -354,6 +404,7 @@ pages_051:
   id: "2731583"
   page_latest: "276198932"
   title: "Adolf Hitler"
+  total_pageviews: "865610"
   updated_at: ~
   url: Adolf_Hitler
 pages_052: 
@@ -361,6 +412,7 @@ pages_052:
   id: "2855554"
   page_latest: "276151522"
   title: "Internet Movie Database"
+  total_pageviews: "633754"
   updated_at: ~
   url: Internet_Movie_Database
 pages_053: 
@@ -368,6 +420,7 @@ pages_053:
   id: "2866555"
   page_latest: "268519517"
   title: "Influenza A virus subtype H1N1"
+  total_pageviews: "693972"
   updated_at: ~
   url: Influenza_A_virus_subtype_H1N1
 pages_054: 
@@ -375,6 +428,7 @@ pages_054:
   id: "2982688"
   page_latest: "276165494"
   title: "X-Men Origins: Wolverine"
+  total_pageviews: "1392859"
   updated_at: ~
   url: "X-Men_Origins:_Wolverine"
 pages_055: 
@@ -382,6 +436,7 @@ pages_055:
   id: "3071743"
   page_latest: "276185862"
   title: "Star Trek (film)"
+  total_pageviews: "2376762"
   updated_at: ~
   url: Star_Trek_(film)
 pages_056: 
@@ -389,6 +444,7 @@ pages_056:
   id: "3434750"
   page_latest: "276212277"
   title: "United States"
+  total_pageviews: "1463821"
   updated_at: ~
   url: United_States
 pages_057: 
@@ -396,6 +452,7 @@ pages_057:
   id: "3524766"
   page_latest: "276105681"
   title: YouTube
+  total_pageviews: "2234903"
   updated_at: ~
   url: YouTube
 pages_058: 
@@ -403,6 +460,7 @@ pages_058:
   id: "4429395"
   page_latest: "276148998"
   title: Eminem
+  total_pageviews: "1785031"
   updated_at: ~
   url: Eminem
 pages_059: 
@@ -410,6 +468,7 @@ pages_059:
   id: "4513237"
   page_latest: "276056018"
   title: "Chris Pine"
+  total_pageviews: "560661"
   updated_at: ~
   url: Chris_Pine
 pages_060: 
@@ -417,6 +476,7 @@ pages_060:
   id: "4689264"
   page_latest: "276092216"
   title: Australia
+  total_pageviews: "705130"
   updated_at: ~
   url: Australia
 pages_061: 
@@ -424,6 +484,7 @@ pages_061:
   id: "4764461"
   page_latest: "275632496"
   title: "World War I"
+  total_pageviews: "737452"
   updated_at: ~
   url: World_War_I
 pages_062: 
@@ -431,6 +492,7 @@ pages_062:
   id: "5042862"
   page_latest: "275656548"
   title: China
+  total_pageviews: "541881"
   updated_at: ~
   url: China
 pages_063: 
@@ -438,6 +500,7 @@ pages_063:
   id: "5042916"
   page_latest: "276212767"
   title: Canada
+  total_pageviews: "714531"
   updated_at: ~
   url: Canada
 pages_064: 
@@ -445,6 +508,7 @@ pages_064:
   id: "5042951"
   page_latest: "275802493"
   title: "Global warming"
+  total_pageviews: "607488"
   updated_at: ~
   url: Global_warming
 pages_065: 
@@ -452,6 +516,7 @@ pages_065:
   id: "5043734"
   page_latest: "275878414"
   title: Wikipedia
+  total_pageviews: "1370415"
   updated_at: ~
   url: Wikipedia
 pages_066: 
@@ -459,6 +524,7 @@ pages_066:
   id: "5207311"
   page_latest: "276203327"
   title: "Heroes (TV series)"
+  total_pageviews: "659536"
   updated_at: ~
   url: Heroes_(TV_series)
 pages_067: 
@@ -466,6 +532,7 @@ pages_067:
   id: "5422144"
   page_latest: "276075267"
   title: "Taylor Swift"
+  total_pageviews: "563326"
   updated_at: ~
   url: Taylor_Swift
 pages_068: 
@@ -473,6 +540,7 @@ pages_068:
   id: "5794648"
   page_latest: "275839779"
   title: "Angels & Demons (film)"
+  total_pageviews: "750243"
   updated_at: ~
   url: Angels_&_Demons_(film)
 pages_069: 
@@ -480,6 +548,7 @@ pages_069:
   id: "7529378"
   page_latest: "275920067"
   title: Facebook
+  total_pageviews: "1365811"
   updated_at: ~
   url: Facebook
 pages_070: 
@@ -487,6 +556,7 @@ pages_070:
   id: "8135890"
   page_latest: "275866959"
   title: "Miley Cyrus"
+  total_pageviews: "651997"
   updated_at: ~
   url: Miley_Cyrus
 pages_071: 
@@ -494,6 +564,7 @@ pages_071:
   id: "8295950"
   page_latest: "276224089"
   title: Illuminati
+  total_pageviews: "853185"
   updated_at: ~
   url: Illuminati
 pages_072: 
@@ -501,6 +572,7 @@ pages_072:
   id: "8517686"
   page_latest: "274800656"
   title: "Britain's Got Talent"
+  total_pageviews: "611026"
   updated_at: ~
   url: Britain's_Got_Talent
 pages_073: 
@@ -508,6 +580,7 @@ pages_073:
   id: "9988187"
   page_latest: "276206252"
   title: Twitter
+  total_pageviews: "815813"
   updated_at: ~
   url: Twitter
 pages_074: 
@@ -515,6 +588,7 @@ pages_074:
   id: "10451432"
   page_latest: "276160265"
   title: "2009 in film"
+  total_pageviews: "570889"
   updated_at: ~
   url: 2009_in_film
 pages_075: 
@@ -522,6 +596,7 @@ pages_075:
   id: "11415141"
   page_latest: "275821443"
   title: Masturbation
+  total_pageviews: "617788"
   updated_at: ~
   url: Masturbation
 pages_076: 
@@ -529,6 +604,7 @@ pages_076:
   id: "11562143"
   page_latest: "276131033"
   title: "Lost (season 5)"
+  total_pageviews: "577700"
   updated_at: ~
   url: Lost_(season_5)
 pages_077: 
@@ -536,6 +612,7 @@ pages_077:
   id: "11937084"
   page_latest: "276190802"
   title: "Relapse (album)"
+  total_pageviews: "1150014"
   updated_at: ~
   url: Relapse_(album)
 pages_078: 
@@ -543,6 +620,7 @@ pages_078:
   id: "12319832"
   page_latest: "276179496"
   title: "Transformers: Revenge of the Fallen"
+  total_pageviews: "806085"
   updated_at: ~
   url: "Transformers:_Revenge_of_the_Fallen"
 pages_079: 
@@ -550,6 +628,7 @@ pages_079:
   id: "12479749"
   page_latest: "275932236"
   title: "Sasha Grey"
+  total_pageviews: "589470"
   updated_at: ~
   url: Sasha_Grey
 pages_080: 
@@ -557,6 +636,7 @@ pages_080:
   id: "13670373"
   page_latest: "276185271"
   title: "Terminator Salvation"
+  total_pageviews: "1383989"
   updated_at: ~
   url: Terminator_Salvation
 pages_081: 
@@ -564,6 +644,7 @@ pages_081:
   id: "16454230"
   page_latest: "275861355"
   title: "Lost (TV series)"
+  total_pageviews: "1268193"
   updated_at: ~
   url: Lost_(TV_series)
 pages_082: 
@@ -571,6 +652,7 @@ pages_082:
   id: "17157886"
   page_latest: "276210310"
   title: "Star Trek"
+  total_pageviews: "1258421"
   updated_at: ~
   url: Star_Trek
 pages_083: 
@@ -578,6 +660,7 @@ pages_083:
   id: "17322701"
   page_latest: "276189613"
   title: Penis
+  total_pageviews: "632787"
   updated_at: ~
   url: Penis
 pages_084: 
@@ -585,6 +668,7 @@ pages_084:
   id: "17524651"
   page_latest: "276116910"
   title: "Eurovision Song Contest 2009"
+  total_pageviews: "734082"
   updated_at: ~
   url: Eurovision_Song_Contest_2009
 pages_085: 
@@ -592,6 +676,7 @@ pages_085:
   id: "18225947"
   page_latest: "262489880"
   title: "Lucy Gordon (actress)"
+  total_pageviews: "554144"
   updated_at: ~
   url: Lucy_Gordon_(actress)
 pages_086: 
@@ -599,6 +684,7 @@ pages_086:
   id: "18673780"
   page_latest: "276096858"
   title: "Montauk Monster"
+  total_pageviews: "555318"
   updated_at: ~
   url: Montauk_Monster
 pages_087: 
@@ -606,6 +692,7 @@ pages_087:
   id: "19188562"
   page_latest: "276109362"
   title: "Gossip Girl (TV series)"
+  total_pageviews: "600609"
   updated_at: ~
   url: Gossip_Girl_(TV_series)
 pages_088: 
@@ -613,6 +700,7 @@ pages_088:
   id: "20901854"
   page_latest: "276223106"
   title: "Deaths in 2009"
+  total_pageviews: "1487716"
   updated_at: ~
   url: Deaths_in_2009
 pages_089: 
@@ -620,6 +708,7 @@ pages_089:
   id: "21374259"
   page_latest: "275981292"
   title: "Kris Allen"
+  total_pageviews: "538074"
   updated_at: ~
   url: Kris_Allen
 pages_090: 
@@ -627,6 +716,7 @@ pages_090:
   id: "21456098"
   page_latest: "276222972"
   title: "21st Century Breakdown"
+  total_pageviews: "608750"
   updated_at: ~
   url: 21st_Century_Breakdown
 pages_091: 
@@ -634,5 +724,6 @@ pages_091:
   id: "21501511"
   page_latest: "276217702"
   title: "Adam Lambert"
+  total_pageviews: "788449"
   updated_at: ~
   url: Adam_Lambert

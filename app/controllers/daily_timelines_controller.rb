@@ -1,6 +1,8 @@
 class DailyTimelinesController < ApplicationController
   # GET /daily_timelines
   # GET /daily_timelines.xml
+
+    
   def index
     @daily_timelines = DailyTimeline.all
 

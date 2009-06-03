@@ -3,3 +3,5 @@ schema_migrations_001:
   version: "20090602002800"
 schema_migrations_002: 
   version: "20090602123029"
+schema_migrations_003: 
+  version: "20090602232155"

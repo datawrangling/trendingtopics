@@ -154,8 +154,11 @@ LINES TERMINATED BY '\n'
 -- LINES TERMINATED BY '\n'
 -- (id, url, title, page_latest);
 
-
-
+-- LOAD DATA LOCAL INFILE '~/newpages.txt'
+-- INTO TABLE pages
+-- FIELDS TERMINATED BY '\t'
+-- LINES TERMINATED BY '\n'
+-- (id, url, title, page_latest, total_pageviews);
 
 
 -- create a MYSQL index on the title field
@@ -173,7 +176,13 @@ FIELDS TERMINATED BY '\t'
 LINES TERMINATED BY '\n'
 (page_id, dates, pageviews, total_pageviews);
 
+-- LOAD DATA LOCAL INFILE '~/daily_timelines_sample.txt'
+-- INTO TABLE daily_timelines
+-- FIELDS TERMINATED BY '\t'
+-- LINES TERMINATED BY '\n'
+-- (page_id, dates, pageviews, total_pageviews);
 
+create index timeline_totalviews_index on daily_timelines (total_pageviews);
 
 
 

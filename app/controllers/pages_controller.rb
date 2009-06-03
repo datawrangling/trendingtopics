@@ -1,6 +1,15 @@
 class PagesController < ApplicationController
   # GET /pages
   # GET /pages.xml
+  protect_from_forgery :only => [:create, :update, :destroy]
+  layout 'pages', :except => [:auto_complete_for_search_query]
+  #use_google_charts
+
+  def auto_complete_for_search_query
+    @pages = Page.title_like params["search"]["query"]
+    render :partial => "search_results"
+  end  
+  
   def index
     @pages = Page.all
 
@@ -14,6 +23,24 @@ class PagesController < ApplicationController
   # GET /pages/1.xml
   def show
     @page = Page.find(params[:id])
+
+    # @data = {
+    #   1.day.ago => { :foo=>123, :bar=>100 },
+    #   2.day.ago => { :foo=>345, :bar=>200 },
+    #   3.day.ago => { :foo=>445, :bar=>120 }, 
+    #   4.day.ago => { :foo=>425, :bar=>140 }, 
+    #   5.day.ago => { :foo=>515, :bar=>107 }                    
+    # }
+
+    rawdates = JSON.parse(@page.daily_timeline.dates)
+    pageviews = JSON.parse(@page.daily_timeline.pageviews)
+    
+    @data ={}
+    rawdates.each_with_index do |date, index|
+      @data[DateTime.strptime( date.to_s, "%Y%m%d")] = {:page_views => pageviews[index]}
+    end
+
+    puts @data
 
     respond_to do |format|
       format.html # show.html.erb

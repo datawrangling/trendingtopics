@@ -1,0 +1,102 @@
+AnnotatedTimeline
+=================
+
+AnnotatedTimeline is a Rails plugin that wraps up the for the Annotated Timeline widget from the Google Visualization API (http://code.google.com/apis/visualization/documentation/gallery/annotatedtimeline.html)
+
+=== Usage: 
+
+In your controller:
+
+		@data = {
+			1.day.ago => { :foo=>123, :bar=>100 },
+			2.day.ago => { :foo=>345, :bar=>200 }	
+		}
+
+The graph accepts either daily or hourly data. It will attempt to auto detect what type of data it is given by checking the time difference between the first two keys.
+
+Your keys should either be Dates or Times, but not a mix of both types.
+
+In the view:
+
+		<%= inline_annotated_timeline @data, width, height, 'div_id_to_create', options %>
+
+OR
+
+		<script type="text/javascript" src="http://www.google.com/jsapi"></script>	
+		...
+		<%= annotated_timeline @data, 'div-id', options %>
+		...
+		<div id='div-id' style='width: 600px; height: 400px'></div>
+
+	This will create a graph of "foo" & "bar" vs time.  It will be placed in a div with ID 'div-name'.
+
+Using inline_annotated_timeline inserts google javascript include and the graph where you put it, whereas annotated_timeline requires you to make the <div> where you want the graph, and include the google javascript somewhere, and allows you to manipulate the div more. Note that if you are putting several graphs on a page, it is more efficient not to use the inline function, because if you use the inline function several times, it calls the javascript from google several times.
+
+
+=== Annotations
+
+In your controller:
+
+		@data = {
+			1.day.ago.to_date => { :foo=>123, :bar=>100 },
+			2.day.ago.to_date => { :foo=>345, :bar=>200 }	
+		}
+		@annotations = {
+			:foo => { 1.day.ago.to_date => ["yesterday", "all my troubles seemed so far away"]}
+			:bar => { 1.day.ago.to_date => ["last tuesday"], 2.days.ago.to_date => ["last monday"]}
+		}
+
+Sending arrays of strings with two elements will render the first element as the title and the second as the text, and sending a one element array will render just the title.
+
+Now, in the view, the variable @annotations be passed in as option :annotations, with any other options in the hash. For example:
+
+		<%= inline_annotated_timeline @data, 500, 200, 'graph', {:annotations => @annotations, :displayExactValues => true} %>
+		
+If you use Time values for your keys, make sure that you use the exact same timestamps in the annotations array. You can avoid having to do this by using Date values.
+
+	
+
+
+=== Options
+
+	:allowHtml (boolean) - If set to true, any annotation text that includes HTML tags will be rendered as HTML. Defaults false
+
+	:allValuesSuffix (string) - A suffix to be added to all values in the scales and the legend. Defaults blank (no suffix.)
+
+	:annotations - see above
+
+	:timeZone - (string) An optional timezone which is used when generating Javascript datetimes for hourly timelines. This is useful when your keys are in a timezone different from your UI timezone. For example, your data set can be indexed with UTC datetimes, but the timeline would display EST datetimes. Set this to a timezone string suitable for passing to ActiveSupport::CoreExtensions::Time::Zones#in_time_zone. This requires ActiveSupport 2.1.0 or higher.
+	
+	:annotationsWidth (number) - If specified, sets the percentage of the width of the display that the annotations column takes up. Defaults to 25, must be between 5 and 80. 
+
+	:colors (array of strings) - The colors to use to override the default google color scheme for the chart lines and labels. Each element is a string in a valid HTML color format. For example 'red' or '#00cc00'. 
+
+	:displayAnnotationsFilter (boolean) - If set true, a search box appears at the top of the annotations column that will filter the annotations according to its contents. Defaults to false.
+
+	:displayExactValues (boolean) - If set to false (the default), value displayed on top may be in a shorter approximated form (56.12k instead of 56123.45). If set to true, values will appear unchanged.
+
+	:displayZoomButtons (boolean) - If false, the zoom buttons in the top left corner are disabled. Defaults true.
+
+	:legendPosition (string) - Whether to put the colored legend on the same row (default) with the zoom buttons and the date ('sameRow'), or on a new row ('newRow'). 
+
+	:min (number) - Use to explicitly set the minimal value to show in the Y axis.
+
+	:scaleColumns (array of numbers) - Specifies which data series are to be used for each of the scales on the chart. The chart can display up to three scales. If only one series is specified, the scale will be displayed to the right of the chart. If two series are specified, the first scale will be displayed to the left, and the second to the right of the chart. If three series are specified, the first to the left, the second to the right, and the third in the middle of the chart. When displaying more than one scale, it is advisable to set scaleType either to 'allfixed' or 'allmaximize'. All of the values are optional, and if an empty array is specified the chart will show no scale. If more than three values are specified, the rest are ignored. If this value is not specified at all, only the first data series scale is displayed on the right. scaleColumns parameter is an array of numbers, in which 0 refers to the first data series, 1 to the second, and so on.
+
+	:scaleType (string) - 'fixed', 'maximize', 'allfixed' or 'allmaximize'. If 'maximize' is used, the range of the values axis will span between the minimal and maximal values of the DataTable. If 'fixed' is used, the range of the values axis will span between zero and the maximal values of the DataTable. 'allfixed' and 'allmaximize' do the same, individually for each series. This means that the scale of each series is calculated based on its values only, and not based on all values from all series. When 'allfixed' or 'allmaximize' are used, it makes sense to set the scaleColumns option as well, otherwise some of the series will be displayed in a scale that is not the displayed one.
+
+	:wmode (string) - 'opaque'(default), 'window' or 'transparent'. the Window Mode (wmode) parameter for the Flash chart. 
+
+	:zoomStartTime (date) -  	If specified, sets the start date of the selected zoom range. 
+
+	:zoomEndTime (date) -  If specified, sets the end date of the selected zoom range.
+
+You may notice that with the exception of annotations and timeZone, all of these options are taken directly from the options in Google's API. Any new option implemented by the Google API that takes a string, boolean, number, or array as an argument should work implicitly as per examples above.
+
+
+===License:
+
+* MIT License
+
+
+(C) Mobile Commons 2008

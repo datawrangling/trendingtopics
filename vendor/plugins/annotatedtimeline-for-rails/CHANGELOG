@@ -1,0 +1,5 @@
+AnnotatedTimeline Changelog
+===========================
+
+2009-01-09: Replace string += calls with << for major speed improvements on large graphs
+2008-12-22: Initial release

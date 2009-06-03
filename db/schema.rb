@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090602123029) do
+ActiveRecord::Schema.define(:version => 20090602232155) do
 
   create_table "daily_timelines", :force => true do |t|
     t.integer  "page_id"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(:version => 20090602123029) do
     t.string   "url"
     t.string   "title"
     t.integer  "page_latest"
+    t.integer  "total_pageviews"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
