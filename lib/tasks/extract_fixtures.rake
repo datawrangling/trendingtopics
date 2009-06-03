@@ -1,6 +1,7 @@
 desc 'Create YAML test fixtures from data in an existing database.  
 Defaults to development database.  Set RAILS_ENV to override.'
  
+require 'rubygems' 
 require 'Ya2YAML'
  
 task :extract_fixtures => :environment do
