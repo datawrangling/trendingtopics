@@ -1,28 +1,34 @@
-<h2> Top Article this month:</h2>
-<div id = "timeline_chart">
- <%= render :partial => "timeline"  %>
+<% content_for :title, "Trending Topics on Wikipedia - Powered by Hadoop & EC2" %>
+
+<div class="left">
+  <div id = "timeline_chart" class="left_box">
+    <h2> Top Article this month: <%= link_to @page.title, @page  %></h2>  
+        <%= render :partial => "timeline"  %>
+  </div>
+  <div class="left_box">
+	Covers the flu viruses common to pigs and briefly describes notable outbreaks including the 1918 <b>swine</b> flu epidemic, the 2007 Philippine outbreak and 2009 Mexican <b>...</b>
+	</div>
+
+	<div class="right_side">
+    <h3>Most Read Articles (Last 30 Days)</h3>	
+    <table>
+      <tr>
+        <th>Rank</th>
+        <th>Pageviews</th>
+        <th>Article</th>
+        <th>Wikilink</th>
+      </tr>
+      <% @pages.each_with_index do |page, index| %>
+        <tr>
+          <td><%= index + 1 + 10*(params[:page].to_i - 1) %></td>
+          <td><%= number_with_delimiter(page.total_pageviews, ',') %></td>  
+          <td><%= link_to page.title, page  %><BR><%= image_tag page.sparkline.to_url %> </td>
+          <td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td>
+        </tr>
+      <% end %>
+    </table>
+    <br />
+    <%= will_paginate @pages %>
+  </div>			
 </div>
 
-<h2>Top Wikipedia Articles (Last 30 Days)</h2>
-
-<table>
-  <tr>
-    <th>Rank</th>
-    <th>Pageviews</th>
-    <th>Article</th>
-    <th>Wikilink</th>
-  </tr>
-
-<% @pages.each_with_index do |page, index| %>
-  <tr>
-    <td><%= index + 1 + 10*(params[:page].to_i - 1) %></td>
-    <td><%= number_with_delimiter(page.total_pageviews, ',') %></td>  
-    <td><%= link_to page.title, page  %><BR><%= image_tag page.sparkline.to_url %> </td>
-    <td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
-<%= will_paginate @pages %>

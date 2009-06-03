@@ -1,6 +1,8 @@
+<% content_for :title, "Wikipedia Trends for: " + @page.title %>
 
 
 <div id = "timeline_chart">
+<h2><%= @page.title %></h2>
  <%= render :partial => "timeline"  %>
 </div>
 <p>

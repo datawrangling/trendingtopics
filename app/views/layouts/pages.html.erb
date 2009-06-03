@@ -4,18 +4,40 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title>Pages: <%= controller.action_name %></title>
-  <%= stylesheet_link_tag 'scaffold' %>
+  <!-- <title>Pages: <%= controller.action_name %></title> -->
+  <title><%=h yield(:title) %></title>
+  
+  <%= stylesheet_link_tag 'trends' %>
   <%= javascript_include_tag :defaults %> 
   
 </head>
 <body>
+<div class="content">
+	<div class="header">
+		<div class="top_info">
+		</div>
+		<div class="top_info_left">	
+		  <h1><%= link_to "Trending Topics", "/", :class =>"dark" %></h1>
+		</div>
+		<div class="top_info_right">
+      <h3>Hot Wikipedia Topics, Powered by <a href="http://hadoop.apache.org/core/">Hadoop</a> & <a href="http://hadoop.apache.org/hive/">Hive</a></h3>
+		</div>
+	</div>
+		
+	<div class="search_field">
+		<form method="post" action="?">
+			<div class="search_form">
+			<p>Find Articles: <%= render :partial=>"pages/search_pane" %></p> 
+			</div>
+		</form>		
+	    <p>&nbsp;</p>
+	</div>
 
-Search Articles: <%= render :partial=>"pages/search_pane" %>
+  <p style="color: green"><%= flash[:notice] %></p>
 
-<p style="color: green"><%= flash[:notice] %></p>
+  <!-- Main site content -->
+  <%= yield %>
 
-<%= yield %>
-
+</div>
 </body>
 </html>

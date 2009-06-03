@@ -13,6 +13,9 @@ class PagesController < ApplicationController
   def index
     @pages = Page.paginate :page => params[:page], :order => 'total_pageviews DESC', :per_page => 10  
     @page = Page.first(:order => 'total_pageviews desc')
+    unless params[:page]
+      params[:page]='1'
+    end  
     
     respond_to do |format|
       format.html # index.html.erb
