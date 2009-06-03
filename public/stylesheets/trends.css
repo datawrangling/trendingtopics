@@ -34,14 +34,14 @@ form { 	margin: 0; }
 input.search[query] { 
 	width: 292px; 
 	border: 1;
-	background: #FFF url(input.gif) no-repeat;
+	background: #FFF url(../images/input.gif) no-repeat;
 	padding: 4px; 
 	color: #E0691A;
 	font-weight: bold;
 }
 
 input.submit {
-	background: #E0691A url(submit.gif) no-repeat;
+	background: #E0691A url(../images/submit.gif) no-repeat;
 	border: 0;
 	padding: 4px 0;
 	width: 65px;
@@ -177,7 +177,7 @@ input.login {
 
 .left h3 {
 	clear: both;
-	background: #6698FF url(corner.gif) no-repeat right top;
+	background: #6698FF url(../images/corner.gif) no-repeat right top;
 	color: #FFF;
 	padding: 7px 0 7px 5px;
 	font: 1.2em Tahoma, Arial, Sans-Serif;
@@ -223,7 +223,7 @@ input.login {
 }
 
 .right h3 {
-	background: #6698FF url(corner.gif) no-repeat right top;;
+	background: #6698FF url(../images/corner.gif) no-repeat right top;;
 	color: #FFF;
 	padding: 7px 0 7px 5px;
 	font: bold 1em Tahoma, Arial, Sans-Serif;
