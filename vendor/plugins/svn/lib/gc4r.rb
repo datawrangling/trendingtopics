@@ -124,6 +124,18 @@ module GC4R
       !min.nil? && !max.nil?
     end
   end
+  class ChartFillArea < Struct.new :fill
+    include GoogleChartsObject
+    def get_param
+      "chm"
+    end
+    def get_value
+      expand_multiple fill, ","
+    end
+    def valid?
+      !fill.nil? && !fill.empty?
+    end
+  end  
   class ChartDataColor < Struct.new :colors
     include GoogleChartsObject
     def get_param
@@ -288,11 +300,12 @@ module GC4R
     
     # data and dataset
     class GoogleChartDataset 
-      attr_accessor :data, :color, :title
+      attr_accessor :data, :color, :title, :fill
       def initialize options={}
         @data = options[:data]
         @color = options[:color]
         @title = options[:title]
+        @fill = options[:fill]
       end
     end
     class GoogleChartData < ChartContainer
@@ -300,19 +313,23 @@ module GC4R
         datasets = [] 
         colors = []
         legend = []
+        fill = []
         if options[:datasets].is_a?(Array)
           options[:datasets].each do |dataset|
             datasets << dataset.data
             colors << dataset.color
+            fill << dataset.fill            
             legend << dataset.title
           end
         else
           datasets << options[:datasets].data
           colors << options[:datasets].color
+          fill << options[:datasets].fill
           legend << options[:datasets].title
         end
         add ChartData.new(datasets.compact)
         add ChartDataColor.new(colors.compact)
+        add ChartFillArea.new(fill.compact)
         add ChartDataLegend.new(legend.compact)
         add ChartDataPieLabels.new(legend.compact)
         add ChartDataScale.new(options[:min], options[:max])

@@ -6,7 +6,7 @@ class Page < ActiveRecord::Base
     @pageviews = JSON.parse(self.daily_timeline.pageviews)
     @dates = JSON.parse(self.daily_timeline.dates)    
     maxval = @pageviews.max
-    normed_values = @pageviews.collect { |x| x * (120.0 / maxval)}
+    normed_values = @pageviews.collect { |x| x * (110.0 / maxval)}
     date_view_hash = {}
     @dates.each_with_index do |date, index|
       date_view_hash[date] = normed_values[index]
@@ -16,8 +16,13 @@ class Page < ActiveRecord::Base
     return sorted_pageviews
   end
   
-  def sparkline
-    dataset = GC4R::API::GoogleChartDataset.new :data => self.normed_daily_pageviews, :color => '0000FF'
+  def sparkline( fillcolor='76A4FB' )
+    dataset = GC4R::API::GoogleChartDataset.new :data => self.normed_daily_pageviews, 
+      :color => '000000', :fill => ['B', fillcolor ,'0','0','0']
+    # red => FF0000
+    # lightblue => 76A4FB
+    # green => 33FF00
+    # darkblue => 0000FF    
     data = GC4R::API::GoogleChartData.new :datasets => dataset , :min => 0, :max => 120
     # @chart = GoogleBarChart.new :width => 120, :height => 12
     @chart = GC4R::API::GoogleSparklinesChart.new :width => 120, :height => 12
