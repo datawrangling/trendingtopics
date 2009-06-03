@@ -1,0 +1,5 @@
+Options +FollowSymlinks
+RewriteEngine on
+rewritecond %{http_host} ^trendingtopics.org [nc]
+rewriterule ^(.*)$ http://www.trendingtopics.org/$1 [r=301,nc]
+
