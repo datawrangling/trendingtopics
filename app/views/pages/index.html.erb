@@ -1,24 +1,23 @@
-<h1>Listing pages</h1>
+<h1>Top Wikipedia Articles (Last 30 Days)</h1>
 
 <table>
   <tr>
-    <th>Url</th>
-    <th>Title</th>
-    <th>Page latest</th>
+    <th>Rank</th>
+    <th>Pageviews</th>
+    <th>Article</th>
+    <th>Wikilink</th>
   </tr>
 
-<% @pages.each do |page| %>
+<% @pages.each_with_index do |page, index| %>
   <tr>
-    <td><%=h page.url %></td>
-    <td><%=h page.title %></td>
-    <td><%=h page.page_latest %></td>
-    <td><%= link_to 'Show', page %></td>
-    <td><%= link_to 'Edit', edit_page_path(page) %></td>
-    <td><%= link_to 'Destroy', page, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= index +1 %></td>
+    <td><%= number_with_delimiter(page.total_pageviews, ',') %></td>  
+    <td><%= link_to page.title, page  %><BR><%= image_tag page.chart.to_url %> </td>
+    <td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New page', new_page_path %>
+<%= will_paginate @pages %>

@@ -1,0 +1,133 @@
+GC4R
+============
+
+Google Chart 4 Rails - Ruby wrapper for Google Charts API.
+
+Supported features:
+* line chart
+* bar chart (vertical and horizontal)
+* pie chart (both 2D and 3D)
+* title, title color and size
+* data colors and legend
+* data scaling 
+* multiple axis
+
+Roadmap:
+* the remaining chart types
+* axis labels
+
+Example
+=======
+
+1. Hello World
+    @chart = GoogleChart.new
+
+
+2. ok, make a line chart with size 300x200
+    @chart = GoogleLineChart.new :width => 300, :height => 200
+
+
+3. add some random data
+    dataset = GoogleChartDataset.new :data => [10,50,4,10,16]
+    data = GoogleChartData.new :datasets => dataset
+    @chart = GoogleLineChart.new :width => 300, :height => 200
+    @chart.data = data
+
+
+4. add a chart title
+    dataset = GoogleChartDataset.new :data => [10,50,4,10,16]
+    data = GoogleChartData.new :datasets => dataset
+    @chart = GoogleLineChart.new :width => 200, :height => 150, :title => 'Java vs. Ruby Montly Job Opportunities'
+    @chart.data = data
+
+
+5. wow, title is too big let's wrap it
+    dataset = GoogleChartDataset.new :data => [10,50,4,10,16]
+    data = GoogleChartData.new :datasets => dataset
+    @chart = GoogleLineChart.new :width => 200, :height => 150, :title => ['Java vs. Ruby', 'Montly Job Opportunities']
+    @chart.data = data
+ Notice: title is now an array instead of string
+
+6. ok now, let's add more data
+    dataset1 = GoogleChartDataset.new :data => [10,50,4,10,16]
+    dataset2 = GoogleChartDataset.new :data => [99, 81, 25, 54, 80]
+    data = GoogleChartData.new :datasets => [dataset1, dataset2]
+    @chart = GoogleLineChart.new :width => 200, :height => 150, :title => ['Java vs. Ruby', 'Montly Job Opportunities']
+    @chart.data = data
+
+
+7. hmmmm, let's put some colors
+    dataset1 = GoogleChartDataset.new :data => [10,50,4,10,16], :color => 'FF0000'
+    dataset2 = GoogleChartDataset.new :data => [99, 81, 25, 54, 80], :color => '0000FF'
+    data = GoogleChartData.new :datasets => [dataset1, dataset2]
+    @chart = GoogleLineChart.new :width => 200, :height => 150, :title => ['Java vs. Ruby', 'Montly Job Opportunities']
+    @chart.data = data
+
+
+8. better but not good enough, which one is java which one is ruby, let's put the legend
+    dataset1 = GoogleChartDataset.new :data => [10,50,4,10,16], :color => 'FF0000', :title => 'Java'
+    dataset2 = GoogleChartDataset.new :data => [99, 81, 25, 54, 80], :color => '0000FF', :title => 'Ruby'
+    data = GoogleChartData.new :datasets => [dataset1, dataset2]
+    @chart = GoogleLineChart.new :width => 200, :height => 150, :title => ['Java vs. Ruby', 'Montly Job Opportunities']
+    @chart.data = data
+
+
+9. now, it will be nice to have axis
+    dataset1 = GoogleChartDataset.new :data => [10,50,4,10,16], :color => 'FF0000', :title => 'Java'
+    dataset2 = GoogleChartDataset.new :data => [99, 81, 25, 54, 80], :color => '0000FF', :title => 'Ruby'
+    data = GoogleChartData.new :datasets => [dataset1, dataset2]
+    axis = GoogleChartAxis.new :axis  => [GoogleChartAxis::LEFT, GoogleChartAxis::BOTTOM]
+    @chart = GoogleLineChart.new :width => 250, :height => 150, :title => ['Java vs. Ruby', 'Montly Job Opportunities']
+    @chart.data = data
+    @chart.axis = axis
+
+
+10. and two more, right and second x axis
+    dataset1 = GoogleChartDataset.new :data => [10,50,4,10,16], :color => 'FF0000', :title => 'Java'
+    dataset2 = GoogleChartDataset.new :data => [99, 81, 25, 54, 80], :color => '0000FF', :title => 'Ruby'
+    data = GoogleChartData.new :datasets => [dataset1, dataset2]
+    axis = GoogleChartAxis.new :axis  => [GoogleChartAxis::LEFT, GoogleChartAxis::BOTTOM,  GoogleChartAxis::RIGHT, GoogleChartAxis::BOTTOM]
+    @chart = GoogleLineChart.new :width => 300, :height => 200, :title => ['Java vs. Ruby', 'Montly Job Opportunities']
+    @chart.data = data
+    @chart.axis = axis
+
+
+11. so far so good, now i want a bar chart
+    dataset1 = GoogleChartDataset.new :data => [10,50,4,10,16], :color => 'FF0000', :title => 'Java'
+    dataset2 = GoogleChartDataset.new :data => [99, 81, 25, 54, 80], :color => '0000FF', :title => 'Ruby'
+    data = GoogleChartData.new :datasets => [dataset1, dataset2]
+    axis = GoogleChartAxis.new :axis  => [GoogleChartAxis::LEFT, GoogleChartAxis::BOTTOM,  GoogleChartAxis::RIGHT, GoogleChartAxis::BOTTOM]
+    @chart = GoogleBarChart.new :width => 300, :height => 200, :title => ['Java vs. Ruby', 'Montly Job Opportunities']
+    @chart.data = data
+    @chart.axis = axis
+
+
+12. or nice 3d pie chart
+    dataset1 = GoogleChartDataset.new :data => 50, :color => 'FF0000', :title => 'Java'
+    dataset2 = GoogleChartDataset.new :data => 90, :color => '0000FF', :title => 'Ruby'
+    data = GoogleChartData.new :datasets => [dataset1, dataset2]
+    @chart = GooglePieChart.new :width => 400, :height => 200, :title => ['Java vs. Ruby', 'Montly Job Opportunities'],
+      :chart_type  => GooglePieChart::PIE_3D
+    @chart.data = data
+
+
+13. if you like it, then
+
+install plugin:
+script/plugin install http://gc4r.googlecode.com/svn/trunk/
+
+in controller:
+class AnalysisController < ApplicationController
+  use_google_charts
+   
+  def index
+      # prepare some nice charts here 
+      @chart = GoogleChart.new
+  end
+end
+
+in view:
+<%= image_tag @chart.to_url %>
+
+
+Copyright (c) 2008 Iulian Costan, released under the MIT license

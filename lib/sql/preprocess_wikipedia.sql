@@ -148,13 +148,13 @@ LINES TERMINATED BY '\n'
 -- Query OK, 2821319 rows affected (30.29 sec)
 
 -- 
--- LOAD DATA LOCAL INFILE '/mnt/wikidata/wikidump/pages_sample.txt'
--- INTO TABLE pages
--- FIELDS TERMINATED BY '\t'
--- LINES TERMINATED BY '\n'
--- (id, url, title, page_latest);
+LOAD DATA LOCAL INFILE '/mnt/wikidata/wikidump/pages_sample.txt'
+INTO TABLE pages
+FIELDS TERMINATED BY '\t'
+LINES TERMINATED BY '\n'
+(id, url, title, page_latest, total_pageviews);
 
--- LOAD DATA LOCAL INFILE '~/newpages.txt'
+-- LOAD DATA LOCAL INFILE '~/pages_sample.txt'
 -- INTO TABLE pages
 -- FIELDS TERMINATED BY '\t'
 -- LINES TERMINATED BY '\n'
