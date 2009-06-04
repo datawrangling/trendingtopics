@@ -3,7 +3,7 @@ development:
   admin_user: REPLACEME
   admin_password: REPLACEME
   articles_per_page: 20  
-  tracker_id: ""  
+  tracker_id: "UA-REPLACEME"
   protocol: http  
 
 test:
@@ -11,7 +11,7 @@ test:
   admin_user: REPLACEME
   admin_password: REPLACEME
   articles_per_page: 20 
-  tracker_id: ""   
+  tracker_id: "UA-REPLACEME"
   protocol: http        
 
 production:
