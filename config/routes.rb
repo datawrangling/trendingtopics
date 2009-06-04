@@ -3,6 +3,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :daily_timelines
   map.resources :pages
 
+  map.with_options :controller => 'info' do |info|
+    info.about 'about', :action => 'about'
+    info.contact 'contact', :action => 'contact'
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

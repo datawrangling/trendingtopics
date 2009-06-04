@@ -254,6 +254,19 @@ input.login {
 	line-height: 1.8em;
 }
 
+  .footer_right {
+  	float: right;
+  	width: 34.6%;
+  	margin: 0 0 10px 0;
+  }
+
+  .footer_left {
+  	float: left;
+  	width: 34.6%;
+  	margin: 0 0 10px 0;
+  }
+
+
 .footer a { color: #FF6633; background: #fff; }
 
 /* The container for the twitter search results

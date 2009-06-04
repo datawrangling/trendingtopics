@@ -24,25 +24,22 @@
 		</div>
 	</div>
 		
-	<div class="search_field">
-		<form method="post" action="?">
-			<div class="search_form">
-			<p>Find Articles: <%= render :partial=>"pages/search_pane" %></p> 
-			</div>
-		</form>		
-	    <p>&nbsp;</p>
-	</div>
-
   <p style="color: green"><%= flash[:notice] %></p>
 
   <!-- Main site content -->
   <%= yield %>
-  
+
 	<div class="footer">
-		<p><a href="#">RSS Feed</a> | <a href="#">Contact</a> | <a href="#">About</a><br />
+		<p><a href="#">RSS Feed</a> | <%= link_to "Contact", "contact" %> | <%= link_to "About", "about" %><br />
     &copy; Copyright 2009 Data Wrangling, LLC</p>
-    <!-- put logo buttons for Cloudera, Data Wrangling, Amazon Web Services, and Napkin Sketches on bottom of right sidebar --> 
+    <div class="footer_right">
+      <!-- put logo buttons for Cloudera, Data Wrangling, Amazon Web Services, and Napkin Sketches on bottom left & right -->     
+    <a href="http://www.datawrangling.com" title="DataWrangling.com"><%= image_tag("datawrangling.png") %></a>  
+    </div>
 	</div>  
+
+
+	
 
 </div>
 </body>
