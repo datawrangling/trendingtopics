@@ -15,7 +15,7 @@
       <h2>Fastest Rising Article: <%= link_to @page.title, @page  %></h2>  
           <%= render :partial => "timeline"  %>
   	</div>	
-    <h3>Most Read Articles (Last 30 Days)</h3>	
+    <h3>Trending Articles (Over the Last Week)</h3>	
     <table>
       <tr>
         <th>Rank</th>
@@ -41,16 +41,20 @@
   <h2><b><%= @page.title %></b> in the News</h2>
    <%= render :partial => "news_results"  %> 
   </div>			
-    <h3>Rising Articles:</h3>
+    <h3>Rising Articles (Last 24 hours):</h3>
 		<div class="right_articles">
-	            <p><b><a class="title" href="#">Swine Flu</a><BR><img alt="Chart?cht=bvs&amp;chs=120x12&amp;chd=t:27,62,57,98,38,22,15,32,88,65,74,21,22,85,92,25,1,27,20,54,2,55,5,32,18,0,5,31,17,72&amp;chco=4cc417&amp;chds=0,120&amp;chbh=a" src="http://chart.apis.google.com/chart?cht=bvs&amp;chs=120x12&amp;chd=t:27,62,57,98,38,22,15,32,88,65,74,21,22,85,92,25,1,27,20,54,2,55,5,32,18,0,5,31,17,72&amp;chco=4CC417&amp;chds=0,120&amp;chbh=r,0.5,1.5" /> </b></p>
-	            <p><b><a class="title" href="#">Swine Flu</a><BR><img alt="Chart?cht=bvs&amp;chs=120x12&amp;chd=t:27,62,57,98,38,22,15,32,88,65,74,21,22,85,92,25,1,27,20,54,2,55,5,32,18,0,5,31,17,72&amp;chco=4cc417&amp;chds=0,120&amp;chbh=a" src="http://chart.apis.google.com/chart?cht=bvs&amp;chs=120x12&amp;chd=t:27,62,57,98,38,22,15,32,88,65,74,21,22,85,92,25,1,27,20,54,2,55,5,32,18,0,5,31,17,72&amp;chco=4CC417&amp;chds=0,120&amp;chbh=r,0.5,1.5" /> </b></p>	            
+		  <% @rising.each_with_index do |rising, index| %>
+	      <p><b><%= link_to rising.page.title, rising.page, :class =>
+        "title" %><BR><%= image_tag rising.page.sparkline('33FF00').to_url %> </b></p>    
+      <% end %>          
 		</div>						
 			
-    <h3>Dropping Articles:</h3>
+    <h3>Dropping Articles (Last 24 hours):</h3>
 		<div class="right_articles">
-	            <p><b><a class="title" href="#">Swine Flu</a><BR><img alt="Chart?cht=bvs&amp;chs=120x12&amp;chd=t:27,62,57,98,38,22,15,32,88,65,74,21,22,85,92,25,1,27,20,54,2,55,5,32,18,0,5,31,17,72&amp;chco=4cc417&amp;chds=0,120&amp;chbh=a" src="http://chart.apis.google.com/chart?cht=bvs&amp;chs=120x12&amp;chd=t:27,62,57,98,38,22,15,32,88,65,74,21,22,85,92,25,1,27,20,54,2,55,5,32,18,0,5,31,17,72&amp;chco=FF0000&amp;chds=0,120&amp;chbh=r,0.5,1.5" /> </b></p>
-	            <p><b><a class="title" href="#">Swine Flu</a><BR><img alt="Chart?cht=bvs&amp;chs=120x12&amp;chd=t:27,62,57,98,38,22,15,32,88,65,74,21,22,85,92,25,1,27,20,54,2,55,5,32,18,0,5,31,17,72&amp;chco=4cc417&amp;chds=0,120&amp;chbh=a" src="http://chart.apis.google.com/chart?cht=bvs&amp;chs=120x12&amp;chd=t:27,62,57,98,38,22,15,32,88,65,74,21,22,85,92,25,1,27,20,54,2,55,5,32,18,0,5,31,17,72&amp;chco=FF0000&amp;chds=0,120&amp;chbh=r,0.5,1.5" /> </b></p>	            
+		  <% @dropping.each_with_index do |dropping, index| %>
+	      <p><b><%= link_to dropping.page.title, dropping.page, :class =>
+        "title" %><BR><%= image_tag dropping.page.sparkline('FF0000').to_url %> </b></p>    
+      <% end %>          
 		</div>
 			
     <div class="right_articles"></div>

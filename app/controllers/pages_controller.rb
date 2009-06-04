@@ -12,11 +12,16 @@ class PagesController < ApplicationController
   
   def index
     @pages = Page.paginate :page => params[:page], :order => 'total_pageviews DESC', :per_page => APP_CONFIG['articles_per_page']  
-    @page = Page.first(:order => 'total_pageviews desc')
+
+    @rising = DailyTrend.find(:all, :limit => 5, :order => 'trend DESC')
+    @dropping = DailyTrend.find(:all, :limit => 5, :order => 'trend ASC')    
+    
+    @page = @rising[0].page   
+    
     unless params[:page]
       params[:page]='1'
     end  
-    
+        
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @pages }
