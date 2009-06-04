@@ -9,7 +9,7 @@
 
   <div id ="wikipedia">
 <BR><BR>  
-  <h2><em><%= link_to @page.title + "on Wikipedia", 'http://en.wikipedia.org/wiki/' + @page.url %></em></h2>
+  <h2><em><%= link_to @page.title + " on Wikipedia", 'http://en.wikipedia.org/wiki/' + @page.url %></em></h2>
 <BR><BR>
   <iframe name="cwindow" style="border:0px double " width=890 height=890 src="<%='http://en.wikipedia.org/wiki/' + @page.url %>"></iframe>  
   </div>
