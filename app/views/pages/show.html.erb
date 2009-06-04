@@ -1,21 +1,25 @@
 <% content_for :title, "Trending Topics: Wikipedia Trends for: " + @page.title %>
 
+<div class="left">
 
-<div id = "timeline_chart">
-<h2><%= @page.title %></h2>
- <%= render :partial => "timeline"  %>
+  <div id = "timeline_chart" class="left_box">
+  <h2>Daily Pageviews for: <em><%= @page.title %></em></h2>  
+   <%= render :partial => "timeline"  %>
+  </div>
+
+  <div id ="wikipedia">
+<BR><BR>  
+  <h2><em><%= link_to @page.title + "on Wikipedia", 'http://en.wikipedia.org/wiki/' + @page.url %></em></h2>
+<BR><BR>
+  <iframe name="cwindow" style="border:0px double " width=890 height=890 src="<%='http://en.wikipedia.org/wiki/' + @page.url %>"></iframe>  
+  </div>
 </div>
-<p>
-  <b>Url:</b>
-  <%=h @page.url %>
-</p>
 
-<p>
-  <b>Title:</b>
-  <%=h @page.title %>
-</p>
+<div class="right">
+  <h2><em><%= @page.title %></em> in the News</h2>
+  <div id = "news" class="right_articles">
+   <%= render :partial => "news_results"  %> 
+  </div>
+</div>
 
-<p>
-  <b>Page latest:</b>
-  <%=h @page.page_latest %>
-</p>
+
