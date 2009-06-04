@@ -1,1 +1,1 @@
-<%= inline_annotated_timeline @page.timeline, 550, 265, 'div_id_to_create' %>
+<%= inline_annotated_timeline @page.timeline, 550, 265, 'div_id_to_create', {:zoomEndTime => @page.sorted_dates[-1], :zoomStartTime  => @page.sorted_dates[-10] } %>

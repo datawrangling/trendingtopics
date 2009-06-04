@@ -3,3 +3,7 @@
 # To ban all spiders from the entire site uncomment the next two lines:
 # User-Agent: *
 # Disallow: /
+# No real novel text content on the detail pages... so we block them.
+User-agent: *
+Disallow: /pages/
+Disallow: /frames/

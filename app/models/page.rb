@@ -30,6 +30,15 @@ class Page < ActiveRecord::Base
     return @chart
   end  
   
+  def sorted_dates
+    rawdates = JSON.parse(self.daily_timeline.dates)
+    @data = []
+    rawdates.each do |date|
+      @data << DateTime.strptime( date.to_s, "%Y%m%d")
+    end
+    @data.sort
+  end  
+  
   def timeline
     rawdates = JSON.parse(self.daily_timeline.dates)
     pageviews = JSON.parse(self.daily_timeline.pageviews)

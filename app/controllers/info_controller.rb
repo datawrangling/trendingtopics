@@ -5,4 +5,8 @@ class InfoController < ApplicationController
   
   def contact
   end
+  
+  def frames
+  end
+  
 end
