@@ -1,4 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :weekly_trends
+
+  map.resources :daily_trends
+
   map.root :controller => "pages"  
   map.resources :daily_timelines
   map.resources :pages

@@ -132,7 +132,13 @@ LINES TERMINATED BY '\n'
 -- other models:  
 
 -- DailyTrend
--- MonthlyTrend
+-- WeeklyTrend
+
+-- script/generate scaffold DailyTrend page:references trend:float error:float
+-- script/generate scaffold WeeklyTrend page:references trend:float error:float
+
+
+
 
 -- Maybe HourlyTimeline
 
@@ -153,6 +159,13 @@ INTO TABLE pages
 FIELDS TERMINATED BY '\t'
 LINES TERMINATED BY '\n'
 (id, url, title, page_latest, total_pageviews);
+
+
+-- LOAD DATA LOCAL INFILE 'weekly_trends_sample.txt'
+-- INTO TABLE weekly_trends
+-- FIELDS TERMINATED BY '\t'
+-- LINES TERMINATED BY '\n'
+-- (page_id, trend, error);
 
 -- LOAD DATA LOCAL INFILE '~/pages_sample.txt'
 -- INTO TABLE pages

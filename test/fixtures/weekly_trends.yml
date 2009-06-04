@@ -1,0 +1,638 @@
+--- 
+weekly_trends_001: 
+  created_at: ~
+  error: "0.0013235"
+  id: "1"
+  page_id: "10451432"
+  trend: "12.7498"
+  updated_at: ~
+weekly_trends_002: 
+  created_at: ~
+  error: "0.00132402"
+  id: "2"
+  page_id: "621063"
+  trend: "11.9069"
+  updated_at: ~
+weekly_trends_003: 
+  created_at: ~
+  error: "0.00119087"
+  id: "3"
+  page_id: "4689264"
+  trend: "12.8014"
+  updated_at: ~
+weekly_trends_004: 
+  created_at: ~
+  error: "0.00133552"
+  id: "4"
+  page_id: "4513237"
+  trend: "9.53675"
+  updated_at: ~
+weekly_trends_005: 
+  created_at: ~
+  error: "0.00116715"
+  id: "5"
+  page_id: "17524651"
+  trend: "2.57267"
+  updated_at: ~
+weekly_trends_006: 
+  created_at: ~
+  error: "0.000855667"
+  id: "6"
+  page_id: "7529378"
+  trend: "15.6445"
+  updated_at: ~
+weekly_trends_007: 
+  created_at: ~
+  error: "0.00127855"
+  id: "7"
+  page_id: "232581"
+  trend: "10.8712"
+  updated_at: ~
+weekly_trends_008: 
+  created_at: ~
+  error: "0.00126602"
+  id: "8"
+  page_id: "52726"
+  trend: "8.52454"
+  updated_at: ~
+weekly_trends_009: 
+  created_at: ~
+  error: "0.000905407"
+  id: "9"
+  page_id: "14187"
+  trend: "2.47484"
+  updated_at: ~
+weekly_trends_010: 
+  created_at: ~
+  error: "0.00118497"
+  id: "10"
+  page_id: "15573"
+  trend: "12.915"
+  updated_at: ~
+weekly_trends_011: 
+  created_at: ~
+  error: "0.00114987"
+  id: "11"
+  page_id: "168540"
+  trend: "13.8819"
+  updated_at: ~
+weekly_trends_012: 
+  created_at: ~
+  error: "0.0012926"
+  id: "12"
+  page_id: "167748"
+  trend: "13.7539"
+  updated_at: ~
+weekly_trends_013: 
+  created_at: ~
+  error: "0.00134562"
+  id: "13"
+  page_id: "19961"
+  trend: "20.2043"
+  updated_at: ~
+weekly_trends_014: 
+  created_at: ~
+  error: "0.00127777"
+  id: "14"
+  page_id: "39027"
+  trend: "68.6519"
+  updated_at: ~
+weekly_trends_015: 
+  created_at: ~
+  error: "0.00103642"
+  id: "15"
+  page_id: "2095829"
+  trend: "1217.17"
+  updated_at: ~
+weekly_trends_016: 
+  created_at: ~
+  error: "0.000520004"
+  id: "16"
+  page_id: "29812"
+  trend: "15.4716"
+  updated_at: ~
+weekly_trends_017: 
+  created_at: ~
+  error: "0.00111381"
+  id: "17"
+  page_id: "12319832"
+  trend: "13.2421"
+  updated_at: ~
+weekly_trends_018: 
+  created_at: ~
+  error: "0.00117698"
+  id: "18"
+  page_id: "32476"
+  trend: "13.4742"
+  updated_at: ~
+weekly_trends_019: 
+  created_at: ~
+  error: "0.00113398"
+  id: "19"
+  page_id: "534366"
+  trend: "12.6447"
+  updated_at: ~
+weekly_trends_020: 
+  created_at: ~
+  error: "0.00102806"
+  id: "20"
+  page_id: "5860"
+  trend: "9.65605"
+  updated_at: ~
+weekly_trends_021: 
+  created_at: ~
+  error: "0.00131568"
+  id: "21"
+  page_id: "11562143"
+  trend: "7.34213"
+  updated_at: ~
+weekly_trends_022: 
+  created_at: ~
+  error: "0.00108117"
+  id: "22"
+  page_id: "20308"
+  trend: "0.115017"
+  updated_at: ~
+weekly_trends_023: 
+  created_at: ~
+  error: "0.00127227"
+  id: "23"
+  page_id: "11415141"
+  trend: "13.512"
+  updated_at: ~
+weekly_trends_024: 
+  created_at: ~
+  error: "0.00123845"
+  id: "24"
+  page_id: "8135890"
+  trend: "13.1754"
+  updated_at: ~
+weekly_trends_025: 
+  created_at: ~
+  error: "0.000932499"
+  id: "25"
+  page_id: "11937084"
+  trend: "8.29866"
+  updated_at: ~
+weekly_trends_026: 
+  created_at: ~
+  error: "0.000648645"
+  id: "26"
+  page_id: "3071743"
+  trend: "10.2741"
+  updated_at: ~
+weekly_trends_027: 
+  created_at: ~
+  error: "0.000850029"
+  id: "27"
+  page_id: "13670373"
+  trend: "11.0698"
+  updated_at: ~
+weekly_trends_028: 
+  created_at: ~
+  error: "0.0011162"
+  id: "28"
+  page_id: "31717"
+  trend: "12.9473"
+  updated_at: ~
+weekly_trends_029: 
+  created_at: ~
+  error: "0.00134733"
+  id: "29"
+  page_id: "747573"
+  trend: "5.45749"
+  updated_at: ~
+weekly_trends_030: 
+  created_at: ~
+  error: "0.000715935"
+  id: "30"
+  page_id: "184420"
+  trend: "10.9671"
+  updated_at: ~
+weekly_trends_031: 
+  created_at: ~
+  error: "0.00123135"
+  id: "31"
+  page_id: "5207311"
+  trend: "11.2398"
+  updated_at: ~
+weekly_trends_032: 
+  created_at: ~
+  error: "0.00134456"
+  id: "32"
+  page_id: "18079"
+  trend: "11.294"
+  updated_at: ~
+weekly_trends_033: 
+  created_at: ~
+  error: "0.0012775"
+  id: "33"
+  page_id: "966943"
+  trend: "10.805"
+  updated_at: ~
+weekly_trends_034: 
+  created_at: ~
+  error: "0.00109366"
+  id: "34"
+  page_id: "1809036"
+  trend: "10.3787"
+  updated_at: ~
+weekly_trends_035: 
+  created_at: ~
+  error: "0.000887988"
+  id: "35"
+  page_id: "16454230"
+  trend: "8.40223"
+  updated_at: ~
+weekly_trends_036: 
+  created_at: ~
+  error: "0.000961375"
+  id: "36"
+  page_id: "217226"
+  trend: "12.3683"
+  updated_at: ~
+weekly_trends_037: 
+  created_at: ~
+  error: "0.00119036"
+  id: "37"
+  page_id: "26805"
+  trend: "13.7831"
+  updated_at: ~
+weekly_trends_038: 
+  created_at: ~
+  error: "0.00132487"
+  id: "38"
+  page_id: "44220"
+  trend: "41.3184"
+  updated_at: ~
+weekly_trends_039: 
+  created_at: ~
+  error: "0.000485127"
+  id: "39"
+  page_id: "32851"
+  trend: "14.3226"
+  updated_at: ~
+weekly_trends_040: 
+  created_at: ~
+  error: "0.00114066"
+  id: "40"
+  page_id: "191890"
+  trend: "4.26562"
+  updated_at: ~
+weekly_trends_041: 
+  created_at: ~
+  error: "0.00135846"
+  id: "41"
+  page_id: "5042862"
+  trend: "12.9123"
+  updated_at: ~
+weekly_trends_042: 
+  created_at: ~
+  error: "0.000819861"
+  id: "42"
+  page_id: "20901854"
+  trend: "12.8946"
+  updated_at: ~
+weekly_trends_043: 
+  created_at: ~
+  error: "0.000748475"
+  id: "43"
+  page_id: "4429395"
+  trend: "9.95249"
+  updated_at: ~
+weekly_trends_044: 
+  created_at: ~
+  error: "0.00126909"
+  id: "44"
+  page_id: "11867"
+  trend: "13.5904"
+  updated_at: ~
+weekly_trends_045: 
+  created_at: ~
+  error: "0.00100277"
+  id: "45"
+  page_id: "56191"
+  trend: "9.32194"
+  updated_at: ~
+weekly_trends_046: 
+  created_at: ~
+  error: "0.00089143"
+  id: "46"
+  page_id: "17157886"
+  trend: "8.86028"
+  updated_at: ~
+weekly_trends_047: 
+  created_at: ~
+  error: "0.00133236"
+  id: "47"
+  page_id: "5422144"
+  trend: "14.7481"
+  updated_at: ~
+weekly_trends_048: 
+  created_at: ~
+  error: "0.00116448"
+  id: "48"
+  page_id: "4764461"
+  trend: "13.0501"
+  updated_at: ~
+weekly_trends_049: 
+  created_at: ~
+  error: "0.000668915"
+  id: "49"
+  page_id: "3524766"
+  trend: "14.187"
+  updated_at: ~
+weekly_trends_050: 
+  created_at: ~
+  error: "0.00118301"
+  id: "50"
+  page_id: "5042916"
+  trend: "13.2584"
+  updated_at: ~
+weekly_trends_051: 
+  created_at: ~
+  error: "0.00110577"
+  id: "51"
+  page_id: "1273596"
+  trend: "11.8405"
+  updated_at: ~
+weekly_trends_052: 
+  created_at: ~
+  error: "0.00108263"
+  id: "52"
+  page_id: "8295950"
+  trend: "9.40182"
+  updated_at: ~
+weekly_trends_053: 
+  created_at: ~
+  error: "0.00120041"
+  id: "53"
+  page_id: "2866555"
+  trend: "7.53385"
+  updated_at: ~
+weekly_trends_054: 
+  created_at: ~
+  error: "0.00125614"
+  id: "54"
+  page_id: "2855554"
+  trend: "13.3626"
+  updated_at: ~
+weekly_trends_055: 
+  created_at: ~
+  error: "0.00134193"
+  id: "55"
+  page_id: "18673780"
+  trend: "5.12814"
+  updated_at: ~
+weekly_trends_056: 
+  created_at: ~
+  error: "0.00130247"
+  id: "56"
+  page_id: "12479749"
+  trend: "8.66825"
+  updated_at: ~
+weekly_trends_057: 
+  created_at: ~
+  error: "0.00129294"
+  id: "57"
+  page_id: "32897"
+  trend: "11.3632"
+  updated_at: ~
+weekly_trends_058: 
+  created_at: ~
+  error: "0.000970239"
+  id: "58"
+  page_id: "32927"
+  trend: "12.5008"
+  updated_at: ~
+weekly_trends_059: 
+  created_at: ~
+  error: "0.00128168"
+  id: "59"
+  page_id: "21456098"
+  trend: "8.004"
+  updated_at: ~
+weekly_trends_060: 
+  created_at: ~
+  error: "0.00107483"
+  id: "60"
+  page_id: "2731583"
+  trend: "11.7884"
+  updated_at: ~
+weekly_trends_061: 
+  created_at: ~
+  error: "0.001345"
+  id: "61"
+  page_id: "68187"
+  trend: "55.3342"
+  updated_at: ~
+weekly_trends_062: 
+  created_at: ~
+  error: "0.00103354"
+  id: "62"
+  page_id: "235959"
+  trend: "3.51112"
+  updated_at: ~
+weekly_trends_063: 
+  created_at: ~
+  error: "0.00128301"
+  id: "63"
+  page_id: "5042951"
+  trend: "11.333"
+  updated_at: ~
+weekly_trends_064: 
+  created_at: ~
+  error: "0.00115235"
+  id: "64"
+  page_id: "916099"
+  trend: "10.2928"
+  updated_at: ~
+weekly_trends_065: 
+  created_at: ~
+  error: "0.0012571"
+  id: "65"
+  page_id: "17322701"
+  trend: "13.4784"
+  updated_at: ~
+weekly_trends_066: 
+  created_at: ~
+  error: "0.000599715"
+  id: "66"
+  page_id: "1516915"
+  trend: "10.4508"
+  updated_at: ~
+weekly_trends_067: 
+  created_at: ~
+  error: "0.00126193"
+  id: "67"
+  page_id: "34218"
+  trend: "11.4694"
+  updated_at: ~
+weekly_trends_068: 
+  created_at: ~
+  error: "0.00127929"
+  id: "68"
+  page_id: "8517686"
+  trend: "56.6629"
+  updated_at: ~
+weekly_trends_069: 
+  created_at: ~
+  error: "0.0012842"
+  id: "69"
+  page_id: "1092923"
+  trend: "12.1009"
+  updated_at: ~
+weekly_trends_070: 
+  created_at: ~
+  error: "0.00111778"
+  id: "70"
+  page_id: "14533"
+  trend: "13.1125"
+  updated_at: ~
+weekly_trends_071: 
+  created_at: ~
+  error: "0.00124915"
+  id: "71"
+  page_id: "232190"
+  trend: "14.0864"
+  updated_at: ~
+weekly_trends_072: 
+  created_at: ~
+  error: "0.0011386"
+  id: "72"
+  page_id: "310570"
+  trend: "11.0586"
+  updated_at: ~
+weekly_trends_073: 
+  created_at: ~
+  error: "0.00122365"
+  id: "73"
+  page_id: "32611"
+  trend: "13.0137"
+  updated_at: ~
+weekly_trends_074: 
+  created_at: ~
+  error: "0.000854228"
+  id: "74"
+  page_id: "5043734"
+  trend: "13.8418"
+  updated_at: ~
+weekly_trends_075: 
+  created_at: ~
+  error: "0.00133812"
+  id: "75"
+  page_id: "326123"
+  trend: "13.07"
+  updated_at: ~
+weekly_trends_076: 
+  created_at: ~
+  error: "0.00112619"
+  id: "76"
+  page_id: "21501511"
+  trend: "6.37459"
+  updated_at: ~
+weekly_trends_077: 
+  created_at: ~
+  error: "0.00130682"
+  id: "77"
+  page_id: "240940"
+  trend: "15.5394"
+  updated_at: ~
+weekly_trends_078: 
+  created_at: ~
+  error: "0.0012332"
+  id: "78"
+  page_id: "2005448"
+  trend: "7.86906"
+  updated_at: ~
+weekly_trends_079: 
+  created_at: ~
+  error: "0.00110715"
+  id: "79"
+  page_id: "9988187"
+  trend: "14.2722"
+  updated_at: ~
+weekly_trends_080: 
+  created_at: ~
+  error: "0.000955049"
+  id: "80"
+  page_id: "302602"
+  trend: "11.3901"
+  updated_at: ~
+weekly_trends_081: 
+  created_at: ~
+  error: "0.000847318"
+  id: "81"
+  page_id: "2982688"
+  trend: "11.2263"
+  updated_at: ~
+weekly_trends_082: 
+  created_at: ~
+  error: "0.00115451"
+  id: "82"
+  page_id: "5794648"
+  trend: "7.77041"
+  updated_at: ~
+weekly_trends_083: 
+  created_at: ~
+  error: "0.00134391"
+  id: "83"
+  page_id: "3383"
+  trend: "23.6378"
+  updated_at: ~
+weekly_trends_084: 
+  created_at: ~
+  error: "0.00129034"
+  id: "84"
+  page_id: "19188562"
+  trend: "8.63114"
+  updated_at: ~
+weekly_trends_085: 
+  created_at: ~
+  error: "0.00136326"
+  id: "85"
+  page_id: "21374259"
+  trend: "3.78522"
+  updated_at: ~
+weekly_trends_086: 
+  created_at: ~
+  error: "0.00124073"
+  id: "86"
+  page_id: "1769827"
+  trend: "14.9604"
+  updated_at: ~
+weekly_trends_087: 
+  created_at: ~
+  error: "0.000909059"
+  id: "87"
+  page_id: "46276"
+  trend: "13.1427"
+  updated_at: ~
+weekly_trends_088: 
+  created_at: ~
+  error: "0.00133244"
+  id: "88"
+  page_id: "307"
+  trend: "12.0597"
+  updated_at: ~
+weekly_trends_089: 
+  created_at: ~
+  error: "0.00134335"
+  id: "89"
+  page_id: "18225947"
+  trend: "2.01129"
+  updated_at: ~
+weekly_trends_090: 
+  created_at: ~
+  error: "0.00134745"
+  id: "90"
+  page_id: "31341"
+  trend: "9.66695"
+  updated_at: ~
+weekly_trends_091: 
+  created_at: ~
+  error: "0.000826525"
+  id: "91"
+  page_id: "3434750"
+  trend: "13.3835"
+  updated_at: ~

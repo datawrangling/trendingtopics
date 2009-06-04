@@ -5,3 +5,7 @@ schema_migrations_002:
   version: "20090602123029"
 schema_migrations_003: 
   version: "20090602232155"
+schema_migrations_004: 
+  version: "20090604095428"
+schema_migrations_005: 
+  version: "20090604095527"
