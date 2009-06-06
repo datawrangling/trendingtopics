@@ -6,4 +6,5 @@ config/config.yml
 config/deploy.rb
 config/s3.yml
 config/database.yml
+server_config/root/.s3cfg
 
