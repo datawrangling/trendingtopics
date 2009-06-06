@@ -2,7 +2,7 @@ class Page < ActiveRecord::Base
   has_one :daily_timeline
   has_one :daily_trend
   has_one :weekly_trend    
-  named_scope :title_like, lambda { |query| { :conditions => ['title like ?', "#{query}%"], :order => '`total_pageviews` DESC', :limit => 20 } }
+  named_scope :title_like, lambda { |query| { :conditions => ['title like ?', "#{query}%"], :order => '`total_pageviews` DESC', :limit => 12 } }
   
   def normed_daily_pageviews
     @pageviews = JSON.parse(self.daily_timeline.pageviews)
