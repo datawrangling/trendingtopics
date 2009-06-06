@@ -15,7 +15,7 @@ class Page < ActiveRecord::Base
     end
     sorted_pageviews = []
     date_view_hash.keys.sort.each { |key| sorted_pageviews << date_view_hash[key] }
-    return sorted_pageviews
+    return sorted_pageviews[-30,30]
   end
   
   def sparkline( fillcolor='76A4FB' )

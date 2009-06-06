@@ -161,11 +161,17 @@ LINES TERMINATED BY '\n'
 (id, url, title, page_latest, total_pageviews);
 
 
--- LOAD DATA LOCAL INFILE 'weekly_trends_sample.txt'
--- INTO TABLE weekly_trends
--- FIELDS TERMINATED BY '\t'
--- LINES TERMINATED BY '\n'
--- (page_id, trend, error);
+LOAD DATA LOCAL INFILE '/mnt/sample_daily_trends.txt'
+INTO TABLE daily_trends
+FIELDS TERMINATED BY '\t'
+LINES TERMINATED BY '\n'
+(page_id, trend, error);
+
+LOAD DATA LOCAL INFILE '/mnt/sample_daily_trends.txt'
+INTO TABLE weekly_trends
+FIELDS TERMINATED BY '\t'
+LINES TERMINATED BY '\n'
+(page_id, trend, error);
 
 -- LOAD DATA LOCAL INFILE '~/pages_sample.txt'
 -- INTO TABLE pages
