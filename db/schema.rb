@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090604095527) do
+ActiveRecord::Schema.define(:version => 20090605234534) do
 
   create_table "daily_timelines", :force => true do |t|
     t.integer  "page_id"
@@ -31,12 +31,11 @@ ActiveRecord::Schema.define(:version => 20090604095527) do
   end
 
   create_table "pages", :force => true do |t|
-    t.string   "url"
-    t.string   "title"
-    t.integer  "page_latest"
-    t.integer  "total_pageviews"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string  "url"
+    t.string  "title"
+    t.integer "page_latest"
+    t.integer "total_pageviews"
+    t.float   "monthly_trend"
   end
 
   add_index "pages", ["title"], :name => "pages_title_index"
