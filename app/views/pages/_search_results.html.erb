@@ -1,5 +1,5 @@
 <ul>
 	<% for page in @pages %>
-	<li><%= link_to h(page.title + '  ' + number_with_delimiter(page.total_pageviews, ',')), :controller=>"pages", :action=>"show", :id=>page %></li>
+	<li><%= link_to h(page.title + '\t' + number_with_delimiter(page.total_pageviews, ',')), :controller=>"pages", :action=>"show", :id=>page %></li>
   	<% end %>
 </ul>
