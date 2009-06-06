@@ -3,13 +3,13 @@ require 'active_record/fixtures'
 namespace :db do
   desc "Seed the database with once/ and always/ fixtures."
   task :seed => :environment do 
-    load_fixtures "seed/once"
-    load_fixtures "seed/always", :always
+    load_fixtures "data/once"
+    load_fixtures "data/always", :always
   end
  
   desc "Seed the database with develop/ fixtures."
   task :develop => :environment do 
-    load_fixtures 'seed/develop', :always
+    load_fixtures 'data/develop', :always
   end
  
  
