@@ -1,14 +1,14 @@
 class DailyTrendsController < ApplicationController
   # GET /daily_trends
   # GET /daily_trends.xml
-  def index
-    @daily_trends = DailyTrend.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @daily_trends }
-    end
-  end
+  # def index
+  #   @daily_trends = DailyTrend.all
+  # 
+  #   respond_to do |format|
+  #     format.html # index.html.erb
+  #     format.xml  { render :xml => @daily_trends }
+  #   end
+  # end
 
   # GET /daily_trends/1
   # GET /daily_trends/1.xml
