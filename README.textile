@@ -1,4 +1,13 @@
 
+
+Some gems used:
+
+will_paginate
+autocomplete
+gc4r
+annotated-timeline
+
+
 == Mounting Wikistats AWS Public Dataset
 
 ec2-run-instances ami-5394733a -k gsg-keypair -t c1.medium -z us-east-1a
@@ -8,17 +17,7 @@ ec2-attach-volume vol-2455b74d -i i-ed440b84 -d /dev/sdf
 mkdir /mnt/wikidata
 mount /dev/sdf /mnt/wikidata
 
---------------
 
-TODO: expand data volume, take snapshot, and send id to AWS
 
---------------
-
-Plugins to install:
-
-will_paginate
-autocomplete
-gc4r
-annotated-timeline
 
 
