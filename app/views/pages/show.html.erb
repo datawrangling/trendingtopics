@@ -18,7 +18,7 @@
 </div> <!-- first-section -->
 
 <div id="second-section" class="section">
-    <h3>Wikipedia Page <%= link_to "Link", 'http://en.wikipedia.org/wiki/' + @page.url, :class => "wikilink" %></h3>
+    <h3><%= link_to @page.title, 'http://en.wikipedia.org/wiki/' + @page.url, :class => "wikilink" %> on Wikipedia</h3>
     <iframe 
         name="cwindow"
         class="wikiframe" 
