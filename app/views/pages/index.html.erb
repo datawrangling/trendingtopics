@@ -3,12 +3,11 @@
 <div id="first-section" class="section">
 
     <div id="timeline_chart" class="left">
-        <h3>Fastest Rising Article: <%= link_to @page.title, @page  %></h3>  
+        <h3>Fastest Rising Article: <%= link_to truncate(@page.title,35), @page  %></h3>  
         <%= render :partial => "timeline"  %>
   	</div> <!-- #timeline_chart -->	
 
     <div id="news" class="right">
-        <h3><b><%= @page.title %></b> in the News</h3>
         <%= render :partial => "news_results"  %> 
     </div>	<!-- #news -->		
 
