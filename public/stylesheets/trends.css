@@ -68,7 +68,7 @@ body {
 
 .section { /* For a horizontal section of content */
     width: 940px; /* content - 20 (borders) */
-    padding: 10px 10px;
+    padding: 0 10px;
 }
 
 #timeline_chart {}
