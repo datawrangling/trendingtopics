@@ -6,7 +6,6 @@ class PagesController < ApplicationController
   use_google_charts
 
   def auto_complete_for_search_query
-    # Rails sanitizes the input to avoid SQL injection (see title_like in pages.rb)
     @pages = Page.title_like params["search"]["query"]
     render :partial => "search_results"
   end  
@@ -14,8 +13,8 @@ class PagesController < ApplicationController
   def index
     @pages = Page.paginate :page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page']  
 
-    @rising = DailyTrend.find(:all, :limit => 10, :order => 'trend DESC')
-    @dropping = DailyTrend.find(:all, :limit => 10, :order => 'trend ASC')    
+    @rising = DailyTrend.find(:all, :limit => 12, :order => 'trend DESC')
+    @dropping = DailyTrend.find(:all, :limit => 6, :order => 'trend ASC')    
     
     @page = @rising[0].page   
     

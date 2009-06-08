@@ -1,63 +1,87 @@
-<div class="search_field">
-	<form method="post" action="?">
-		<div class="search_form">
-		<p>Find Articles: <%= render :partial=>"pages/search_pane" %></p> 
-		</div>
-	</form>		
-    <p>&nbsp;</p>
-</div>
-
 <% content_for :title, "Trending Topics: Hot Wikipedia Topics - Powered by Hadoop & EC2" %>
 
-<div class="left">
-	<div class="right_side">
-    <div id = "timeline_chart" class="left_box">
-      <h2>Today's Fastest Rising Article: <%= link_to @page.title, @page  %></h2>  
-          <%= render :partial => "timeline"  %>
-  	</div>	
-    <h3>Biggest Movers (Last 30 Days)</h3>	
-    <table>
-      <tr>
-        <th>Rank</th>
-        <th>Pageviews</th>
-        <th>Article</th>
-        <th>Wikilink</th>
-      </tr>
-      <% @pages.each_with_index do |page, index| %>
-        <tr>
-          <td><%= index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1) %></td>
-          <td><%= number_with_delimiter(page.total_pageviews, ',') %></td>  
-          <td><%= link_to page.title, page  %><BR><%= image_tag page.sparkline('76A4FB').to_url %> </td>
-          <td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td>
-        </tr>
-      <% end %>
-    </table>
-    <br />
-    <%= will_paginate @pages, :page_links=> false %>
-  </div>			
-</div>
-<div class="right">
-  <div id = "news" class="right_articles">
-  <h2><b><%= @page.title %></b> in the News</h2>
-   <%= render :partial => "news_results"  %> 
-  </div>			
-    <h3>Rising Articles (Last 24 hours):</h3>
-		<div class="right_articles">
-		  <% @rising.each_with_index do |rising, index| %>
-	      <p><b><%= link_to rising.page.title, rising.page, :class =>
-        "title" %><BR><%= image_tag rising.page.sparkline('33FF00').to_url %> </b></p>    
-      <% end %>          
-		</div>						
-			
-    <h3>Dropping Articles (Last 24 hours):</h3>
-		<div class="right_articles">
-		  <% @dropping.each_with_index do |dropping, index| %>
-	      <p><b><%= link_to dropping.page.title, dropping.page, :class =>
-        "title" %><BR><%= image_tag dropping.page.sparkline('FF0000').to_url %> </b></p>    
-      <% end %>          
-		</div>
-			
-    <div class="right_articles"></div>
-	</div>	
-	
-</div>
+<div id="first-section" class="section">
+
+    <div id="timeline_chart" class="left">
+        <h3>Fastest Rising Article: <%= link_to @page.title, @page  %></h3>  
+        <%= render :partial => "timeline"  %>
+  	</div> <!-- #timeline_chart -->	
+
+    <div id="news" class="right">
+        <h3><b><%= @page.title %></b> in the News</h3>
+        <%= render :partial => "news_results"  %> 
+    </div>	<!-- #news -->		
+
+    <div class="clear">
+    </div> <!-- .clear -->
+
+</div> <!-- first-section -->
+
+<div id="second-section" class="section">
+    
+    <div id="main-column" class="left">
+        <div id="biggest-movers" class="left">
+            <h3>Biggest Movers (Last 30 Days)</h3>	
+            <table id="movers">
+              <tr>
+                <th>Rank</th>
+                <th>Page Views</th>
+                <th>Trend</th>
+                <th>Article</th>
+              </tr>
+              <% @pages.each_with_index do |page, index| %>
+                <tr>
+                  <td class="center"><%= index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1) %></td>
+                  <td class="pageviews"><%= number_with_delimiter(page.total_pageviews, ',') %></td>
+                  <td><%= link_to image_tag(page.sparkline('999999').to_url) , page %></td>
+                  <td>
+                    <%= link_to truncate(page.title,20), page, :class => "articlelink"  %>
+                  <!--<%= link_to 'Wikilink', 'http://en.wikipedia.org/wiki/' + page.url, :class => "wikilink" %> --></td>
+                  <!--td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td-->
+                </tr>
+              <% end %>
+            </table>
+            <center>
+                <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
+            </center>
+        </div>
+
+    </div>
+    
+    <div id="side-column" class="right">
+
+        <div id="rising-articles">
+            <h3>Rising (Last 24 hours):</h3>
+            <div class="articles">
+    		    <% @rising.each_with_index do |rising, index| %>
+    	        <p>
+    	            <strong>
+    	                <%= link_to image_tag(rising.page.sparkline('888888').to_url), rising.page %>&nbsp;&nbsp;
+<!--    	                <%= image_tag rising.page.sparkline('34DB05').to_url %>&nbsp;&nbsp;-->
+    	                <%= link_to truncate(rising.page.title,20), rising.page, :class => "title" %>
+    	            </strong>
+                </p>    
+                <% end %>          
+    		</div>
+        </div> <!-- #rising -->
+        
+        <div id="dropping-articles">
+            <h3>Dropping (Last 24 hours):</h3>
+            <div class="articles">
+        	    <% @dropping.each_with_index do |dropping, index| %>
+        	    <p>
+        	        <strong>
+        	            <%= link_to image_tag(dropping.page.sparkline('888888').to_url), dropping.page %>&nbsp;&nbsp;
+<!--        	        <%= image_tag dropping.page.sparkline('DD0505').to_url %>&nbsp;&nbsp;-->
+        	            <%= link_to truncate(dropping.page.title,20), dropping.page, :class => "title" %>
+                    </strong>
+                </p>    
+                <% end %>          
+        	</div>
+        </div> <!-- #dropping -->
+    </div>
+
+    <div class="clear">
+    </div>
+    
+</div> <!-- second-section -->

@@ -20,14 +20,14 @@ class Page < ActiveRecord::Base
   
   def sparkline( fillcolor='76A4FB' )
     dataset = GC4R::API::GoogleChartDataset.new :data => self.normed_daily_pageviews, 
-      :color => '000000', :fill => ['B', fillcolor ,'0','0','0']
+      :color => '999999', :fill => ['B', fillcolor ,'0','0','0']
     # red => FF0000
     # lightblue => 76A4FB
     # green => 33FF00
     # darkblue => 0000FF    
     data = GC4R::API::GoogleChartData.new :datasets => dataset , :min => 0, :max => 120
     # @chart = GoogleBarChart.new :width => 120, :height => 12
-    @chart = GC4R::API::GoogleSparklinesChart.new :width => 120, :height => 12
+    @chart = GC4R::API::GoogleSparklinesChart.new :width => 120, :height => 15
     @chart.data = data
     return @chart
   end  
