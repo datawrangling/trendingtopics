@@ -1,7 +1,9 @@
 <% content_for :title, "Trending Topics: Hot Wikipedia Topics - Powered by Hadoop & EC2" %>
 
 <div id="first-section" class="section">
-
+  <% if params[:search] %>
+    <!-- do nothing -->
+ <% else %>    
     <div id="timeline_chart" class="left">
         <h3>Fastest Rising Article: <%= link_to truncate(@page.title,35), @page  %></h3>  
         <%= render :partial => "timeline"  %>
@@ -10,6 +12,7 @@
     <div id="news" class="right">
         <%= render :partial => "news_results"  %> 
     </div>	<!-- #news -->		
+<% end %>  	
 
     <div class="clear">
     </div> <!-- .clear -->
@@ -20,7 +23,11 @@
     
     <div id="main-column" class="left">
         <div id="biggest-movers" class="left">
-            <h3>Biggest Movers (Last 30 Days)</h3>	
+            <% if params[:search] %>
+              <h3>Search Results for <span><%= params[:search][:query] %></span></h3> 
+            <% else %>
+              <h3>Biggest Movers (Last 30 Days)</h3>
+            <% end %>  	
             <table id="movers">
               <tr>
                 <th>Rank</th>

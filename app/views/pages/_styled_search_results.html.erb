@@ -1,0 +1,5 @@
+<ul>
+	<% for page in @pages %>
+	<li><%= link_to h(page.title), :controller=>"pages", :action=>"show", :id=>page %></li>
+  	<% end %>
+</ul>

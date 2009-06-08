@@ -2,7 +2,7 @@ class PagesController < ApplicationController
   # GET /pages
   # GET /pages.xml
   protect_from_forgery :only => [:create, :update, :destroy]
-  layout 'pages', :except => [:auto_complete_for_search_query]
+  layout 'pages'#, :except => [:auto_complete_for_search_query]
   use_google_charts
 
   caches_page :index
@@ -13,23 +13,32 @@ class PagesController < ApplicationController
     @pages = Page.title_like params["search"]["query"]
     render :partial => "search_results"
   end  
-  
+    
   def index
-    @pages = Page.paginate :page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page']  
+    if params[:search]
+      @pages = Page.title_like(params["search"]["query"]).paginate :page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page']  
+      
+    else   
+      @pages = Page.paginate :page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page']  
+      
+    end 
 
     @rising = DailyTrend.find(:all, :limit => 20, :order => 'trend DESC')
     @dropping = DailyTrend.find(:all, :limit => 6, :order => 'trend ASC')    
-    
+  
     @page = @rising[0].page   
-    
+  
     unless params[:page]
       params[:page]='1'
     end  
-        
+      
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @pages }
-    end
+    end      
+      
+
+    
   end
 
   # GET /pages/1
