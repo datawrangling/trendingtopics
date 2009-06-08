@@ -2,7 +2,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  before_filter :authenticate # v1.0 is an internal app with single admin user
+  # before_filter :authenticate # v1.0 is an internal app with single admin user
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
   Rubaidh::GoogleAnalytics.tracker_id = APP_CONFIG['tracker_id']
