@@ -33,6 +33,7 @@ class PagesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @pages }
+      format.atom { render :layout => false}
     end      
       
 
