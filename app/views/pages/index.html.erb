@@ -31,7 +31,7 @@
             <table id="movers">
               <tr>
                 <th>Rank</th>
-                <th>Page Views</th>
+                <th>Views</th>
                 <th>Trend</th>
                 <th>Article</th>
               </tr>             
@@ -41,7 +41,7 @@
                   <td class="pageviews"><%= number_with_delimiter(page.total_pageviews, ',') %></td>
                   <td><%= link_to image_tag(page.sparkline('999999').to_url) , page %></td>
                   <td>
-                    <%= link_to truncate(page.title,20), page, :class => "articlelink"  %>
+                    <%= link_to truncate(page.title,35), page, :class => "articlelink"  %>
                   <!--<%= link_to 'Wikilink', 'http://en.wikipedia.org/wiki/' + page.url, :class => "wikilink" %> --></td>
                   <!--td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td-->
                 </tr>
