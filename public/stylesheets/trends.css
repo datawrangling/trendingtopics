@@ -41,7 +41,7 @@ body {
 
 #search {
     float: left;
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 #search span {
@@ -148,6 +148,7 @@ td.pageviews {
     text-align: center;
 }
 
+
 table#brands {
     width: 440px;
 }
@@ -193,6 +194,13 @@ input#search_query {
     border: 10px solid #DDD;
     font-size: 120%;
 }
+
+.searchbutton {
+  width: 70px;
+  height: 25px;
+  
+}
+
 
 /* Generic */
 .left { float: left; }

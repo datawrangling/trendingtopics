@@ -34,7 +34,7 @@
                 <th>Page Views</th>
                 <th>Trend</th>
                 <th>Article</th>
-              </tr>
+              </tr>             
               <% @pages.each_with_index do |page, index| %>
                 <tr>
                   <td class="center"><%= index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1) %></td>

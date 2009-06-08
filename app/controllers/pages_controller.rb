@@ -5,8 +5,6 @@ class PagesController < ApplicationController
   layout 'pages'#, :except => [:auto_complete_for_search_query]
   use_google_charts
 
-  caches_page :index
-  caches_page :show
   caches_page :auto_complete_for_search_query
 
   def auto_complete_for_search_query
