@@ -23,8 +23,11 @@ body {
     font-size: 100%;
 }
 
+
+
+
 #wrapper {
-    margin: 0 auto;
+    margin: auto auto;
     width: 960px;
 }
 

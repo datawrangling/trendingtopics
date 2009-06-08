@@ -19,83 +19,86 @@
 </head>
 
 <body>
-<div id="wrapper">
+  <div id="container">
 
-	<div id="header">
+    <div id="wrapper">
+
+    	<div id="header">
 
         
-        <div id="search">
+            <div id="search">
         
-            <div class="search_field">
-            	<form method="post" action="?">
-            		<div class="search_form">
-            		    <span>Find Topics: </span><%= render :partial=>"pages/search_pane" %>
-            		</div>
-            	</form>		
+                <div class="search_field">
+                	<form method="post" action="?">
+                		<div class="search_form">
+                		    <span>Find Topics: </span><%= render :partial=>"pages/search_pane" %>
+                		</div>
+                	</form>		
+                </div>
+            </div> <!-- #search -->
+
+            <div id="billboard">
+            <h1><%= link_to "Trending Topics", "/", :class =>"dark" %></h1>
+        
+                <h2>
+                    Hot Wikipedia Topics, Served Fresh Daily.<br/>
+                    <span>
+                        Powered by <a href="http://hadoop.apache.org/core/">Hadoop</a> &amp; 
+                        <a href="http://hadoop.apache.org/hive/">Hive</a> on 
+                        <a href="http://www.cloudera.com/hadoop-ec2">Amazon EC2</a>
+                    </span>
+                </h2>
+            </div> <!-- #billboard -->
+
+            <div class="clear">
+                <!-- Use this to enforce bottom -->
             </div>
-        </div> <!-- #search -->
+    	</div> <!-- #header -->
 
-        <div id="billboard">
-        <h1><%= link_to "Trending Topics", "/", :class =>"dark" %></h1>
-        
-            <h2>
-                Hot Wikipedia Topics, Served Fresh Daily.<br/>
-                <span>
-                    Powered by <a href="http://hadoop.apache.org/core/">Hadoop</a> &amp; 
-                    <a href="http://hadoop.apache.org/hive/">Hive</a> on 
-                    <a href="http://www.cloudera.com/hadoop-ec2">Amazon EC2</a>
-                </span>
-            </h2>
-        </div> <!-- #billboard -->
+    	<div id="content">
+            <%= flash[:notice] %>
 
-        <div class="clear">
-            <!-- Use this to enforce bottom -->
-        </div>
-	</div> <!-- #header -->
+        <!-- Main site content -->
+        <%= yield %>
 
-	<div id="content">
-        <%= flash[:notice] %>
+        </div> <!-- content -->
 
-    <!-- Main site content -->
-    <%= yield %>
-
-    </div> <!-- content -->
-
-	<div id="footer">
-	    <div class="left">
-		    <a href="#">RSS Feed</a> | <%= link_to "Contact", "contact" %> | <%= link_to "About", "about" %> |
-            &copy; Copyright 2009 Data Wrangling, LLC
-	    </div> <!-- left -->
+    	<div id="footer">
+    	    <div class="left">
+    		    <a href="#">RSS Feed</a> | <%= link_to "Contact", "contact" %> | <%= link_to "About", "about" %> |
+                &copy; Copyright 2009 Data Wrangling, LLC
+    	    </div> <!-- left -->
 	    
-	    <div class="right">
-	        <table id="brands">
-	            <tr>
-            <td><a href="http://www.datawrangling.com" title="DataWrangling.com">
-                <%= image_tag("dg-logo-dark-1.png", :size =>"120x36") %></a>  
-            </td>
-            <td>
-            <a href="http://www.cloudera.com/" title="Cloudera">
-                <%= image_tag("cloudera-logo.png", :size =>"96x24") %></a>
-            </td>
-            <td>
-            <a href="http://www.napkinsketches.com" title="Napkin Sketches">
-                <%= image_tag("ns-logo.gif", :size =>"50x32") %></a>
-            </td>
-            <td>
-            <a href="http://aws.amazon.com/" title="Amazon AWS">
-                <%= image_tag("logo_aws.gif", :size =>"82x30") %></a>
-                </tr>
-            </td>
-            </table>
-	    </div> <!-- right -->		
-        <!-- put logo buttons for Cloudera, Data Wrangling, Amazon Web Services, and Napkin Sketches on bottom left & right -->     
+    	    <div class="right">
+    	        <table id="brands">
+    	            <tr>
+                <td><a href="http://www.datawrangling.com" title="DataWrangling.com">
+                    <%= image_tag("dg-logo-dark-1.png", :size =>"120x36") %></a>  
+                </td>
+                <td>
+                <a href="http://www.cloudera.com/" title="Cloudera">
+                    <%= image_tag("cloudera-logo.png", :size =>"96x24") %></a>
+                </td>
+                <td>
+                <a href="http://www.napkinsketches.com" title="Napkin Sketches">
+                    <%= image_tag("ns-logo.gif", :size =>"50x32") %></a>
+                </td>
+                <td>
+                <a href="http://aws.amazon.com/" title="Amazon AWS">
+                    <%= image_tag("logo_aws.gif", :size =>"82x30") %></a>
+                    </tr>
+                </td>
+                </table>
+    	    </div> <!-- right -->		
+            <!-- put logo buttons for Cloudera, Data Wrangling, Amazon Web Services, and Napkin Sketches on bottom left & right -->     
 
-        <br/>
-        <br/>
-        <br/>
+            <br/>
+            <br/>
+            <br/>
 
-	</div>  <!-- #footer -->
+    	</div>  <!-- #footer -->
 
-</div> <!-- #wrapper -->
+    </div> <!-- #wrapper -->
+  </div> <!-- #container -->
 </body>
 </html>

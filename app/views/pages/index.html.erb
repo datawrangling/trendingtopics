@@ -65,20 +65,7 @@
     		</div>
         </div> <!-- #rising -->
         
-        <div id="dropping-articles">
-            <h3>Dropping (Last 24 hours):</h3>
-            <div class="articles">
-        	    <% @dropping.each_with_index do |dropping, index| %>
-        	    <p>
-        	        <strong>
-        	            <%= link_to image_tag(dropping.page.sparkline('888888').to_url), dropping.page %>&nbsp;&nbsp;
-<!--        	        <%= image_tag dropping.page.sparkline('DD0505').to_url %>&nbsp;&nbsp;-->
-        	            <%= link_to truncate(dropping.page.title,20), dropping.page, :class => "title" %>
-                    </strong>
-                </p>    
-                <% end %>          
-        	</div>
-        </div> <!-- #dropping -->
+
     </div>
 
     <div class="clear">

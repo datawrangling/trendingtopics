@@ -13,7 +13,7 @@ class PagesController < ApplicationController
   def index
     @pages = Page.paginate :page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page']  
 
-    @rising = DailyTrend.find(:all, :limit => 12, :order => 'trend DESC')
+    @rising = DailyTrend.find(:all, :limit => 20, :order => 'trend DESC')
     @dropping = DailyTrend.find(:all, :limit => 6, :order => 'trend ASC')    
     
     @page = @rising[0].page   
