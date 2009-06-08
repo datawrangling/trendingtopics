@@ -1,7 +1,7 @@
 -- The SQL in this file is used to preprocess the historical 
--- raw wikipedia dumps in the AWS public dataset.  The data 
--- is used to populate the Rails app MySQL pages table and the
--- page_lookups table.
+-- raw wikipedia dumps as part of building the AWS public dataset. 
+-- The data is used to create MySQL a redirect
+-- page_lookups table used by hadoop.
 
 -- Grep for only namespace0 articles
 
@@ -142,36 +142,36 @@ LINES TERMINATED BY '\n'
 
 -- Maybe HourlyTimeline
 
-set foreign_key_checks=0; 
-set sql_log_bin=0; 
-set unique_checks=0;
+-- set foreign_key_checks=0; 
+-- set sql_log_bin=0; 
+-- set unique_checks=0;
 
-LOAD DATA LOCAL INFILE '/mnt/wikidata/wikidump/page_lookup_nonredirects.txt'
-INTO TABLE pages
-FIELDS TERMINATED BY '\t'
-LINES TERMINATED BY '\n'
-(url, title, id, page_latest);
+-- LOAD DATA LOCAL INFILE '/mnt/wikidata/wikidump/page_lookup_nonredirects.txt'
+-- INTO TABLE pages
+-- FIELDS TERMINATED BY '\t'
+-- LINES TERMINATED BY '\n'
+-- (url, title, id, page_latest);
 -- Query OK, 2821319 rows affected (30.29 sec)
 
 -- 
-LOAD DATA LOCAL INFILE '/mnt/wikidata/wikidump/pages_sample.txt'
-INTO TABLE pages
-FIELDS TERMINATED BY '\t'
-LINES TERMINATED BY '\n'
-(id, url, title, page_latest, total_pageviews);
-
-
-LOAD DATA LOCAL INFILE '/mnt/sample_daily_trends.txt'
-INTO TABLE daily_trends
-FIELDS TERMINATED BY '\t'
-LINES TERMINATED BY '\n'
-(page_id, trend, error);
-
-LOAD DATA LOCAL INFILE '/mnt/sample_daily_trends.txt'
-INTO TABLE weekly_trends
-FIELDS TERMINATED BY '\t'
-LINES TERMINATED BY '\n'
-(page_id, trend, error);
+-- LOAD DATA LOCAL INFILE '/mnt/wikidata/wikidump/pages_sample.txt'
+-- INTO TABLE pages
+-- FIELDS TERMINATED BY '\t'
+-- LINES TERMINATED BY '\n'
+-- (id, url, title, page_latest, total_pageviews);
+-- 
+-- 
+-- LOAD DATA LOCAL INFILE '/mnt/sample_daily_trends.txt'
+-- INTO TABLE daily_trends
+-- FIELDS TERMINATED BY '\t'
+-- LINES TERMINATED BY '\n'
+-- (page_id, trend, error);
+-- 
+-- LOAD DATA LOCAL INFILE '/mnt/sample_daily_trends.txt'
+-- INTO TABLE weekly_trends
+-- FIELDS TERMINATED BY '\t'
+-- LINES TERMINATED BY '\n'
+-- (page_id, trend, error);
 
 -- LOAD DATA LOCAL INFILE '~/pages_sample.txt'
 -- INTO TABLE pages
@@ -181,19 +181,19 @@ LINES TERMINATED BY '\n'
 
 
 -- create a MYSQL index on the title field
-create index pages_title_index on pages (title(64));
+-- create index pages_title_index on pages (title(64));
 -- Query OK, 2821319 rows affected (1 min 13.23 sec)
-
-set foreign_key_checks=1; 
-set unique_checks=1;
+-- 
+-- set foreign_key_checks=1; 
+-- set unique_checks=1;
 
 --sed -i -e 's/\x01/   /g' daily_timelines_sample.txt
 
-LOAD DATA LOCAL INFILE '/mnt/wikidata/wikidump/daily_timelines_sample.txt'
-INTO TABLE daily_timelines
-FIELDS TERMINATED BY '\t'
-LINES TERMINATED BY '\n'
-(page_id, dates, pageviews, total_pageviews);
+-- LOAD DATA LOCAL INFILE '/mnt/wikidata/wikidump/daily_timelines_sample.txt'
+-- INTO TABLE daily_timelines
+-- FIELDS TERMINATED BY '\t'
+-- LINES TERMINATED BY '\n'
+-- (page_id, dates, pageviews, total_pageviews);
 
 -- LOAD DATA LOCAL INFILE '~/daily_timelines_sample.txt'
 -- INTO TABLE daily_timelines
@@ -201,7 +201,7 @@ LINES TERMINATED BY '\n'
 -- LINES TERMINATED BY '\n'
 -- (page_id, dates, pageviews, total_pageviews);
 
-create index timeline_totalviews_index on daily_timelines (total_pageviews);
+-- create index timeline_totalviews_index on daily_timelines (total_pageviews);
 
 
 

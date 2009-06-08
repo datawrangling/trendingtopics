@@ -1,5 +1,9 @@
 -- this is run when the database is first created to populate 
--- historical daily timelines and page metadata
+-- historical daily timelines and page metadata.  For 8 months of data:
+-- $ time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/load_history.sql
+-- real 49m56.652s
+-- user 0m1.512s
+-- sys  0m9.237s
 
 set foreign_key_checks=0; 
 set sql_log_bin=0; 
