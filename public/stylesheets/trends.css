@@ -29,7 +29,7 @@ body {
 }
 
 #header {
-    padding: 20px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
 }
 
 #billboard {
@@ -93,8 +93,8 @@ iframe.wikiframe {
 /* Headings */
 
 h1 {
-    margin: 0 0 15px 0;
-    font-size: 250%;
+    margin: 10px 10px 10px 0;
+    font-size: 225%;
 }
 
 h2 {
@@ -188,7 +188,7 @@ a.wikilink {
 
 input#search_query {
     border: 10px solid #DDD;
-    font-size: 140%;
+    font-size: 120%;
 }
 
 /* Generic */
