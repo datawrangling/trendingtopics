@@ -215,6 +215,8 @@ LINES TERMINATED BY '\n'
 
 -- no index on page_id in the following query...
 
+
+-- 
 -- mysql> select * from page_lookups where page_id = 534366;
 -- +---------+------------------------------------------------+--------------+---------+-------------+
 -- | id      | redirect_title                                 | true_title   | page_id | page_latest |
@@ -228,109 +230,34 @@ LINES TERMINATED BY '\n'
 -- | 3151543 | 44th_President_of_the_United_States            | Barack Obama |  534366 |   276223690 | 
 -- | 3151544 | Barach_Obama                                   | Barack Obama |  534366 |   276223690 | 
 -- | 3151545 | Senator_Barack_Obama                           | Barack Obama |  534366 |   276223690 | 
--- | 3151546 | Borrack_Obama                                  | Barack Obama |  534366 |   276223690 | 
--- | 3151547 | Barrak_Obama                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151548 | Barrack_Obama                                  | Barack Obama |  534366 |   276223690 | 
--- | 3151549 | Senator_Obama                                  | Barack Obama |  534366 |   276223690 | 
--- | 3151550 | Barack_obama                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151551 | Barry_Obama                                    | Barack Obama |  534366 |   276223690 | 
--- | 3151552 | Barack_Hussein_Obama,_Jr.                      | Barack Obama |  534366 |   276223690 | 
--- | 3151553 | Barack_Hussein_Obama,_Jr                       | Barack Obama |  534366 |   276223690 | 
--- | 3151554 | Barack_Hussein_Obama_Jr                        | Barack Obama |  534366 |   276223690 | 
--- | 3151555 | Barack_Hussein_Obama_Jr.                       | Barack Obama |  534366 |   276223690 | 
--- | 3151556 | Barack_H._Obama,_Jr.                           | Barack Obama |  534366 |   276223690 | 
--- | 3151557 | Barack_H._Obama,_Jr                            | Barack Obama |  534366 |   276223690 | 
--- | 3151558 | Barack_H._Obama_Jr                             | Barack Obama |  534366 |   276223690 | 
--- | 3151559 | Barack_H._Obama_Jr.                            | Barack Obama |  534366 |   276223690 | 
--- | 3151560 | Barack_H_Obama,_Jr.                            | Barack Obama |  534366 |   276223690 | 
--- | 3151561 | Barack_H_Obama,_Jr                             | Barack Obama |  534366 |   276223690 | 
--- | 3151562 | Barack_H_Obama_Jr.                             | Barack Obama |  534366 |   276223690 | 
--- | 3151563 | Barack_H_Obama_Jr                              | Barack Obama |  534366 |   276223690 | 
--- | 3151564 | Barack_Obama_Jr                                | Barack Obama |  534366 |   276223690 | 
--- | 3151565 | Barack_Obama,_Jr.                              | Barack Obama |  534366 |   276223690 | 
--- | 3151566 | Barack_Obama_Jr.                               | Barack Obama |  534366 |   276223690 | 
--- | 3151567 | Barack_Obama,_Jr                               | Barack Obama |  534366 |   276223690 | 
--- | 3151568 | Barack_Hussein_Obama,_Junior                   | Barack Obama |  534366 |   276223690 | 
--- | 3151569 | Barack_Hussein_Obama_Junior                    | Barack Obama |  534366 |   276223690 | 
--- | 3151570 | Barack_H_Obama_Junior                          | Barack Obama |  534366 |   276223690 | 
--- | 3151571 | Barack_H_Obama,_Junior                         | Barack Obama |  534366 |   276223690 | 
--- | 3151572 | Barack_H._Obama,_Junior                        | Barack Obama |  534366 |   276223690 | 
--- | 3151573 | Barack_H._Obama_Junior                         | Barack Obama |  534366 |   276223690 | 
--- | 3151574 | Barack_Obama_Junior                            | Barack Obama |  534366 |   276223690 | 
--- | 3151575 | Barack_Obama,_Junior                           | Barack Obama |  534366 |   276223690 | 
--- | 3151576 | Barak_hussein_obama                            | Barack Obama |  534366 |   276223690 | 
--- | 3151577 | O'Bama                                         | Barack Obama |  534366 |   276223690 | 
--- | 3151578 | Bacak_Obama                                    | Barack Obama |  534366 |   276223690 | 
--- | 3151579 | Obama                                          | Barack Obama |  534366 |   276223690 | 
--- | 3151580 | Barak_obama                                    | Barack Obama |  534366 |   276223690 | 
--- | 3151581 | Barack_Obamba                                  | Barack Obama |  534366 |   276223690 | 
--- | 3151582 | Obama_Barack                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151583 | Obama,_Barack                                  | Barack Obama |  534366 |   276223690 | 
--- | 3151584 | Hussein_Obama                                  | Barack Obama |  534366 |   276223690 | 
--- | 3151585 | Barac_Obama                                    | Barack Obama |  534366 |   276223690 | 
--- | 3151586 | Barac_obama                                    | Barack Obama |  534366 |   276223690 | 
--- | 3151587 | O'bama                                         | Barack Obama |  534366 |   276223690 | 
--- | 3151588 | Barok_Oboma                                    | Barack Obama |  534366 |   276223690 | 
--- | 3151589 | Baruch_Obama                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151590 | Berack_Obama                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151591 | Barrack_Hussein_Obama                          | Barack Obama |  534366 |   276223690 | 
--- | 3151592 | B._Hussein_Obama                               | Barack Obama |  534366 |   276223690 | 
--- | 3151593 | President_Obama                                | Barack Obama |  534366 |   276223690 | 
--- | 3151594 | Barack_Hussein_Obama_II                        | Barack Obama |  534366 |   276223690 | 
--- | 3151595 | Sen._Obama                                     | Barack Obama |  534366 |   276223690 | 
--- | 3151596 | Barack_H._Obama_II                             | Barack Obama |  534366 |   276223690 | 
--- | 3151597 | Berrack_Obama                                  | Barack Obama |  534366 |   276223690 | 
--- | 3151598 | Berrak_Obama                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151599 | Berak_Obama                                    | Barack Obama |  534366 |   276223690 | 
--- | 3151600 | Barock_obama                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151601 | Barack_OBama                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151602 | Barack_Obbama                                  | Barack Obama |  534366 |   276223690 | 
--- | 3151603 | Barack_O'Bama                                  | Barack Obama |  534366 |   276223690 | 
--- | 3151604 | Barack_Hussein_Obama                           | Barack Obama |  534366 |   276223690 | 
--- | 3151605 | Burack_obama                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151606 | Barack_Hussein                                 | Barack Obama |  534366 |   276223690 | 
--- | 3151607 | Barack_Obama_II                                | Barack Obama |  534366 |   276223690 | 
--- | 3151608 | Barak_Obamba                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151609 | Ob_ama                                         | Barack Obama |  534366 |   276223690 | 
--- | 3151610 | OBAMA                                          | Barack Obama |  534366 |   276223690 | 
--- | 3151611 | Barry_O'Bama                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151612 | Obamessiah                                     | Barack Obama |  534366 |   276223690 | 
--- | 3151613 | 2008_Democratic_Presidential_Nominee           | Barack Obama |  534366 |   276223690 | 
--- | 3151614 | Obahma                                         | Barack Obama |  534366 |   276223690 | 
--- | 3151615 | Barak_O'Bama                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151616 | Barack_Obama_Presidential_Library              | Barack Obama |  534366 |   276223690 | 
--- | 3151617 | President_Barack_Obama                         | Barack Obama |  534366 |   276223690 | 
--- | 3151618 | President_Barack                               | Barack Obama |  534366 |   276223690 | 
--- | 3151619 | Presidant_barack_obama                         | Barack Obama |  534366 |   276223690 | 
--- | 3151620 | Sen._Barack_Obama                              | Barack Obama |  534366 |   276223690 | 
--- | 3151621 | African_American_President                     | Barack Obama |  534366 |   276223690 | 
--- | 3151622 | 44th_president_of_the_united_states_of_america | Barack Obama |  534366 |   276223690 | 
--- | 3151623 | President_Elect_Barack_Obama                   | Barack Obama |  534366 |   276223690 | 
--- | 3151624 | Pres._Obama                                    | Barack Obama |  534366 |   276223690 | 
--- | 3151625 | Obama_II                                       | Barack Obama |  534366 |   276223690 | 
--- | 3151626 | Borack_Obama                                   | Barack Obama |  534366 |   276223690 | 
--- | 3151627 | President_Barack_Hussein_Obama_II              | Barack Obama |  534366 |   276223690 | 
--- | 3151628 | Barry_Soetoro                                  | Barack Obama |  534366 |   276223690 | 
--- | 3151629 | President_Barack_Hussein_Obama                 | Barack Obama |  534366 |   276223690 | 
--- | 3151630 | Obama_44                                       | Barack Obama |  534366 |   276223690 | 
--- | 3151631 | Barack_Obama_Biography                         | Barack Obama |  534366 |   276223690 | 
--- | 3151632 | Barackobama                                    | Barack Obama |  534366 |   276223690 | 
--- | 3151633 | Sen_Obama                                      | Barack Obama |  534366 |   276223690 | 
--- | 3151634 | Brack_obama                                    | Barack Obama |  534366 |   276223690 | 
--- | 3151635 | President_Government                           | Barack Obama |  534366 |   276223690 | 
--- | 3151636 | Barak_h._obama                                 | Barack Obama |  534366 |   276223690 | 
--- | 3151637 | Barak_h_obama                                  | Barack Obama |  534366 |   276223690 | 
--- | 3151638 | Obama_obama                                    | Barack Obama |  534366 |   276223690 | 
--- | 3151639 | President_barack_obama                         | Barack Obama |  534366 |   276223690 | 
--- | 3151640 | Obamism                                        | Barack Obama |  534366 |   276223690 | 
--- | 3151641 | Obamaism                                       | Barack Obama |  534366 |   276223690 | 
--- | 3151642 | BHOII                                          | Barack Obama |  534366 |   276223690 | 
--- | 3151643 | Barack_obma                                    | Barack Obama |  534366 |   276223690 | 
+--    ....                                                                                   ....
+-- 
 -- | 3151644 | Rocco_Bama                                     | Barack Obama |  534366 |   276223690 | 
 -- | 3151645 | Barack_Obama's                                 | Barack Obama |  534366 |   276223690 | 
 -- | 3151646 | B._Obama                                       | Barack Obama |  534366 |   276223690 | 
 -- +---------+------------------------------------------------+--------------+---------+-------------+
--- 110 rows in set (11.15 sec)
+-- 110 rows in set (11.15 sec)    
+
+-- for joining with:
+-- 
+-- $ grep '^en Barack' pagecounts-20090521-100001 
+-- en Barack 8 1240112
+-- en Barack%20Obama 1 1167
+-- en Barack_H._Obama 1 142802
+-- en Barack_H_Obama 3 428946
+-- en Barack_H_Obama_Jr. 2 285780
+-- en Barack_Hussein_Obama,_Junior 2 285606
+-- en Barack_O%27Bama 1 142796
+-- en Barack_Obama 701 139248439
+-- en Barack_Obama%27s_first_100_days 2 143181
+-- en Barack_Obama,_Jr 2 285755
+-- en Barack_Obama,_Sr. 10 287685
+-- en Barack_Obama_%22HOPE%22_poster 2 40896
+-- en Barack_Obama_%22Hope%22_poster 13 321436
+-- en Barack_Obama_(comic_character) 1 11123
+-- en Barack_Obama_2009_presidential_inauguration 3 170683
+-- en Barack_Obama_Muslim_rumor 2 287550
+
 
 
 

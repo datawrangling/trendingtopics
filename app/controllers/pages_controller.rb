@@ -41,7 +41,7 @@ class PagesController < ApplicationController
   # GET /pages/1
   # GET /pages/1.xml
   def show
-    @page = Page.find_by_url(params[:id])
+    @page = Page.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
