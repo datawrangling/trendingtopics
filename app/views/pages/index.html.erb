@@ -32,54 +32,54 @@
             <% end %>  	
             
             <% cache_unless (params[:search], 'pages', {:page => params[:page] || 1}) do %>
-            <table id="movers">
-              <tr>
-                <th>Rank</th>
-                <th>Views</th>
-                <th>Trend</th>
-                <th>Article</th>
-              </tr>             
-              <% @pages.each_with_index do |page, index| %>
-                <tr>
-                  <td class="center"><%= index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1) %></td>
-                  <td class="pageviews"><%= number_with_delimiter(page.total_pageviews, ',') %></td>
-                  <td><%= link_to image_tag(page.sparkline('999999').to_url) , page %></td>
-                  <td>
-                    <%= link_to truncate(page.title,35), page, :class => "articlelink"  %>
-                  <!--<%= link_to 'Wikilink', 'http://en.wikipedia.org/wiki/' + page.url, :class => "wikilink" %> --></td>
-                  <!--td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td-->
-                </tr>
-              <% end %>
-            </table>
-            <center>
-                <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
-            </center>
+                <table id="movers">
+                  <tr>
+                    <th>Rank</th>
+                    <th>Views</th>
+                    <th>Trend</th>
+                    <th>Article</th>
+                  </tr>             
+                  <% @pages.each_with_index do |page, index| %>
+                    <tr>
+                      <td class="center"><%= index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1) %></td>
+                      <td class="pageviews"><%= number_with_delimiter(page.total_pageviews, ',') %></td>
+                      <td><%= link_to image_tag(page.sparkline('999999').to_url) , page %></td>
+                      <td>
+                        <%= link_to truncate(page.title,35), page, :class => "articlelink"  %>
+                      <!--<%= link_to 'Wikilink', 'http://en.wikipedia.org/wiki/' + page.url, :class => "wikilink" %> --></td>
+                      <!--td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td-->
+                    </tr>
+                  <% end %>
+                </table>
+                <center>
+                    <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
+                </center>
             <% end %>
             
         </div>
 
     </div>
     
-    <% cache do %>
-    <div id="side-column" class="right">
 
-        <div id="rising-articles">
-            <h3>Rising (Last 24 hours):</h3>
-            <div class="articles">
-    		    <% @rising.each_with_index do |rising, index| %>
-    	        <p>
-    	            <strong>
-    	                <%= link_to image_tag(rising.page.sparkline('888888').to_url), rising.page %>&nbsp;&nbsp;
-<!--    	                <%= image_tag rising.page.sparkline('34DB05').to_url %>&nbsp;&nbsp;-->
-    	                <%= link_to truncate(rising.page.title,20), rising.page, :class => "title" %>
-    	            </strong>
-                </p>    
-                <% end %>          
-    		</div>
-        </div> <!-- #rising -->
-        
+    <div id="side-column" class="right">
+      <% cache 'rising' do %>
+          <div id="rising-articles">
+              <h3>Rising (Last 24 hours):</h3>
+                <div class="articles">
+        		    <% @rising.each_with_index do |rising, index| %>
+        	        <p>
+        	            <strong>
+        	                <%= link_to image_tag(rising.page.sparkline('888888').to_url), rising.page %>&nbsp;&nbsp;
+    <!--    	                <%= image_tag rising.page.sparkline('34DB05').to_url %>&nbsp;&nbsp;-->
+        	                <%= link_to truncate(rising.page.title,20), rising.page, :class => "title" %>
+        	            </strong>
+                    </p>    
+                <% end %> 
+        		    </div>
+          </div> <!-- #rising -->
+      <% end %> <! --#cache -->    
     </div>
-    <% end %>
+
 
     <div class="clear">
     </div>
