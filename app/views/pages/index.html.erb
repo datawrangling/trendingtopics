@@ -5,8 +5,10 @@
     <!-- do nothing -->
  <% else %>    
     <div id="timeline_chart" class="left">
+        <% cache do %>
         <h3>Fastest Rising Article: <%= link_to truncate(@page.title,35), @page  %></h3>  
         <%= render :partial => "timeline"  %>
+        <% end %>
   	</div> <!-- #timeline_chart -->	
 
     <div id="news" class="right">
@@ -28,6 +30,8 @@
             <% else %>
               <h3>Biggest Movers (Last 30 Days)</h3>
             <% end %>  	
+            
+            <% cache_unless (params[:search], 'pages', {:page => params[:page] || 1}) do %>
             <table id="movers">
               <tr>
                 <th>Rank</th>
@@ -50,10 +54,13 @@
             <center>
                 <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
             </center>
+            <% end %>
+            
         </div>
 
     </div>
     
+    <% cache do %>
     <div id="side-column" class="right">
 
         <div id="rising-articles">
@@ -71,8 +78,8 @@
     		</div>
         </div> <!-- #rising -->
         
-
     </div>
+    <% end %>
 
     <div class="clear">
     </div>

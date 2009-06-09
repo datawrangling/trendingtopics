@@ -4,6 +4,8 @@ class PagesController < ApplicationController
   layout 'pages'#, :except => [:auto_complete_for_search_query]
   use_google_charts
 
+  caches_page :show
+  
 
   def auto_complete_for_search_query
     @pages = Page.title_like params["search"]["query"]
@@ -15,7 +17,9 @@ class PagesController < ApplicationController
       @pages = Page.title_like(params["search"]["query"]).paginate :page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page']  
       
     else   
-      @pages = Page.paginate :page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page']  
+      unless read_fragment({:page => params[:page] || 1})  # Add the page param to the cache naming
+        @pages = Page.paginate :page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'] 
+      end      
       
     end 
 
@@ -42,7 +46,6 @@ class PagesController < ApplicationController
   # GET /pages/1.xml
   def show
     @page = Page.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @page }

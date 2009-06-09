@@ -5,11 +5,6 @@ class Page < ActiveRecord::Base
   named_scope :title_like, lambda { |query| { :conditions => ['title like ?', "#{query}%"], :order => '`monthly_trend` DESC', :limit => 12 } }
   named_scope :full_title_like, lambda { |query| { :conditions => ['title like ?', "%#{query}%"], :order => '`monthly_trend` DESC', :limit => 12 } }  
   
-  # def to_param
-  #   "#{url}"
-  # end
-  # 
-  # 
   
   def normed_daily_pageviews
     @pageviews = JSON.parse(self.daily_timeline.pageviews)
