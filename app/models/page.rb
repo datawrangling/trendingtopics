@@ -3,6 +3,7 @@ class Page < ActiveRecord::Base
   has_one :daily_trend
   has_one :weekly_trend    
   named_scope :title_like, lambda { |query| { :conditions => ['title like ?', "#{query}%"], :order => '`monthly_trend` DESC', :limit => 12 } }
+  named_scope :full_title_like, lambda { |query| { :conditions => ['title like ?', "%#{query}%"], :order => '`monthly_trend` DESC', :limit => 12 } }  
   
   
   
