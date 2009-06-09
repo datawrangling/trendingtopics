@@ -26,10 +26,10 @@ def fetchpages():
   digraph_urls = [SITE + autocomplete_template + x for x in digraph.split()]
   urls.extend(digraph_urls)
 
-  os.system('curl %s' % SITE)
+  os.system('curl %s 1> /dev/null' % SITE)
   for url in urls:
-    print 'curl %s' % (url)
-    os.system('curl %s' % (url))
+    print 'curl %s 1> /dev/null' % (url)
+    os.system('curl %s 1> /dev/null' % (url))
 
 
 def main():
