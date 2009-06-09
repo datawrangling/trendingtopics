@@ -112,5 +112,12 @@ task :update_config, :roles => [:app] do
   run "cp -Rf #{shared_path}/config/* #{current_path}/config"
 end
 
+desc "Preseed Memcached with Autocomplete Query prefixes "
+task :seed_memcached, :roles => [:app] do
+  run "python #{current_path}/lib/scripts/seed_memcached.py"
+end
+
+
 after 'deploy:update_code', :copy_nonvconfig
 after 'deploy:symlink', :update_config
+after 'deploy', :seed_memcached
