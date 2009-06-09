@@ -16,9 +16,7 @@ class PagesController < ApplicationController
     if params[:search]
       @pages = Page.title_like(params["search"]["query"]).paginate(:page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])  
     else   
-      unless read_fragment({:page => params[:page] || 1})  # Add the page param to the cache naming
-        @pages = Page.paginate(:page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page']) 
-      end      
+      @pages = Page.paginate(:page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
     end 
 
     @page = DailyTrend.find(:first, :order => 'trend DESC').page   

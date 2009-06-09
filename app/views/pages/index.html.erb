@@ -1,4 +1,3 @@
-<% content_for :title, "Trending Topics: Hot Wikipedia Topics - Powered by Hadoop & EC2" %>
 
 <div id="first-section" class="section">
   <% if params[:search] %>
@@ -27,11 +26,14 @@
         <div id="biggest-movers" class="left">
             <% if params[:search] %>
               <h3>Search Results for <span><%= params[:search][:query] %></span></h3> 
+              <% content_for :title, 'Trending Topics: Search Results for "' + params[:search][:query] +'"' %>
+              
             <% else %>
               <h3>Biggest Movers (Last 30 Days)</h3>
+              <% content_for :title, "Trending Topics: Hot Wikipedia Topics - Powered by Hadoop & EC2" %>
+              
             <% end %>  	
-            
-            <% cache_unless (params[:search], 'pages', {:page => params[:page] || 1}) do %>
+
                 <table id="movers">
                   <tr>
                     <th>Rank</th>
@@ -53,9 +55,7 @@
                 </table>
                 <center>
                     <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
-                </center>
-            <% end %>
-            
+                </center>            
         </div>
 
     </div>
