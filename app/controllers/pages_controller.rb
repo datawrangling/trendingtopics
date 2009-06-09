@@ -12,7 +12,7 @@ class PagesController < ApplicationController
     
   def index
     if params[:search]
-      @pages = Page.full_title_like(params["search"]["query"]).paginate :page => params[:page], :order => 'total_pageviews DESC', :per_page => APP_CONFIG['articles_per_page']  
+      @pages = Page.title_like(params["search"]["query"]).paginate :page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page']  
       
     else   
       @pages = Page.paginate :page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page']  
