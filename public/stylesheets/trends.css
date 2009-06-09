@@ -192,13 +192,12 @@ a.wikilink {
 
 input#search_query {
     border: 10px solid #DDD;
-    font-size: 120%;
+    font-size: 140%;
 }
 
 .searchbutton {
-  width: 70px;
-  height: 25px;
-  
+  width: 84px;
+  height: 30px;  
 }
 
 
