@@ -1,6 +1,5 @@
 class PagesController < ApplicationController
   # GET /pages
-  # GET /pages.xml
   protect_from_forgery :only => [:create, :update, :destroy]
   layout 'pages'#, :except => [:auto_complete_for_search_query]
   use_google_charts
