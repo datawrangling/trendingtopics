@@ -8,6 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :pages, :collection => {:auto_complete_for_search_query => :get }
   
 
+
   map.with_options :controller => 'info' do |info|
     info.about 'about', :action => 'about'
     info.contact 'contact', :action => 'contact'

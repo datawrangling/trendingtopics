@@ -5,10 +5,10 @@
     <!-- do nothing -->
  <% else %>    
     <div id="timeline_chart" class="left">
-        <% cache do %>
-        <h3>Fastest Rising Article: <%= link_to truncate(@page.title,35), @page  %></h3>  
-        <%= render :partial => "timeline"  %>
-        <% end %>
+    <% cache do %>
+      <h3>Fastest Rising Article: <%= link_to truncate(@page.title,35), @page %></h3>
+      <%= render :partial => "timeline" %>
+    <% end %>
   	</div> <!-- #timeline_chart -->	
 
     <div id="news" class="right">
@@ -66,7 +66,7 @@
           <div id="rising-articles">
               <h3>Rising (Last 24 hours):</h3>
                 <div class="articles">
-        		    <% @rising.each_with_index do |rising, index| %>
+        		    <% DailyTrend.find(:all, :limit => 20, :order => 'trend DESC').each_with_index do |rising, index| %>
         	        <p>
         	            <strong>
         	                <%= link_to image_tag(rising.page.sparkline('888888').to_url), rising.page %>&nbsp;&nbsp;

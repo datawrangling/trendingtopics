@@ -14,19 +14,17 @@ class PagesController < ApplicationController
     
   def index
     if params[:search]
-      @pages = Page.title_like(params["search"]["query"]).paginate :page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page']  
-      
+      @pages = Page.title_like(params["search"]["query"]).paginate(:page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])  
     else   
       unless read_fragment({:page => params[:page] || 1})  # Add the page param to the cache naming
-        @pages = Page.paginate :page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'] 
+        @pages = Page.paginate(:page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page']) 
       end      
-      
     end 
 
-    @rising = DailyTrend.find(:all, :limit => 20, :order => 'trend DESC')
-    @dropping = DailyTrend.find(:all, :limit => 6, :order => 'trend ASC')    
+    @page = DailyTrend.find(:first, :order => 'trend DESC').page   
+    # @rising = DailyTrend.find(:all, :limit => 20, :order => 'trend DESC')
+    # @dropping = DailyTrend.find(:all, :limit => 6, :order => 'trend ASC')    
   
-    @page = @rising[0].page   
   
     unless params[:page]
       params[:page]='1'
