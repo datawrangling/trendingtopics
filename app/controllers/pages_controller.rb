@@ -8,7 +8,10 @@ class PagesController < ApplicationController
   
 
   def auto_complete_for_search_query
-    @pages = Page.title_like params["search"]["query"]
+    # look for autosuggest results in memcached
+    unless read_fragment({:query => params["search"]["query"]}) 
+      @pages = Page.title_like params["search"]["query"]
+    end
     render :partial => "search_results"
   end  
     
