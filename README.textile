@@ -1,6 +1,6 @@
-h1. trendingtopics 
+h1. TrendingTopics 
 
-This project contains the code for the trend tracking site "trendingtopics.org":http://www.trendingtopics.org built by "Data Wrangling":http://www,datawrangling.com.  The trend statistics and time series data that run the site are updated periodically by launching a temporary EC2 cluster running the "Cloudera Hadoop Distribution":http://www.cloudera.com/hadoop-ec2. The current trend calculations are done using Hadoop Streaming and Hive.
+This project contains code for the trend tracking site "trendingtopics.org":http://www.trendingtopics.org built by "Data Wrangling":http://www,datawrangling.com.  The trend statistics and time series data that power the site are updated periodically by launching a temporary EC2 cluster running the "Cloudera Hadoop Distribution":http://www.cloudera.com/hadoop-ec2. The current trend calculations are done using Hadoop Streaming and Hive.
 
 The output produced by these Hadoop jobs are loaded into MySQL and indexed to power the live site. The demo data included in the Rails app was generated from hourly wikipedia article "traffic logs":http://stats.grok.se/ collected from the wikipedia squid proxy by Domas Mituzas.  A larger snapshot is available on Amazon Public Datasets (snap-753dfc1c). The Rails app and MySQL database are deployed to Amazon EC2 using Paul Downman's "EC2onRails":http://ec2onrails.rubyforge.org/.
 
@@ -20,24 +20,28 @@ h3. How Hadoop is Used in the Application
 * Generating Statistics that power search autocomplete and the ranking of search results
 * Running periodic trend estimation jobs / regressions
 
-h2. Dependencies
+h2. The Wikipedia Article Traffic Log Dataset
 
-h3. For local development:
+
+h2. Running the Rails app
+
+h3. Dependencies for local development:
 
 * Ruby (1.8.7)
 * Ruby Gems (1.3.1)
 * Capistrano (v2.5.5)
 * Rails (2.3.2)
 
-h3. For running on EC2:
+h3. Additional dependencies for running on EC2:
 
 * "Amazon EC2 Account":http://aws.amazon.com/ec2/ 
 * Steps from EC2 "Getting Started Guide":http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/
 * "EC2onRails":http://ec2onrails.rubyforge.org/
 * "Cloudera EC2 Hadoop scripts":http://www.cloudera.com/hadoop-ec2
 * "1 TB of Wikipedia Article Traffic Logs (Amazon Public Data Set)":http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2596
+* "Trendingtopics code on github":http://github.com/datawrangling/trendingtopics/tree/master
 
-h2. Running a development version locally
+h3. Running locally in development mode
 
 Fetch the trendingtopics source code:
 
@@ -89,7 +93,7 @@ Launch the rails app itself
 Navigate to http://localhost:3000/ to access the application
 
 
-h2. Deploying to EC2
+h3. Deploying the Rails app to EC2
 
 Fetch the source code as shown above, then install the ec2onrails gem as described at http://ec2onrails.rubyforge.org/:
 <pre>	$ sudo gem install ec2onrails </pre>
@@ -142,33 +146,31 @@ h2. Running Hadoop & Hive on EC2 to Generate Trend Data
 
 This can be completely automated, but for now we will execute a number of steps by hand to show the process...
 
-Daily Timeline Generation
+h3. Historical Daily Timeline Generation
 
 !http://trendingtopics.s3.amazonaws.com/images/american_idol_daily_pageviews.png!
 
-Launch a small EC2 Ubuntu instance and mount the Wikipedia Traffic Statistics public snapshot
-
-On your local machine:
+From your local machine, launch a small EC2 Ubuntu instance:  
 
 <pre>
 	skom:~ pskomoroch$ ec2-run-instances ami-5394733a -k gsg-keypair -z us-east-1a
 </pre>
 
-Create and attach an EBS Volume from the Wikipedia Traffic Logs public snapshot (make sure the volume is created in the same availability zone as the ec2 instance)
+Once it is running and you have the instance id, create and attach an EBS Volume using the Wikipedia Traffic Statistics "public snapshot":http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2596 (make sure the volume is created in the same availability zone as the ec2 instance)
 
 <pre>
 	skom:~ pskomoroch$ ec2-create-volume --snapshot snap-753dfc1c -z us-east-1a
 	skom:~ pskomoroch$ ec2-attach-volume vol-ec06ea85 -i i-df396cb6 -d /dev/sdf
 </pre>
 
-Log in to the instance and mount the volume
+ssh into the instance and mount the volume
 <pre>
 	skom:~ pskomoroch$ ssh root@ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com
 	root@domU-12-xx-xx-xx-75-81:/mnt# mkdir /mnt/wikidata
 	root@domU-12-xx-xx-xx-75-81:/mnt# mount /dev/sdf /mnt/wikidata
 </pre>	
 	
-Copy the raw data up to S3 from the Amazon Public Dataset Snapshot using S3cmd
+Copy the raw pagecount data up to S3 from the EBS volume using S3cmd:
 
 TODO:
 
@@ -176,46 +178,71 @@ Customize the Cloudera Ubuntu Hadoop launch scripts
 ... add packages for s3cmd, git, Rpy, etc
 TODO:
 
-Launch a 10 node XL Hadoop cluster, configure S3cmd on the master node
 
-TODO:
-
-
-Wait for the file system setup to complete then run the Hadoop & Hive Jobs.  A "hadoop" directory will appear in /mnt on the master node when the cluster is ready.
+I found the following settings to work well for c1.medium instances on EC2.  This will likely vary based on the nature of your Hadoop Job.  
 
 <pre>
-	$ cd /mnt
+	MAX_MAP_TASKS=2
+	MAX_REDUCE_TASKS=1
+
+	real	22m41.951s
+	user	0m1.924s
+	sys	0m0.276s
+
+
+	MAX_MAP_TASKS=4
+	MAX_REDUCE_TASKS=2
+
+	real	15m47.388s
+	user	0m2.948s
+	sys	0m0.324s	
+</pre>	
+
+
+For c1.xlarge instances, I used <code>MAX_MAP_TASKS=8</code> and <code>MAX_REDUCE_TASKS=4</code>.  To run the daily timeline generation across 8 months of data, I launched a 10 node c1.xlarge Hadoop cluster using the cloudera scripts:
+
+<pre>
+	skom:cloudera-for-hadoop-on-ec2-0.3.1 pskomoroch$ bin/hadoop-ec2 launch-cluster my-hadoop-cluster 10
+	skom:cloudera-for-hadoop-on-ec2-0.3.1 pskomoroch$ ssh root@ec2-174-129-165-138.compute-1.amazonaws.com
+	$ cd /mnt	
+</pre>		
+	
+Once logged into the master node, you need to wait for the file system setup to complete before running the Hadoop & Hive Jobs.  A "hadoop" directory will appear in /mnt on the master node when the cluster is ready.  While you are waiting, configure S3cmd on the master node as we did previously when uploading the raw data to S3.
+
+When the file system is ready, fetch the trendingtopics code from github and then start the daily timeline job:
+
+<pre>
 	$ git clone git://github.com/datawrangling/trendingtopics.git
 	$ bash trendingtopics/lib/scripts/run_daily_timelines.sh
 </pre>
 
-TODO: give more details on the Hadoop / Hive jobs along with code snippets.  We are only using Hive here for some simple Joins and selects, but it has other powerful features for analytics...
+TODO: give more details on the Hadoop / Hive jobs along with code snippets.
+ We are only using Hive here for some simple Joins and selects,
+ but it has other powerful features for analytics...
 
-You can monitor your jobs by using Foxy Proxy to view the Hadoop Web UI
-
-TODO: add link to steps...
+You can monitor your jobs by using Foxy Proxy to view the Cloudera Hadoop Web UI (see the README included with the Cloudera EC2 scripts for more details).  The following command sets up a tunnel for the Web UI.
 
 <pre>
-	$ ssh -ND 8157 root@ec2-75-101-233-42.compute-1.amazonaws.com	
+	$ ssh -ND 8157 root@ec2-174-129-165-138.compute-1.amazonaws.com	
 </pre>	
 
 When the job completes, we can inspect the results:
 
-<pre><code>
+<pre>
 	SELECT COUNT(1) FROM raw_daily_stats_table; 
 	2823525
 	Time taken: 33.199 seconds
-</code></pre>
+</pre>
 
 Some other simple queries you can try:
 
-<pre><code>
+<pre>
 	SELECT MAX(total_pageviews) FROM raw_daily_stats_table;
 	
 	SELECT * from raw_daily_stats_table SORT BY total_pageviews DESC LIMIT 100;
 	
 	SELECT * from raw_daily_stats_table SORT BY monthly_trend DESC LIMIT 100;
-</code></pre>
+</pre>
 
 Send the results over to the trendingtopics database server:
 
@@ -230,7 +257,7 @@ Send a copy of the full data up to S3 for safe keeping along with a copy of the 
 	$ s3cmd put --force /mnt/sample* s3://trendingtopics/sampledata/	
 </pre>
 
-Jump over to the database server and execute the load_history.sql script against trendingtopics_production.  You will want to automate these logins and use proper authentication for your own app instead of manually loading the production database like this.  
+Jump over to the database server and execute the <code>load_history.sql</code> script against <code>trendingtopics_production</code>.  You will want to automate these logins and use proper authentication for your own app instead of manually loading the production database like this.  
 
 <pre>
 	$ ssh root@www.trendingtopics.org 
@@ -239,13 +266,19 @@ Jump over to the database server and execute the load_history.sql script against
 	$ mysql -u root trendingtopics_production < load_history.sql
 </pre>
 
+h3. Using Hadoop and Hive for Exploratory Analysis
 
-Trend Estimation...
-
+TODO
+...
 !http://trendingtopics.s3.amazonaws.com/images/fit_example_small.png!
 
 
-Run the daily trend Hadoop jobs on a cluster
+
+h3. Daily Trend Estimation
+
+!http://trendingtopics.s3.amazonaws.com/images/monthly_and_daily_trends.png!
+
+Repeat the initial cluster launch and configuration steps used in the last job.  This time, we run <code>daily_trend.sh</code>:
 
 <pre>
 	$ cd /mnt
@@ -253,7 +286,12 @@ Run the daily trend Hadoop jobs on a cluster
 </pre>
 
 
-Inspect a sample of the results:
+Here is what the script is executing:
+
+TODO:
+
+
+We can inspect a sample of the results before loading them into MySQL:
 
 <pre><code>
 	SELECT redirect_table.redirect_title, 
@@ -287,10 +325,31 @@ Copy the output file over to the trendingtopics server:
 scp /mnt/daily_trends.txt root@www.trendingtopics.org:/mnt/
 </pre>
 
-Next we load the data into MySQL on the prod server
+Load the daily trend data into MySQL on the prod server and build the trend indices:
 <pre>
 	ssh root@www.trendingtopics.org 
 	cd /mnt
 	mysql -u root trendingtopics_production < load_trends.sql
 </pre>
 
+Shut down the Hadoop cluster
+
+<pre>	
+	$ bin/hadoop-ec2 terminate-cluster my-hadoop-cluster
+	Terminate all instances? [yes or no]: yes
+	INSTANCE	i-2d7b2c44	running	shutting-down
+	INSTANCE	i-eb7b2c82	running	shutting-down
+	INSTANCE	i-ed7b2c84	running	shutting-down
+	INSTANCE	i-ef7b2c86	running	shutting-down
+	INSTANCE	i-e17b2c88	running	shutting-down
+	INSTANCE	i-e37b2c8a	running	shutting-down
+	INSTANCE	i-e57b2c8c	running	shutting-down
+	INSTANCE	i-e77b2c8e	running	shutting-down
+	INSTANCE	i-f97b2c90	running	shutting-down
+	INSTANCE	i-fb7b2c92	running	shutting-down
+	INSTANCE	i-fd7b2c94	running	shutting-down
+</pre>	
+
+h2. Next Steps
+
+TODO
