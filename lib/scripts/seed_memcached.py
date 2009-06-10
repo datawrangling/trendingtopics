@@ -11,25 +11,28 @@ Copyright (c) 2009 Data Wrangling LLC. All rights reserved.
 
 import sys
 import os
-
-
+import urllib2
 
 SITE = 'http://www.trendingtopics.org/'
+
+
+def fetch_url(url):
+  response = urllib2.urlopen(url)
+  html = response.read()
 
 def fetchpages():
   # TODO: read queries and site from a file...
   autocomplete_template = 'pages/auto_complete_for_search_query?search%5Bquery%5D'
-
   prefetch = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
   urls = [SITE + autocomplete_template + x for x in prefetch]  
   digraph = "th he an in er on re ed nd ha at en es of nt ea ti to io le is ou ar as de rt ve"
   digraph_urls = [SITE + autocomplete_template + x for x in digraph.split()]
   urls.extend(digraph_urls)
+  urls.append(SITE)
 
-  os.system('curl %s 1> /dev/null' % SITE)
   for url in urls:
-    print 'curl %s 1> /dev/null' % (url)
-    os.system('curl %s 1> /dev/null' % (url))
+    print "fetching", url
+    fetch_url(url)
 
 
 def main():
