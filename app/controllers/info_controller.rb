@@ -8,5 +8,5 @@ class InfoController < ApplicationController
   
   def frames
   end
-  
+
 end

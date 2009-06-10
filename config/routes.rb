@@ -15,6 +15,7 @@ ActionController::Routing::Routes.draw do |map|
     info.about 'about', :action => 'about'
     info.contact 'contact', :action => 'contact'
     info.frames 'frames', :action => 'frames'  
+    info.auto_complete_for_search_query 'pages/auto_complete_for_search_query', :action => 'auto_complete_for_search_query'     
   end
   
   
