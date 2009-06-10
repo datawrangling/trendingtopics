@@ -1,8 +1,8 @@
-h1. TrendingTopics 
+h1. Tracking Trends with Hadoop & Hive on EC2
 
-This project contains code for the trend tracking site "trendingtopics.org":http://www.trendingtopics.org built by "Data Wrangling":http://www,datawrangling.com.  The trend statistics and time series data that power the site are updated periodically by launching a temporary EC2 cluster running the "Cloudera Hadoop Distribution":http://www.cloudera.com/hadoop-ec2. The current trend calculations are done using Hadoop Streaming and Hive.
+This repository contains the full source code for "Trendingtopics.org":http://www.trendingtopics.org, built by "Data Wrangling":http://www,datawrangling.com to demonstrate how Hadoop & EC2 can power a data driven website. The trend statistics and time series data that run the site are updated periodically by launching a temporary EC2 cluster running the "Cloudera Hadoop Distribution":http://www.cloudera.com/hadoop-ec2. Our initial seed data consists the raw wikipedia database dump along with hourly "traffic logs":http://stats.grok.se/ for all articles collected from the wikipedia squid proxy (curated by Domas Mituzas). We made the first 7 months of this hourly data available as an Amazon Public Dataset.
 
-The output produced by these Hadoop jobs are loaded into MySQL and indexed to power the live site. The demo data included in the Rails app was generated from hourly wikipedia article "traffic logs":http://stats.grok.se/ collected from the wikipedia squid proxy by Domas Mituzas.  A larger snapshot is available on Amazon Public Datasets (snap-753dfc1c). The Rails app and MySQL database are deployed to Amazon EC2 using Paul Downman's "EC2onRails":http://ec2onrails.rubyforge.org/.
+The current trend calculations are done using Hadoop Streaming and Hive.  The output produced by these Hadoop jobs are loaded into MySQL and indexed to power the live site. The demo data included in the Rails app was generated from hourly wikipedia article traffic logs collected from the Wikipedia squid proxy by Domas Mituzas. A larger snapshot is available on Amazon Public Datasets (snap-753dfc1c). The Rails app and MySQL database are deployed to Amazon EC2 using Paul Downman’s "EC2onRails":http://ec2onrails.rubyforge.org/.
 
 !http://trendingtopics.s3.amazonaws.com/images/trendingtopics_dashboard.png!
 
@@ -20,137 +20,78 @@ h3. How Hadoop is Used in the Application
 * Generating Statistics that power search autocomplete and the ranking of search results
 * Running periodic trend estimation jobs / regressions
 
-h2. The Wikipedia Article Traffic Log Dataset
+The rest of this document will walk through the code which powers the site and describe some basic approaches for extract trends from log data with Hadoop and Hive.
 
+h2. Raw Data: Hourly Wikipedia Article Traffic Logs
 
-h2. Running the Rails app
+The "Wikipedia Traffic Statistics":http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2596 Amazon Public Dataset we will process covers a 7 month period from October, 01 2008 to April, 30 2009. This data is regularly logged from the wikipedia squid proxy by Domas Mituzas and was compiled by Data Wrangling for this demo.
 
-h3. Dependencies for local development:
+h3. Log file format
 
-* Ruby (1.8.7)
-* Ruby Gems (1.3.1)
-* Capistrano (v2.5.5)
-* Rails (2.3.2)
+Each log file is named with the date and time of collection: <code>pagecounts-20090430-230000.gz</code>. The individual hourly files are around 55 MB when compressed, so 8 months of compressed data takes up about 300 GB of space.
 
-h3. Additional dependencies for running on EC2:
-
-* "Amazon EC2 Account":http://aws.amazon.com/ec2/ 
-* Steps from EC2 "Getting Started Guide":http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/
-* "EC2onRails":http://ec2onrails.rubyforge.org/
-* "Cloudera EC2 Hadoop scripts":http://www.cloudera.com/hadoop-ec2
-* "1 TB of Wikipedia Article Traffic Logs (Amazon Public Data Set)":http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2596
-* "Trendingtopics code on github":http://github.com/datawrangling/trendingtopics/tree/master
-
-h3. Running locally in development mode
-
-Fetch the trendingtopics source code:
+Each line has 4 fields: <code>projectcode, pagename, pageviews, bytes</code>
 
 <pre>
-git clone git://github.com/datawrangling/trendingtopics.git
+      $ grep '^en Barack' pagecounts-20090521-100001 
+      en Barack 8 1240112
+      en Barack%20Obama 1 1167
+      en Barack_H._Obama 1 142802
+      en Barack_H_Obama 3 428946
+      en Barack_H_Obama_Jr. 2 285780
+      en Barack_Hussein_Obama,_Junior 2 285606
+      en Barack_O%27Bama 1 142796
+      en Barack_Obama 701 139248439
+      en Barack_Obama%27s_first_100_days 2 143181
+      en Barack_Obama,_Jr 2 285755
 </pre>
 
-Navigate to the root of the source code directory and create the needed configuration files from the provided examples:
+Many of the raw wiki log page titles are percent-encoded. To match these with the page titles in the wikipedia database, you can transform them as follows in Python:
+
 <pre>
-	$ cd trendingtopics
-	$ cp config/config.yml.example config/config.yml
-	$ cp config/database.yml.example config/database.yml	
+      $ python
+     >>> import urllib
+     >>> escaped_title = '%22Klondike_Kate%22_Rockwell'
+     >>> print urllib.unquote_plus(escaped_title)
+     "Klondike_Kate"_Rockwell
 </pre>
 
-Do the normal rails gem install dance for any missing dependencies.
+
+h3. Handling Wikipedia Redirects
+
+To further complicate the raw data processing, many page titles are actually wikipedia redirects which do not match to the primary key of the wikipedia "Pages" table.  The non-redirect articles are referred to as belonging to "namespace-0".  As part of our Hadoop pre-processing, we can perform a join against a redirect lookup table to find the true wikipedia pageid for a give article title.
 
 <pre>
-	$ rake gems:install
+   mysql> select * from page_lookups where page_id = 534366;
+   +---------+------------------------------------------------+--------------+---------+-------------+
+   | id      | redirect_title                                 | true_title   | page_id | page_latest |
+   +---------+------------------------------------------------+--------------+---------+-------------+
+   |  219291 | Barack_Obama                                   | Barack Obama |  534366 |   276223690 | 
+   | 3151538 | Barak_Obama                                    | Barack Obama |  534366 |   276223690 | 
+   | 3151543 | 44th_President_of_the_United_States            | Barack Obama |  534366 |   276223690 | 
+   | 3151544 | Barach_Obama                                   | Barack Obama |  534366 |   276223690 | 
+   | 3151545 | Senator_Barack_Obama                           | Barack Obama |  534366 |   276223690 | 
+      ....                                                                                   ....
+
+   | 3151644 | Rocco_Bama                                     | Barack Obama |  534366 |   276223690 | 
+   | 3151645 | Barack_Obama's                                 | Barack Obama |  534366 |   276223690 | 
+   | 3151646 | B._Obama                                       | Barack Obama |  534366 |   276223690 | 
+   +---------+------------------------------------------------+--------------+---------+-------------+
+   110 rows in set (11.15 sec)    
 </pre>
 
-We also used the following plugins (already included in /vendor):
 
-* autocomplete
-* annotated-timeline
-* gc4r (modified a bit)
+h2. Using Hadoop & Hive on EC2 to Extract Trends
 
+Processing large log datasets like this is a typical use case for Hadoop.  By using MapReduce and EC2 we can run millions of regressions on a distributed cluster to quickly answer analytical questions or generate real time analytics on metrics of interest.
 
-Create the database:
-<pre>
-    $ rake db:create
-    $ rake db:migrate
-</pre>
+h3. Task 1: Generate Daily Timelines from 1TB of Historical Hourly Logs
 
-Populate the app with demo data from 100 wiki articles:
-
-<pre>
-    $ rake db:develop
-</pre>
-
-Launch the rails app itself 
-<pre>
-	$ script/server 
-	=> Booting Mongrel
-	=> Rails 2.3.2 application starting on http://0.0.0.0:3000
-	=> Call with -d to detach
-	=> Ctrl-C to shutdown server
-</pre>
-	
-Navigate to http://localhost:3000/ to access the application
-
-
-h3. Deploying the Rails app to EC2
-
-Fetch the source code as shown above, then install the ec2onrails gem as described at http://ec2onrails.rubyforge.org/:
-<pre>	$ sudo gem install ec2onrails </pre>
-Find AMI id of the latest 32 bit ec2onrails image (in our case this was ami-5394733a):
-<pre>	$ cap ec2onrails:ami_ids</pre>
-
-Launch an instance of the latest ec2onrails ami and note the returned instance address from ec2-describe-instances, it will be something like ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com 
-<pre>
-	$ ec2-run-instances ami-5394733a -k gsg-keypair
-	$ ec2-describe-instances
-</pre>
-Create the needed configuration files from the provided examples and edit them, filling in your instance address information, keypairs, and other configuration information as indicated in the comments of each file. See the ec2onrails documentation or source code for more details on each setting.  If you want to make changes to the elasticwulf code, be sure to replace the base github repository in deploy.rb and config.yml with your own github location.
-<pre>
-	$ cp config/deploy.rb.example config/deploy.rb
-	$ cp config/s3.yml.example config/s3.yml
-	$ cp config/config.yml.example config/config.yml
-	$ cp config/database.yml.example config/database.yml	
-</pre>	
-Be sure to substitute in your own AWS key and secret key in both config.yml and s3.yml (You can leave these out and ec2onrails will still work, it just won't back up MySQL or the log files)
-<pre>
-	aws_secret_access_key: YYVUYVIUBIBI
-	aws_access_key_id: BBKBBOUjbkj/BBOUBOBJKBjbjbboubuBUB
-</pre>
-If you uncomment the the auth filter in the main page controller, also replace the admin user name and password in config.yml:
-<pre>
-	admin_user: REPLACE_ME
-	admin_password: REPLACE_ME
-</pre>
-
-Deploy the app to your launched EC2 instance with Capistrano (this wil take several minutes)
-<pre>
-    $ cap ec2onrails:setup
-    $ cap deploy:cold
-</pre>
-If you have auth enabled, you can use the admin login information you set in config.yml to access the dashboard from a web browser or as web service at the url of the instance you provided in deploy.rb: http://ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com . You can also ssh into your running EC2 instance as usual with your keypairs to debug any issues.  See the ec2onrails forums for more help debugging deployment issues.
-
-To redeploy the app after making changes to the base trendingtopics code, just do the usual cap deploy:
-<pre>
-    $ cap deploy
-</pre>
-To manually restart the apache service or mongrels:
-<pre>
-    $ cap ec2onrails:server:restart_services
-    $ cap deploy:restart
-</pre>
-
-No data will be populated in the production deployed app until you run the included Hadoop Jobs.  To test the deployment, you can use Capistrano to run the db:develop task on the EC2 server, just wipe the dev data before loading real production data.
-
-h2. Running Hadoop & Hive on EC2 to Generate Trend Data
-
-This can be completely automated, but for now we will execute a number of steps by hand to show the process...
-
-h3. Historical Daily Timeline Generation
+Our first task is to calculate daily page views for all 2.5 million English Wikipedia articles, so we can display dynamic Google finance style timelines on the site.
 
 !http://trendingtopics.s3.amazonaws.com/images/american_idol_daily_pageviews.png!
 
-From your local machine, launch a small EC2 Ubuntu instance:  
+First, we need to access the Amazon public dataset.  From your local machine, launch a small EC2 Ubuntu instance:  
 
 <pre>
 	skom:~ pskomoroch$ ec2-run-instances ami-5394733a -k gsg-keypair -z us-east-1a
@@ -163,7 +104,8 @@ Once it is running and you have the instance id, create and attach an EBS Volume
 	skom:~ pskomoroch$ ec2-attach-volume vol-ec06ea85 -i i-df396cb6 -d /dev/sdf
 </pre>
 
-ssh into the instance and mount the volume
+Next, ssh into the instance and mount the volume
+
 <pre>
 	skom:~ pskomoroch$ ssh root@ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com
 	root@domU-12-xx-xx-xx-75-81:/mnt# mkdir /mnt/wikidata
@@ -226,6 +168,14 @@ You can monitor your jobs by using Foxy Proxy to view the Cloudera Hadoop Web UI
 	$ ssh -ND 8157 root@ec2-174-129-165-138.compute-1.amazonaws.com	
 </pre>	
 
+-----------------
+
+TODO:  What we are running: Python Streaming snippets and Hive Join
+
+Use filename in mapper trick, show hadoop tricks /tips
+
+----------------------
+
 When the job completes, we can inspect the results:
 
 <pre>
@@ -239,10 +189,53 @@ Some other simple queries you can try:
 <pre>
 	SELECT MAX(total_pageviews) FROM raw_daily_stats_table;
 	
-	SELECT * from raw_daily_stats_table SORT BY total_pageviews DESC LIMIT 100;
+	+----------------------+
+	| MAX(total_pageviews) |
+	+----------------------+
+	|             33471178 | 
+	+----------------------+
 	
-	SELECT * from raw_daily_stats_table SORT BY monthly_trend DESC LIMIT 100;
+	
+	SELECT redirect_title from raw_daily_stats_table SORT BY total_pageviews DESC LIMIT 10;
+	
+	+----------------+
+	| redirect_title |
+	+----------------+
+	| Wiki           | 
+	| The_Beatles    | 
+	| Barack_Obama   | 
+	| YouTube        | 
+	| Wikipedia      | 
+	| United_States  | 
+	| Facebook       | 
+	| Deaths_in_2009 | 
+	| Eminem         | 
+	| World_War_II   | 
+	+----------------+
+
+	
+	SELECT redirect_title from raw_daily_stats_table SORT BY monthly_trend DESC LIMIT 10;
+
+	+-----------------------------------+
+	| redirect_title                    |
+	+-----------------------------------+
+	| David_Carradine                   | 
+	| Sonia_Sotomayor                   | 
+	| North_Korea                       | 
+	| Tiananmen_Square_protests_of_1989 | 
+	| Land_of_the_Lost_(1974_TV_series) | 
+	| Britain's_Got_Talent              | 
+	| Lady_Gaga                         | 
+	| Bermuda_Triangle                  | 
+	| Mike_Tyson                        | 
+	| Up_(2009_film)                    | 
+	+-----------------------------------+
+
+
 </pre>
+
+!http://trendingtopics.s3.amazonaws.com/images/trend_autocomplete.png!
+
 
 Send the results over to the trendingtopics database server:
 
@@ -266,7 +259,7 @@ Jump over to the database server and execute the <code>load_history.sql</code> s
 	$ mysql -u root trendingtopics_production < load_history.sql
 </pre>
 
-h3. Using Hadoop and Hive for Exploratory Analysis
+h3. Task 2: Using Hadoop and Hive for Exploratory Analysis
 
 TODO
 ...
@@ -274,7 +267,7 @@ TODO
 
 
 
-h3. Daily Trend Estimation
+h3. Task 3: Daily Trend Estimation
 
 !http://trendingtopics.s3.amazonaws.com/images/monthly_and_daily_trends.png!
 
@@ -285,11 +278,20 @@ Repeat the initial cluster launch and configuration steps used in the last job. 
 	$ bash bash trendingtopics/lib/scripts/run_daily_trends.sh
 </pre>
 
+-----------
+TODO:
 
 Here is what the script is executing:
 
-TODO:
+Use regex on input bucket trick
 
+Show cron job to fetch and upload files to s3
+
+
+This process is fairly similar to the first historical aggregation, except we pass the hourly data to the trend estimation script
+
+Python Streaming example, pulling input data from S3
+------------
 
 We can inspect a sample of the results before loading them into MySQL:
 
@@ -326,6 +328,7 @@ scp /mnt/daily_trends.txt root@www.trendingtopics.org:/mnt/
 </pre>
 
 Load the daily trend data into MySQL on the prod server and build the trend indices:
+
 <pre>
 	ssh root@www.trendingtopics.org 
 	cd /mnt
@@ -350,6 +353,143 @@ Shut down the Hadoop cluster
 	INSTANCE	i-fd7b2c94	running	shutting-down
 </pre>	
 
-h2. Next Steps
+h2. Next Steps with MapReduce
 
 TODO
+
+
+h2. Appendix: Running the Rails app
+
+h3. Dependencies for local development:
+
+* Ruby (1.8.7)
+* Ruby Gems (1.3.1)
+* Capistrano (v2.5.5)
+* Rails (2.3.2)
+
+h3. Additional dependencies for running on EC2:
+
+* "Amazon EC2 Account":http://aws.amazon.com/ec2/ 
+* Steps from EC2 "Getting Started Guide":http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/
+* "EC2onRails":http://ec2onrails.rubyforge.org/
+* "Cloudera EC2 Hadoop scripts":http://www.cloudera.com/hadoop-ec2
+* "1 TB of Wikipedia Article Traffic Logs (Amazon Public Data Set)":http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2596
+* "Trendingtopics code on github":http://github.com/datawrangling/trendingtopics/tree/master
+
+h3. Running locally in development mode
+
+Fetch the trendingtopics source code:
+
+<pre>
+git clone git://github.com/datawrangling/trendingtopics.git
+</pre>
+
+Navigate to the root of the source code directory and create the needed configuration files from the provided examples:
+
+<pre>
+	$ cd trendingtopics
+	$ cp config/config.yml.example config/config.yml
+	$ cp config/database.yml.example config/database.yml	
+</pre>
+
+Do the normal rails gem install dance for any missing dependencies.
+
+<pre>
+	$ rake gems:install
+</pre>
+
+We also used the following plugins (already included in /vendor):
+
+* autocomplete
+* annotated-timeline
+* gc4r (modified a bit)
+
+
+Create the database:
+
+<pre>
+    $ rake db:create
+    $ rake db:migrate
+</pre>
+
+Populate the app with demo data from 100 wiki articles:
+
+<pre>
+    $ rake db:develop
+</pre>
+
+Launch the rails app itself 
+
+<pre>
+	$ script/server 
+	=> Booting Mongrel
+	=> Rails 2.3.2 application starting on http://0.0.0.0:3000
+	=> Call with -d to detach
+	=> Ctrl-C to shutdown server
+</pre>
+	
+Navigate to http://localhost:3000/ to access the application
+
+
+h3. Deploying the Rails app to EC2
+
+Fetch the source code as shown above, then install the ec2onrails gem as described at http://ec2onrails.rubyforge.org/:
+
+<pre>	$ sudo gem install ec2onrails </pre>
+Find AMI id of the latest 32 bit ec2onrails image (in our case this was ami-5394733a):
+<pre>	$ cap ec2onrails:ami_ids</pre>
+
+Launch an instance of the latest ec2onrails ami and note the returned instance address from ec2-describe-instances, it will be something like ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com 
+
+<pre>
+	$ ec2-run-instances ami-5394733a -k gsg-keypair
+	$ ec2-describe-instances
+</pre>
+
+Create the needed configuration files from the provided examples and edit them, filling in your instance address information, keypairs, and other configuration information as indicated in the comments of each file. See the ec2onrails documentation or source code for more details on each setting.  If you want to make changes to the elasticwulf code, be sure to replace the base github repository in deploy.rb and config.yml with your own github location.
+
+<pre>
+	$ cp config/deploy.rb.example config/deploy.rb
+	$ cp config/s3.yml.example config/s3.yml
+	$ cp config/config.yml.example config/config.yml
+	$ cp config/database.yml.example config/database.yml	
+</pre>	
+
+Be sure to substitute in your own AWS key and secret key in both config.yml and s3.yml (You can leave these out and ec2onrails will still work, it just won't back up MySQL or the log files)
+
+<pre>
+	aws_secret_access_key: YYVUYVIUBIBI
+	aws_access_key_id: BBKBBOUjbkj/BBOUBOBJKBjbjbboubuBUB
+</pre>
+
+If you uncomment the the auth filter in the main page controller, also replace the admin user name and password in config.yml:
+
+<pre>
+	admin_user: REPLACE_ME
+	admin_password: REPLACE_ME
+</pre>
+
+Deploy the app to your launched EC2 instance with Capistrano (this wil take several minutes)
+
+<pre>
+    $ cap ec2onrails:setup
+    $ cap deploy:cold
+</pre>
+
+If you have auth enabled, you can use the admin login information you set in config.yml to access the dashboard from a web browser or as web service at the url of the instance you provided in deploy.rb: http://ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com . You can also ssh into your running EC2 instance as usual with your keypairs to debug any issues.  See the ec2onrails forums for more help debugging deployment issues.
+
+To redeploy the app after making changes to the base trendingtopics code, just do the usual cap deploy:
+
+<pre>
+    $ cap deploy
+</pre>
+
+To manually restart the apache service or mongrels:
+
+<pre>
+    $ cap ec2onrails:server:restart_services
+    $ cap deploy:restart
+</pre>
+
+No data will be populated in the production deployed app until you run the included Hadoop Jobs.  To test the deployment, you can use Capistrano to run the db:develop task on the EC2 server, just wipe the dev data before loading real production data.
+
