@@ -304,7 +304,7 @@ When the Hive job completes, we can inspect the results:
 	Time taken: 33.199 seconds
 </pre>
 
-Here are a few more quick queries to show how similar HiveQL is to SQL:
+We can run a few more quick queries to show how similar HiveQL is to SQL.  Here we find article with the most pageviews over this time period had 33M views:
 
 <pre>
 	SELECT MAX(total_pageviews) FROM raw_daily_stats_table;
@@ -313,7 +313,11 @@ Here are a few more quick queries to show how similar HiveQL is to SQL:
 	+----------------------+
 	|             33471178 | 
 	+----------------------+
+</pre>
+
+
 	
+<pre>	
 	SELECT redirect_title from raw_daily_stats_table SORT BY total_pageviews DESC LIMIT 10;
 	+----------------+
 	| redirect_title |
@@ -329,7 +333,11 @@ Here are a few more quick queries to show how similar HiveQL is to SQL:
 	| Eminem         | 
 	| World_War_II   | 
 	+----------------+
+</pre>
+
+Not surprisingly, the article was "Wiki".  Overall this list of popular pages doesn't change much over time and provides little insight.  We can look at titles ranked by monthly trend instead:	
 	
+<pre>	
 	SELECT redirect_title from raw_daily_stats_table SORT BY monthly_trend DESC LIMIT 10;
 	+-----------------------------------+
 	| redirect_title                    |
@@ -347,10 +355,11 @@ Here are a few more quick queries to show how similar HiveQL is to SQL:
 	+-----------------------------------+
 </pre>
 
-Along with powering the ranked lists of articles on the site, these trends are used to order autocomplete search results:
+These results seem much more interesting and timely.  This list looked strange to me at first, but apparently these are all really trending news items for the beginning of June.  I guess I need to stop coding once in a while and keep up with the news...
+
+Along with serving as the ranked lists of trending articles on the main page, these trends are used to power the site search engine and order autocomplete suggestions:
 
 !http://trendingtopics.s3.amazonaws.com/images/trend_autocomplete.png!
-
 
 Once we are confident in the results of the Hadoop jobs, we can send the results over to the trendingtopics database server:
 
@@ -399,7 +408,7 @@ The job steps in the bash script are fairly similar to the first historical aggr
 
 TODO:
 
-Show Python Streaming example, pulling input data from S3
+Show 2nd Python Streaming example, pulling input data from S3
 Show regex on input bucket trick
 Mention cron job to fetch and upload files to s3
 
