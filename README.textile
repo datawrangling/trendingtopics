@@ -1,23 +1,148 @@
+h1. trendingtopics 
+
+This project contains the code for the trend tracking site "trendingtopics.org":http://www.trendingtopics.org built by "Data Wrangling":http://www,datawrangling.com.  The trend statistics and time series data that run the site are updated periodically by launching a temporary EC2 cluster running the Cloudera "Hadoop Distribution":http://www.cloudera.com/hadoop-ec2. The current trend calculations are done using Hadoop Streaming and Hive.
+
+The output produced by these Hadoop jobs are loaded into MySQL and indexed to power the live site. The demo data included in the Rails app was generated from hourly wikipedia article "traffic logs":http://stats.grok.se/ collected from the wikipedia squid proxy by Domas Mituzas.  A larger snapshot is available on Amazon Public Datasets (snap-753dfc1c). The Rails app and MySQL database are deployed to Amazon EC2 using Paul Downman's "EC2onRails":http://ec2onrails.rubyforge.org/.
+
+!http://trendingtopics.s3.amazonaws.com/images/trendingtopics_dashboard.png!
+
+h3. Application Features
+
+* Ranked list of the most significant trends over the last 30 days along with total pageviews
+* Ranked list of "Rising" articles trending in the last 24 hours
+* Daily time series charts and sparklines for over 2.5 Million wikipedia articles
+* Autocomplete functionality and search results ranked by article trend score
+
+h3. How Hadoop is Used in the Application
+
+* Cleaning raw log data and joining title strings with wikipedia page ids
+* Aggregating hourly time series data for daily pageview charts and sparklines 
+* Generating Statistics that power search autocomplete and the ranking of search results
+* Running periodic trend estimation jobs / regressions
+
+h2. Dependencies
+
+h3. For local development:
+
+* Ruby (1.8.7)
+* Ruby Gems (1.3.1)
+* Capistrano (v2.5.5)
+* Rails (2.3.2)
+
+h3. For running on EC2:
+
+* "Amazon EC2 Account":http://aws.amazon.com/ec2/ - You should also have completed the "Getting Started Guide":http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/
+* "EC2onRails":http://ec2onrails.rubyforge.org/
+* "Cloudera EC2 Hadoop scripts":http://www.cloudera.com/hadoop-ec2
+* "1 TB of Wikipedia Article Traffic Logs (Amazon Public Data Set)":http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2596
+
+h2. Installation
+
+TODO: fetching the source code instructions will go here
+
+h2. Running a development version locally
+
+Navigate to the root of the source code directory and create the needed configuration files from the provided examples:
+<pre>
+	$ cd trendingtopics
+	$ cp config/config.yml.example config/config.yml
+	$ cp config/database.yml.example config/database.yml	
+</pre>
+
+Do the normal rails gem install dance for any missing dependencies.
+
+<pre>
+	$ rake gems:install
+</pre>
+
+We also used the following plugins (already included in /vendor):
+
+* autocomplete
+* annotated-timeline
+* gc4r (modified a bit)
+
+Create the database:
+<pre>
+    $ rake db:create
+    $ rake db:migrate
+</pre>
+
+Populate the app with demo data from 100 wiki articles:
+
+<pre>
+    $ rake db:develop
+</pre>
+
+Launch the rails app itself 
+<pre>
+	$ script/server 
+	=> Booting Mongrel
+	=> Rails 2.3.2 application starting on http://0.0.0.0:3000
+	=> Call with -d to detach
+	=> Ctrl-C to shutdown server
+</pre>
+	
+Navigate to http://localhost:3000/ to access the application
 
 
-Some gems used:
+h2. Deploying to EC2
 
-will_paginate
-autocomplete
-gc4r
-annotated-timeline
+Install the ec2onrails gem as described at http://ec2onrails.rubyforge.org/:
+<pre>	$ sudo gem install ec2onrails </pre>
+Find AMI id of the latest 32 bit ec2onrails image (in our case this was ami-5394733a):
+<pre>	$ cap ec2onrails:ami_ids</pre>
+
+Launch an instance of the latest ec2onrails ami and note the returned instance address from ec2-describe-instances, it will be something like ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com 
+<pre>
+	$ ec2-run-instances ami-5394733a -k gsg-keypair
+	$ ec2-describe-instances
+</pre>
+Create the needed configuration files from the provided examples and edit them, filling in your instance address information, keypairs, and other configuration information as indicated in the comments of each file. See the ec2onrails documentation or source code for more details on each setting.  If you want to make changes to the elasticwulf code, be sure to replace the base github repository in deploy.rb and config.yml with your own github location.
+<pre>
+	$ cp config/deploy.rb.example config/deploy.rb
+	$ cp config/s3.yml.example config/s3.yml
+	$ cp config/config.yml.example config/config.yml
+	$ cp config/database.yml.example config/database.yml	
+</pre>	
+Be sure to substitute in your own AWS key and secret key in both config.yml and s3.yml
+<pre>
+	aws_secret_access_key: YYVUYVIUBIBI
+	aws_access_key_id: BBKBBOUjbkj/BBOUBOBJKBjbjbboubuBUB
+</pre>
+If you uncomment the the auth filter in the main page controller, also replace the admin user name and password in config.yml:
+<pre>
+	admin_user: REPLACE_ME
+	admin_password: REPLACE_ME
+</pre>
+
+Deploy the app to your launched EC2 instance with Capistrano (this wil take several minutes)
+<pre>
+    $ cap ec2onrails:setup
+    $ cap deploy:cold
+</pre>
+If you have auth enabled, you can use the admin login information you set in config.yml to access the dashboard from a web browser or as web service at the url of the instance you provided in deploy.rb: http://ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com . You can also ssh into your running EC2 instance as usual with your keypairs to debug any issues.  See the ec2onrails forums for more help debugging deployment issues.
+
+To redeploy the app after making changes to the base trendingtopics code, just do the usual cap deploy:
+<pre>
+    $ cap deploy
+</pre>
+To manually restart the apache service or mongrels:
+<pre>
+    $ cap ec2onrails:server:restart_services
+    $ cap deploy:restart
+</pre>
+
+No data will be populated in the production deployed app until you run the included Hadoop Jobs.  To test the deployment, you can use Capistrano to run the db:develop task on the EC2 server, just wipe the dev data before loading real production data.
+
+h2. Running Hadoop & Hive jobs on EC2 to generate trend data
+
+coming shortly...
+
+Daily time series...
+
+!http://trendingtopics.s3.amazonaws.com/images/american_idol_daily_pageviews.png!
 
 
-== Mounting Wikistats AWS Public Dataset
+Trend Estimation...
 
-ec2-run-instances ami-5394733a -k gsg-keypair -t c1.medium -z us-east-1a
-ec2-associate-address -i i-ed440b84 174.129.202.23
-ec2-attach-volume vol-2455b74d -i i-ed440b84 -d /dev/sdf
-# on ec2
-mkdir /mnt/wikidata
-mount /dev/sdf /mnt/wikidata
-
-
-
-
-
+!http://trendingtopics.s3.amazonaws.com/images/fit_example_small.png!
