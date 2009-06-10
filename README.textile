@@ -20,7 +20,7 @@ h3. How Hadoop is Used in the Application
 * Generating Statistics that power search autocomplete and the ranking of search results
 * Running periodic trend estimation jobs / regressions
 
-The rest of this document will walk through the code which powers the site and describe some basic approaches for extracting trends from log data with Hadoop and Hive.
+The rest of this document will walk through the code which powers the site and describe some basic approaches for extracting trends from log data with Hadoop and Hive.  The individual steps are run manually for the code walkthrough, but would but likely be automated with some combination of Rake, Cron, Puppet, or Chef in a real production environment.
 
 h2. Raw Data: Hourly Wikipedia Article Traffic Logs
 
@@ -81,7 +81,7 @@ To further complicate the raw data processing, many page titles are actually wik
 </pre>
 
 
-h2. Using Hadoop & Hive on EC2 to Extract Trends
+h2. Using Hadoop & Hive on EC2 to Spot Trends in Time Series Data
 
 Processing large log datasets like this is a typical use case for Hadoop.  By using MapReduce and EC2 we can run millions of regressions on a distributed cluster to quickly answer analytical questions or generate real time analytics on metrics of interest.
 
@@ -90,6 +90,8 @@ h3. Task 1: Generate Daily Timelines from 1TB of Historical Hourly Logs
 Our first task is to calculate daily page views for all 2.5 million English Wikipedia articles, so we can display dynamic Google finance style timelines on the site.
 
 !http://trendingtopics.s3.amazonaws.com/images/american_idol_daily_pageviews.png!
+
+h4. Mounting the Public Dataset Volume
 
 First, we need to access the Amazon public dataset.  From your local machine, launch a small EC2 Ubuntu instance:  
 
@@ -112,7 +114,7 @@ Next, ssh into the instance and mount the volume
 	root@domU-12-xx-xx-xx-75-81:/mnt# mount /dev/sdf /mnt/wikidata
 </pre>	
 	
-h4. Uploading the data to S3	
+h4. Uploading the Data to S3	
 	
 Hadoop can use Amazon S3 as a distributed file system out of the box, so it will be easier for future EC2 jobs if we store a full copy of the EBS data on S3.  We will copy the raw pagecount data up to S3 from the EBS volume using S3cmd.  This install and configuration can be automated later on, but for now you will need your AWS access keys handy for the configuration.
 
@@ -134,15 +136,36 @@ You can upload all the files with a single command, or select a subset based on 
 	....
 </pre>	
 
-Each month has approximately 40GB of compressed data and takes around 30 minutes tt upload from a small EC2 instance.  Data transfer between EC2 and S3 is free so it costs about 50 cents do do the entire one time upload.
+Each month has approximately 40GB of compressed data and takes around 30 minutes to upload from a small EC2 instance.  Data transfer between EC2 and S3 is free, so it will cost 50 cents for the entire one time upload.
 
 h4. Customize the Cloudera Hadoop Ubuntu launch scripts
 
+One nice feature of the Cloudera Hadoop Distribution for EC2 is that you have full control over the instances for installing non-standard packages or customizing nodes.  
 
-... add packages for s3cmd, git, Rpy, etc
+For example, you can add apt-get installs by editing the USER_PACKAGES section in <code>hadoop-ec2-init-remote-cloudera-ubuntu.sh</code>
 
+Here are the packages we added:
 
-I found the following settings to work well for c1.medium instances on EC2.  This will likely vary based on the nature of your Hadoop Job.  
+<pre>
+	# Specify user packages to install here, separated by whitespace (e.g. 'r-base' for R)
+	USER_PACKAGES='r-base r-base-core r-base-dev r-base-html r-base-latex r-cran-date python-rpy 
+	python-setuptools python-docutils python-support python-distutils-extra python-simplejson git-core s3cmd'	
+</pre>	
+
+Since we want to use S3 as an input file system, we also make the following change so Hadoop knows about our AWS keys:
+
+<pre>
+	<property>
+	 <name>fs.s3n.awsAccessKeyId</name>
+	 <value>BBBIBIBBBBBBBBNPSINC</value>
+	</property>
+	<property>
+	 <name>fs.s3n.awsSecretAccessKey</name>
+	 <value>BJKBJBJK/NNNNNNNNNNinINNIONIONION</value>
+	</property>	
+</pre>	
+
+We can also change the default maximums for map and reduce tasks based on the EC2 instance type and the nature of the Hadoop jobs we will be running.  I found the following settings to work well for c1.medium instances on EC2 for the jobs we ran.  This will likely vary based on the nature of your MapReduce code and data.  
 
 <pre>
 	MAX_MAP_TASKS=2
@@ -161,9 +184,9 @@ I found the following settings to work well for c1.medium instances on EC2.  Thi
 	sys	0m0.324s	
 </pre>	
 
-For c1.xlarge instances, I used <code>MAX_MAP_TASKS=8</code> and <code>MAX_REDUCE_TASKS=4</code>.  
+For c1.xlarge instances, we used <code>MAX_MAP_TASKS=8</code> and <code>MAX_REDUCE_TASKS=4</code>.  
 
-h4. Launch an EC2 Hadoop Cluster
+h4. Launching a Hadoop Cluster on EC2
 
 For running daily timeline aggregations across 8 months of data, we will start a 10 node c1.xlarge Hadoop cluster
 
@@ -175,28 +198,95 @@ For running daily timeline aggregations across 8 months of data, we will start a
 	
 Once logged into the master node, you need to wait for the file system setup to complete before running the Hadoop & Hive Jobs.  A "hadoop" directory will appear in /mnt on the master node when the cluster is ready.  While you are waiting, configure S3cmd on the master node as we did previously when uploading the raw data to S3.
 
-When the file system is ready, fetch the trendingtopics code from github and then start the daily timeline job:
+
+When the file system is ready, fetch the trendingtopics code from github and then kick off the daily timeline job:
 
 <pre>
 	$ git clone git://github.com/datawrangling/trendingtopics.git
 	$ bash trendingtopics/lib/scripts/run_daily_timelines.sh
 </pre>
 
-While the job is running, we can dig into the MapReduce code to see how it does the aggregation and data cleaning:
+The bash script <code>run_daily_timelines.sh</code> executes a series of streaming hadoop jobs and Hive queries before emitting tab delimited output files ready for loading to MySQL.
 
-------------------------
+h4. Python Streaming Jobs 
+
+For the initial log file text normalization and filtering we used a simple "Hadoop Streaming":http://hadoop.apache.org/core/docs/r0.18.3/streaming.html job with Python.  You can plug any language into Hadoop Streaming jobs, but I prefer Python for text munging.  I didn't use it here, but the latest Cloudera Distribution of Hadoop also supports "Dumbo":http://dumbotics.com/2009/05/31/dumbo-on-clouderas-distribution/ for Python Streaming.
+
+A quick look at lib/python_streaming/daily_timelines.py shows the filters we applied to page urls
+
+<pre>
+	# Exclude pages outside of english wikipedia
+	wikistats_regex = re.compile('en (.*) ([0-9].*) ([0-9].*)')
+
+	# Excludes pages outside of namespace 0 (ns0)
+	namespace_titles_regex = re.compile('(Media|Special' + 
+	'|Talk|User|User_talk|Project|Project_talk|File' +
+	'|File_talk|MediaWiki|MediaWiki_talk|Template' +
+	'|Template_talk|Help|Help_talk|Category' +
+	'|Category_talk|Portal|Wikipedia|Wikipedia_talk)\:(.*)')
+
+	# More exclusions
+	first_letter_is_lower_regex = re.compile('([a-z])(.*)')
+	image_file_regex = re.compile('(.*).(jpg|gif|png|JPG|GIF|PNG|txt|ico)')
+
+	# Exclude Mediawiki boilerplate
+	blacklist = [
+	'404_error/',
+	'Main_Page',
+	'Hypertext_Transfer_Protocol',
+	'Favicon.ico',
+	'Search'
+	]
+</pre>
+
+The first Python Streaming job restricts pageviews to a subset of English wikipedia pages, filters out bad records, then sums hourly pageviews by keyed by Article-Date.  It emits output something like this:
+
+<pre>
+	Barack_Obama}20090422  129
+	Barack_Obama}20090419  143
+	Barack_Obama}20090421  163
+	Barack_Obama}20090420  152
+</pre>
+
+A second MapReduce pass then maps the records by article name:
+
+<pre>
+	Barack_Obama  20090422 129
+	Barack_Obama  20090419 143
+	Barack_Obama  20090421 163
+	Barack_Obama  20090420 152
+</pre>
+
+The records are merged at the reducers to generate a daily time series for each article in serialized JSON format (for easy manipulation in R & Python, or quick loading for the Web UI). 
+
+<code>article\tdates\tpagecounts\ttotal_pageviews</code>
+<pre>
+'Barack_Obama\t[20090419,20090420,20090421,20090422]\t[143,152,163,129]\t587'
+</pre>
+
+While the daily article pageviews are in hand, we also calculate the most recent "monthly trend" for each article using a simple difference over the last 30 days.  You can easily drop in a more complicated trend detection model here as well
+
+<pre>
+def calc_trend(dates, pageviews):
+  dts,counts = zip( *sorted( zip (dates,pageviews)))
+  trend_2 = sum(counts[-15:])
+  trend_1 = sum(counts[-30:-15])
+  monthly_trend = trend_2 - trend_1
+  date_str = '[%s]' % ','.join(dts)
+  pageview_str = '[%s]' % ','.join(map(str,counts))
+  return monthly_trend, date_str, pageview_str
+</pre>
+
+h4. Hive MapReduce Jobs & HiveQL
 
 
-TODO:  What we are running: Python Streaming snippets and Hive Join
+TODO: examples from hive_daily_timelines.sql go here
 
-Use filename in mapper trick, show hadoop tricks /tips
-
-TODO: give more details on the Hadoop / Hive jobs along with code snippets.
- We are only using Hive here for some simple Joins and selects,
- but it has other powerful features for analytics...
+We are only using Hive here for some simple joins and selects, but it has more powerful features for analytics.
 
 
-------------------------
+h4. Inspecting the results
+
 
 You can monitor your job progress by using Foxy Proxy to view the Cloudera Hadoop Web UI (see the README included with the Cloudera EC2 scripts for more details).  The following command sets up a tunnel for the Web UI.
 
@@ -214,7 +304,7 @@ When the Hive job completes, we can inspect the results:
 	Time taken: 33.199 seconds
 </pre>
 
-Some other simple queries you can try:
+Here are a few more quick queries to show how similar HiveQL is to SQL:
 
 <pre>
 	SELECT MAX(total_pageviews) FROM raw_daily_stats_table;
@@ -257,7 +347,7 @@ Some other simple queries you can try:
 	+-----------------------------------+
 </pre>
 
-Along with powering the ranked lists of trending articles on the site, these rankings are used to rank autocomplete search results:
+Along with powering the ranked lists of articles on the site, these trends are used to order autocomplete search results:
 
 !http://trendingtopics.s3.amazonaws.com/images/trend_autocomplete.png!
 
@@ -286,43 +376,34 @@ Jump over to the database server and execute the <code>load_history.sql</code> s
 
 h3. Task 2: Using Hadoop and Hive for Exploratory Analysis
 
---------------------------
+TODO: Brief description of running 2 Million Regressions with R
+TODO: Mention Hive Sampling / Partition Bucket features
 
-TODO
-...
-
--------------------------
 !http://trendingtopics.s3.amazonaws.com/images/fit_example_small.png!
-
 
 
 h3. Task 3: Daily Trend Estimation
 
+After the initial historical timeline aggregation is complete, we can begin daily runs of to detect trending articles over the last 24 hours using new hourly log data.  This job still needs to access some historical data to for baseline comparisons or regressions, but it will be much faster than processing the full timeline.
+
 !http://trendingtopics.s3.amazonaws.com/images/monthly_and_daily_trends.png!
 
-Repeat the initial cluster launch and configuration steps used in the last job.  This time, we run <code>daily_trend.sh</code>:
+To run the daily job, we repeat the initial cluster launch and configuration steps used in the last job using <code>daily_trend.sh</code>:
 
 <pre>
 	$ cd /mnt
 	$ bash bash trendingtopics/lib/scripts/run_daily_trends.sh
 </pre>
 
------------
+The job steps in the bash script are fairly similar to the first historical aggregation and monthly trend estimation, except that we pass the hourly data directly to the trend estimation script.
+
 TODO:
 
-Here is what the script is executing:
+Show Python Streaming example, pulling input data from S3
+Show regex on input bucket trick
+Mention cron job to fetch and upload files to s3
 
-Use regex on input bucket trick
-
-Show cron job to fetch and upload files to s3
-
-
-This process is fairly similar to the first historical aggregation, except we pass the hourly data to the trend estimation script
-
-Python Streaming example, pulling input data from S3
-------------
-
-We can inspect a sample of the results before loading them into MySQL:
+We can inspect a sample of the results in Hive before loading them into MySQL:
 
 <pre><code>
 	SELECT redirect_table.redirect_title, 

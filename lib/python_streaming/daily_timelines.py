@@ -21,7 +21,7 @@ import urllib
 # Exclude pages outside of english wikipedia
 wikistats_regex = re.compile('en (.*) ([0-9].*) ([0-9].*)')
 
-# Excludes pages outside of namspace 0 (ns0)
+# Excludes pages outside of namespace 0 (ns0)
 namespace_titles_regex = re.compile('(Media|Special' + 
 '|Talk|User|User_talk|Project|Project_talk|File' +
 '|File_talk|MediaWiki|MediaWiki_talk|Template' +
@@ -32,7 +32,7 @@ namespace_titles_regex = re.compile('(Media|Special' +
 first_letter_is_lower_regex = re.compile('([a-z])(.*)')
 image_file_regex = re.compile('(.*).(jpg|gif|png|JPG|GIF|PNG|txt|ico)')
 
-# Exclude mediawiki boilerplate
+# Exclude Mediawiki boilerplate
 blacklist = [
 '404_error/',
 'Main_Page',

@@ -22,7 +22,7 @@ from math import log, sqrt
 # Exclude pages outside of english wikipedia
 wikistats_regex = re.compile('en (.*) ([0-9].*) ([0-9].*)')
 
-# Excludes pages outside of namspace 0 (ns0)
+# Excludes pages outside of namespace 0 (ns0)
 namespace_titles_regex = re.compile('(Media|Special' + 
 '|Talk|User|User_talk|Project|Project_talk|File' +
 '|File_talk|MediaWiki|MediaWiki_talk|Template' +
