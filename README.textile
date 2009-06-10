@@ -2,7 +2,7 @@ h1. Tracking Trends with Hadoop & Hive on EC2
 
 This repository contains the full source code for "Trendingtopics.org":http://www.trendingtopics.org, built by "Data Wrangling":http://www,datawrangling.com to demonstrate how Hadoop & EC2 can power a data driven website. The trend statistics and time series data that run the site are updated periodically by launching a temporary EC2 cluster running the "Cloudera Hadoop Distribution":http://www.cloudera.com/hadoop-ec2. Our initial seed data consists of the raw wikipedia database content dump along with hourly "traffic logs":http://stats.grok.se/ for all articles collected from the wikipedia squid proxy (curated by Domas Mituzas). We made the first 7 months of this hourly data for all articles available as an Amazon Public Dataset.
 
-The current trend calculations are done using Hadoop Streaming and Hive.  The output produced by these Hadoop jobs are loaded into MySQL and indexed to power the live site. The demo data included with the Rails app on Github was generated from a sample of 100 trending articles on June 6th 2009. A larger snapshot is available on Amazon Public Datasets (snap-753dfc1c). The Rails app and MySQL database are deployed on Amazon EC2 using Paul Downman’s "EC2onRails":http://ec2onrails.rubyforge.org/.
+The current trend calculations are run with Hadoop Streaming and Hive.  The output produced by these Hadoop jobs is loaded into MySQL and indexed to power the live site. The demo data included with the Rails app on Github was generated from a sample of 100 trending articles on June 6th 2009. A much larger snapshot is available on Amazon Public Datasets (snap-753dfc1c). The Rails app and MySQL database are deployed on Amazon EC2 using Paul Downman’s "EC2onRails":http://ec2onrails.rubyforge.org/.
 
 !http://trendingtopics.s3.amazonaws.com/images/trendingtopics_dashboard.png!
 
@@ -212,7 +212,7 @@ h4. Python Streaming Jobs
 
 For the initial log file text normalization and filtering we used a simple "Hadoop Streaming":http://hadoop.apache.org/core/docs/r0.18.3/streaming.html job with Python.  You can plug any language into Hadoop Streaming jobs, but I prefer Python for text munging.  I didn't use it here, but the latest Cloudera Distribution of Hadoop also supports "Dumbo":http://dumbotics.com/2009/05/31/dumbo-on-clouderas-distribution/ for Python Streaming.
 
-A quick look at lib/python_streaming/daily_timelines.py shows the filters we applied to page urls
+A quick look at lib/python_streaming/daily_timelines.py shows the filtering we apply to page urls in the logs
 
 <pre>
 	# Exclude pages outside of english wikipedia
@@ -239,7 +239,7 @@ A quick look at lib/python_streaming/daily_timelines.py shows the filters we app
 	]
 </pre>
 
-The first Python Streaming job restricts pageviews to a subset of English wikipedia pages, filters out bad records, then sums hourly pageviews by keyed by Article-Date.  It emits output something like this:
+The first Python Streaming job restricts pageviews to a subset of English wikipedia pages, filters out bad records, then sums hourly pageviews keyed by Article-Date. It emits output something like this:
 
 <pre>
 	Barack_Obama}20090422  129
@@ -248,7 +248,14 @@ The first Python Streaming job restricts pageviews to a subset of English wikipe
 	Barack_Obama}20090420  152
 </pre>
 
-A second MapReduce pass then maps the records by article name:
+As a side note, there is a little known Hadoop Streaming trick buried in this Python script.  You will notice that the date is not actually in the raw log data itself, but is part of the filename.  It turns out that Hadoop makes job parameters you would fetch in Java with something like <code>job.get("mapred.input.file")</code> available as environment variables for streaming jobs, with periods replaced with underscores:
+
+<pre>
+	filepath = os.environ["map_input_file"] 
+	filename = os.path.split(filepath)[-1]
+</pre>
+
+Thanks to "Todd Lipcon":http://twitter.com/tlipcon for directing me to that hack.  A second MapReduce pass then maps the records by article name:
 
 <pre>
 	Barack_Obama  20090422 129
@@ -257,7 +264,7 @@ A second MapReduce pass then maps the records by article name:
 	Barack_Obama  20090420 152
 </pre>
 
-The records are merged at the reducers to generate a daily time series for each article in serialized JSON format (for easy manipulation in R & Python, or quick loading for the Web UI). 
+These records are merged at the reducers to generate a daily time series for each article in serialized JSON format (for easy manipulation in R & Python, or quick loading for the Web UI). 
 
 <code>article\tdates\tpagecounts\ttotal_pageviews</code>
 <pre>
@@ -278,6 +285,17 @@ def calc_trend(dates, pageviews):
 </pre>
 
 h4. Hive MapReduce Jobs & HiveQL
+
+
+
+
+
+
+
+
+
+
+
 
 
 TODO: examples from hive_daily_timelines.sql go here
@@ -385,10 +403,16 @@ Jump over to the database server and execute the <code>load_history.sql</code> s
 
 h3. Task 2: Using Hadoop and Hive for Exploratory Analysis
 
+
+
+
 TODO: Brief description of running 2 Million Regressions with R
 TODO: Mention Hive Sampling / Partition Bucket features
 
 !http://trendingtopics.s3.amazonaws.com/images/fit_example_small.png!
+
+
+
 
 
 h3. Task 3: Daily Trend Estimation
@@ -406,11 +430,20 @@ To run the daily job, we repeat the initial cluster launch and configuration ste
 
 The job steps in the bash script are fairly similar to the first historical aggregation and monthly trend estimation, except that we pass the hourly data directly to the trend estimation script.
 
-TODO:
+One trick worth noting in this script is that we use wildcards in the input paths to select a subset of the s3 files.  At this point we have thousands of hourly files sitting in an S3 bucket.  For the large historical aggregation this was fine, but if we only want to load a subset, then being careful with naming conventions can make you life easy.  Note that in operational mode these simple bash scripts would be parameterized by date, and probably replaced entirely with something more robust.
 
-Show 2nd Python Streaming example, pulling input data from S3
-Show regex on input bucket trick
-Mention cron job to fetch and upload files to s3
+<pre>
+hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
+  -input s3n://trendingtopics/wikistats/pagecounts-2009052* \
+  -input s3n://trendingtopics/wikistats/pagecounts-2009053* \
+  -input s3n://trendingtopics/wikistats/pagecounts-200906* \
+  -output finaltrendoutput \
+  -mapper "daily_trends.py mapper" \
+  -reducer "daily_trends.py reducer 10" \
+  -file '/mnt/trendingtopics/lib/python_streaming/daily_trends.py' \
+  -jobconf mapred.reduce.tasks=40 \
+  -jobconf mapred.job.name=daily_trends
+</pre>
 
 We can inspect a sample of the results in Hive before loading them into MySQL:
 
