@@ -5,8 +5,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => "pages"  
   map.resources :daily_timelines
-  map.resources :pages, :collection => {:auto_complete_for_search_query => :get }
   
+  
+  map.resources :pages, :collection => {:auto_complete_for_search_query => :get }
+
 
 
   map.with_options :controller => 'info' do |info|

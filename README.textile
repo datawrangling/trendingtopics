@@ -36,11 +36,13 @@ h3. For running on EC2:
 * "Cloudera EC2 Hadoop scripts":http://www.cloudera.com/hadoop-ec2
 * "1 TB of Wikipedia Article Traffic Logs (Amazon Public Data Set)":http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2596
 
-h2. Installation
-
-TODO: fetching the source code instructions will go here
-
 h2. Running a development version locally
+
+Fetch the trendingtopics source code:
+
+<pre>
+git clone git://github.com/datawrangling/trendingtopics.git
+</pre>
 
 Navigate to the root of the source code directory and create the needed configuration files from the provided examples:
 <pre>
@@ -60,6 +62,7 @@ We also used the following plugins (already included in /vendor):
 * autocomplete
 * annotated-timeline
 * gc4r (modified a bit)
+
 
 Create the database:
 <pre>
@@ -87,7 +90,7 @@ Navigate to http://localhost:3000/ to access the application
 
 h2. Deploying to EC2
 
-Install the ec2onrails gem as described at http://ec2onrails.rubyforge.org/:
+Fetch the source code as shown above, then install the ec2onrails gem as described at http://ec2onrails.rubyforge.org/:
 <pre>	$ sudo gem install ec2onrails </pre>
 Find AMI id of the latest 32 bit ec2onrails image (in our case this was ami-5394733a):
 <pre>	$ cap ec2onrails:ami_ids</pre>
@@ -104,7 +107,7 @@ Create the needed configuration files from the provided examples and edit them, 
 	$ cp config/config.yml.example config/config.yml
 	$ cp config/database.yml.example config/database.yml	
 </pre>	
-Be sure to substitute in your own AWS key and secret key in both config.yml and s3.yml
+Be sure to substitute in your own AWS key and secret key in both config.yml and s3.yml (You can leave these out and ec2onrails will still work, it just won't back up MySQL or the log files)
 <pre>
 	aws_secret_access_key: YYVUYVIUBIBI
 	aws_access_key_id: BBKBBOUjbkj/BBOUBOBJKBjbjbboubuBUB
