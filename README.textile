@@ -1,6 +1,6 @@
 h1. trendingtopics 
 
-This project contains the code for the trend tracking site "trendingtopics.org":http://www.trendingtopics.org built by "Data Wrangling":http://www,datawrangling.com.  The trend statistics and time series data that run the site are updated periodically by launching a temporary EC2 cluster running the Cloudera "Hadoop Distribution":http://www.cloudera.com/hadoop-ec2. The current trend calculations are done using Hadoop Streaming and Hive.
+This project contains the code for the trend tracking site "trendingtopics.org":http://www.trendingtopics.org built by "Data Wrangling":http://www,datawrangling.com.  The trend statistics and time series data that run the site are updated periodically by launching a temporary EC2 cluster running the "Cloudera Hadoop Distribution":http://www.cloudera.com/hadoop-ec2. The current trend calculations are done using Hadoop Streaming and Hive.
 
 The output produced by these Hadoop jobs are loaded into MySQL and indexed to power the live site. The demo data included in the Rails app was generated from hourly wikipedia article "traffic logs":http://stats.grok.se/ collected from the wikipedia squid proxy by Domas Mituzas.  A larger snapshot is available on Amazon Public Datasets (snap-753dfc1c). The Rails app and MySQL database are deployed to Amazon EC2 using Paul Downman's "EC2onRails":http://ec2onrails.rubyforge.org/.
 
@@ -31,7 +31,8 @@ h3. For local development:
 
 h3. For running on EC2:
 
-* "Amazon EC2 Account":http://aws.amazon.com/ec2/ - You should also have completed the "Getting Started Guide":http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/
+* "Amazon EC2 Account":http://aws.amazon.com/ec2/ 
+* Steps from EC2 "Getting Started Guide":http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/
 * "EC2onRails":http://ec2onrails.rubyforge.org/
 * "Cloudera EC2 Hadoop scripts":http://www.cloudera.com/hadoop-ec2
 * "1 TB of Wikipedia Article Traffic Logs (Amazon Public Data Set)":http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2596
@@ -137,15 +138,159 @@ To manually restart the apache service or mongrels:
 
 No data will be populated in the production deployed app until you run the included Hadoop Jobs.  To test the deployment, you can use Capistrano to run the db:develop task on the EC2 server, just wipe the dev data before loading real production data.
 
-h2. Running Hadoop & Hive jobs on EC2 to generate trend data
+h2. Running Hadoop & Hive on EC2 to Generate Trend Data
 
-coming shortly...
+This can be completely automated, but for now we will execute a number of steps by hand to show the process...
 
-Daily time series...
+Daily Timeline Generation
 
 !http://trendingtopics.s3.amazonaws.com/images/american_idol_daily_pageviews.png!
+
+Launch a small EC2 Ubuntu instance and mount the Wikipedia Traffic Statistics public snapshot
+
+On your local machine:
+
+<pre>
+	skom:~ pskomoroch$ ec2-run-instances ami-5394733a -k gsg-keypair -z us-east-1a
+</pre>
+
+Create and attach an EBS Volume from the Wikipedia Traffic Logs public snapshot (make sure the volume is created in the same availability zone as the ec2 instance)
+
+<pre>
+	skom:~ pskomoroch$ ec2-create-volume --snapshot snap-753dfc1c -z us-east-1a
+	skom:~ pskomoroch$ ec2-attach-volume vol-ec06ea85 -i i-df396cb6 -d /dev/sdf
+</pre>
+
+Log in to the instance and mount the volume
+<pre>
+	skom:~ pskomoroch$ ssh root@ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com
+	root@domU-12-xx-xx-xx-75-81:/mnt# mkdir /mnt/wikidata
+	root@domU-12-xx-xx-xx-75-81:/mnt# mount /dev/sdf /mnt/wikidata
+</pre>	
+	
+Copy the raw data up to S3 from the Amazon Public Dataset Snapshot using S3cmd
+
+TODO:
+
+Customize the Cloudera Ubuntu Hadoop launch scripts
+... add packages for s3cmd, git, Rpy, etc
+TODO:
+
+Launch a 10 node XL Hadoop cluster, configure S3cmd on the master node
+
+TODO:
+
+
+Wait for the file system setup to complete then run the Hadoop & Hive Jobs.  A "hadoop" directory will appear in /mnt on the master node when the cluster is ready.
+
+<pre>
+	$ cd /mnt
+	$ git clone git://github.com/datawrangling/trendingtopics.git
+	$ bash trendingtopics/lib/scripts/run_daily_timelines.sh
+</pre>
+
+TODO: give more details on the Hadoop / Hive jobs along with code snippets.  We are only using Hive here for some simple Joins and selects, but it has other powerful features for analytics...
+
+You can monitor your jobs by using Foxy Proxy to view the Hadoop Web UI
+
+TODO: add link to steps...
+
+<pre>
+	$ ssh -ND 8157 root@ec2-75-101-233-42.compute-1.amazonaws.com	
+</pre>	
+
+When the job completes, we can inspect the results:
+
+<pre><code>
+	SELECT COUNT(1) FROM raw_daily_stats_table; 
+	2823525
+	Time taken: 33.199 seconds
+</code></pre>
+
+Some other simple queries you can try:
+
+<pre><code>
+	SELECT MAX(total_pageviews) FROM raw_daily_stats_table;
+	
+	SELECT * from raw_daily_stats_table SORT BY total_pageviews DESC LIMIT 100;
+	
+	SELECT * from raw_daily_stats_table SORT BY monthly_trend DESC LIMIT 100;
+</code></pre>
+
+Send the results over to the trendingtopics database server:
+
+<pre>
+	$ scp /mnt/trendsdb.tar.gz root@www.trendingtopics.org:/mnt/
+</pre>
+
+Send a copy of the full data up to S3 for safe keeping along with a copy of the sample data for use later in development:
+
+<pre>
+	$ s3cmd put trendsdb.tar.gz s3://trendingtopics/archive/trendsdb.tar.gz
+	$ s3cmd put --force /mnt/sample* s3://trendingtopics/sampledata/	
+</pre>
+
+Jump over to the database server and execute the load_history.sql script against trendingtopics_production.  You will want to automate these logins and use proper authentication for your own app instead of manually loading the production database like this.  
+
+<pre>
+	$ ssh root@www.trendingtopics.org 
+	$ cd /mnt
+	$ tar -xzvf trendsdb.tar.gz
+	$ mysql -u root trendingtopics_production < load_history.sql
+</pre>
 
 
 Trend Estimation...
 
 !http://trendingtopics.s3.amazonaws.com/images/fit_example_small.png!
+
+
+Run the daily trend Hadoop jobs on a cluster
+
+<pre>
+	$ cd /mnt
+	$ bash bash trendingtopics/lib/scripts/run_daily_trends.sh
+</pre>
+
+
+Inspect a sample of the results:
+
+<pre><code>
+	SELECT redirect_table.redirect_title, 
+		raw_daily_trends_table.trend, 
+		raw_daily_trends_table.error 
+	FROM redirect_table JOIN raw_daily_trends_table 
+	ON (redirect_table.redirect_title = raw_daily_trends_table.redirect_title) 
+	SORT BY trend DESC LIMIT 100;
+</code></pre>
+
+The raw trends are also sitting in the "finaltrendoutput" directory on hdfs after the job runs:
+
+<pre>
+	$ hadoop fs -cat finaloutput/part-00001 | head
+	Ant_&_Dec	-2306.54138876	0.00584615412289
+	Antarctic_Peninsula	3.25105235217	0.022530295453
+	Ante_Paveliƒá	43.0203206758	0.0190174565282
+	Antebellum	181.963189695	0.00773800065214
+</pre>
+
+Send copies of the trend file & sample data up to amazons3 for use later in development:
+
+<pre>
+	s3cmd put /mnt/daily_trends.txt s3://trendingtopics/archive/20090606/daily_trends.txt
+	s3cmd put --force /mnt/sample_daily_trends.txt s3://trendingtopics/sampledata/sample_daily_trends.txt
+</pre>
+
+Copy the output file over to the trendingtopics server:
+
+<pre>
+scp /mnt/daily_trends.txt root@www.trendingtopics.org:/mnt/
+</pre>
+
+Next we load the data into MySQL on the prod server
+<pre>
+	ssh root@www.trendingtopics.org 
+	cd /mnt
+	mysql -u root trendingtopics_production < load_trends.sql
+</pre>
+

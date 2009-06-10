@@ -1,4 +1,4 @@
--- The SQL in this file is used to preprocess the historical 
+-- The SQL in this file was used to preprocess the historical 
 -- raw wikipedia dumps as part of building the AWS public dataset. 
 -- The data is used to create MySQL a redirect
 -- page_lookups table used by hadoop.
