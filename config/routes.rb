@@ -14,8 +14,10 @@ ActionController::Routing::Routes.draw do |map|
   map.with_options :controller => 'info' do |info|
     info.about 'about', :action => 'about'
     info.contact 'contact', :action => 'contact'
-    info.frames 'frames', :action => 'frames'    
+    info.frames 'frames', :action => 'frames'  
   end
+  
+  
 
   # The priority is based upon order of creation: first created -> highest priority.
 

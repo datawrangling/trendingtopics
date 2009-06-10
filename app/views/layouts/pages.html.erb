@@ -66,8 +66,11 @@
         </div> <!-- content -->
 
     	<div id="footer">
+    	
     	    <div class="left">
-    		      <%= link_to "XML feed", params.merge(:format => :xml) %> | <%= link_to "Contact", "contact" %> | <%= link_to "About", "about" %> |
+    	    
+          
+    		      <%= link_to("XML feed", pages_path(:format => :xml, :page => 1)) %> | <%= link_to "Contact",  { :controller => "contact" } %> | <%= link_to "About", { :controller => "about" } %> |
                 &copy; Copyright 2009 <a href="http://www.datawrangling.com">Data Wrangling, LLC</a>
     	    </div> <!-- left -->
 	    
