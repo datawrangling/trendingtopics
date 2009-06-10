@@ -59,7 +59,7 @@ Many of the raw wiki log page titles are percent-encoded. To match these with th
 
 h3. Handling Wikipedia Redirects
 
-To further complicate the raw data processing, many page titles are actually wikipedia redirects which do not match to the primary key of the wikipedia "Pages" table.  The non-redirect articles are referred to as belonging to "namespace-0".  As part of our Hadoop pre-processing, we can perform a join against a redirect lookup table to find the true wikipedia pageid for a give article title.
+To further complicate the raw data processing, many page titles are actually wikipedia redirects which do not match to the primary key of the wikipedia "Pages" table.  The non-redirect articles are referred to as belonging to "namespace-0".  As part of our Hadoop pre-processing, we can perform a join against a redirect lookup table to find the true wikipedia pageid for a given article title.
 
 <pre>
    mysql> select * from page_lookups where page_id = 534366;
@@ -286,22 +286,67 @@ def calc_trend(dates, pageviews):
 
 h4. Hive MapReduce Jobs & HiveQL
 
+Doing Joins in MapReduce can be a bit of a pain, Hive hides a lot of tedious details behind a simple SQL like syntax most developers are familiar with.  Behind the scenes this compiles down to optimized MapReduce code executed by Hive.  import and export of data is also very natural and will be familar to MySQL users.  
 
+We are only using Hive in this trend batch job for some simple joins and selects, but it has much more powerful features for analytics including partions, bucketing, and random sample of queries.  
 
+Here is an example from <code>lib/hive/hive_daily_timelines.sql</code> which solves the redirect matching problem we mentioned above:
 
+Create a <code>raw_daily_stats_table</code> and load it with the output of our Python streaming job directy from HDFS.
 
+<pre>
+	CREATE TABLE raw_daily_stats_table (
+		redirect_title STRING, 
+		dates STRING, 
+		pageviews STRING,
+	 	total_pageviews BIGINT, 
+		monthly_trend DOUBLE) 
+	ROW FORMAT DELIMITED 
+	FIELDS TERMINATED BY '\t' 
+	STORED AS TEXTFILE;
 
+	LOAD DATA INPATH 'finaloutput' INTO TABLE raw_daily_stats_table;	
+</pre>	
 
+Create a <code>redirect_table</code> for holding the large Wikipedia pageid lookup table we mentioned in the introduction, the file is loaded directly from the local filesystem, but could be pulled from MySQL using Sqoop instead.
 
+<pre>	
+	CREATE TABLE redirect_table (
+		redirect_title STRING, 
+		true_title STRING, 
+		page_id BIGINT, 
+		page_latest BIGINT) 
+	ROW FORMAT DELIMITED
+	FIELDS TERMINATED BY '\t'
+	STORED AS TEXTFILE;
+	
+	LOAD DATA LOCAL INPATH '/mnt/page_lookup_nonredirects.txt' OVERWRITE INTO TABLE redirect_table;	
+</pre>
 
+Create an output table to hold the result of the join.  This table mirrors the structure of the daily_timelines table in our MySQL database:
 
+<pre>
+	CREATE TABLE daily_timelines (
+		page_id BIGINT,
+		dates STRING, 
+		pageviews STRING, 
+		total_pageviews BIGINT) 
+	ROW FORMAT DELIMITED FIELDS
+	TERMINATED BY '\t' STORED
+	AS TEXTFILE;
+</pre>	
 
+Now we can use a familar join syntax to quickly normalize the page titles with the correct Wikipedia page ids:
 
-
-TODO: examples from hive_daily_timelines.sql go here
-
-We are only using Hive here for some simple joins and selects, but it has more powerful features for analytics.
-
+<pre>
+	INSERT OVERWRITE TABLE daily_timelines
+	SELECT redirect_table.page_id, 
+		raw_daily_stats_table.dates, 
+		raw_daily_stats_table.pageviews, 
+		raw_daily_stats_table.total_pageviews 
+	FROM redirect_table 
+	JOIN raw_daily_stats_table ON (redirect_table.redirect_title = raw_daily_stats_table.redirect_title);	
+</pre>	
 
 h4. Inspecting the results
 
