@@ -1,8 +1,8 @@
 h1. Tracking Trends with Hadoop & Hive on EC2
 
-This repository contains the full source code for "Trendingtopics.org":http://www.trendingtopics.org, built by "Data Wrangling":http://www,datawrangling.com to demonstrate how Hadoop & EC2 can power a data driven website. The trend statistics and time series data that run the site are updated periodically by launching a temporary EC2 cluster running the "Cloudera Hadoop Distribution":http://www.cloudera.com/hadoop-ec2. Our initial seed data consists the raw wikipedia database dump along with hourly "traffic logs":http://stats.grok.se/ for all articles collected from the wikipedia squid proxy (curated by Domas Mituzas). We made the first 7 months of this hourly data available as an Amazon Public Dataset.
+This repository contains the full source code for "Trendingtopics.org":http://www.trendingtopics.org, built by "Data Wrangling":http://www,datawrangling.com to demonstrate how Hadoop & EC2 can power a data driven website. The trend statistics and time series data that run the site are updated periodically by launching a temporary EC2 cluster running the "Cloudera Hadoop Distribution":http://www.cloudera.com/hadoop-ec2. Our initial seed data consists of the raw wikipedia database content dump along with hourly "traffic logs":http://stats.grok.se/ for all articles collected from the wikipedia squid proxy (curated by Domas Mituzas). We made the first 7 months of this hourly data for all articles available as an Amazon Public Dataset.
 
-The current trend calculations are done using Hadoop Streaming and Hive.  The output produced by these Hadoop jobs are loaded into MySQL and indexed to power the live site. The demo data included in the Rails app was generated from hourly wikipedia article traffic logs collected from the Wikipedia squid proxy by Domas Mituzas. A larger snapshot is available on Amazon Public Datasets (snap-753dfc1c). The Rails app and MySQL database are deployed to Amazon EC2 using Paul Downman’s "EC2onRails":http://ec2onrails.rubyforge.org/.
+The current trend calculations are done using Hadoop Streaming and Hive.  The output produced by these Hadoop jobs are loaded into MySQL and indexed to power the live site. The demo data included with the Rails app on Github was generated from a sample of 100 trending articles on June 6th 2009. A larger snapshot is available on Amazon Public Datasets (snap-753dfc1c). The Rails app and MySQL database are deployed on Amazon EC2 using Paul Downman’s "EC2onRails":http://ec2onrails.rubyforge.org/.
 
 !http://trendingtopics.s3.amazonaws.com/images/trendingtopics_dashboard.png!
 
@@ -20,7 +20,7 @@ h3. How Hadoop is Used in the Application
 * Generating Statistics that power search autocomplete and the ranking of search results
 * Running periodic trend estimation jobs / regressions
 
-The rest of this document will walk through the code which powers the site and describe some basic approaches for extract trends from log data with Hadoop and Hive.
+The rest of this document will walk through the code which powers the site and describe some basic approaches for extracting trends from log data with Hadoop and Hive.
 
 h2. Raw Data: Hourly Wikipedia Article Traffic Logs
 
@@ -112,13 +112,34 @@ Next, ssh into the instance and mount the volume
 	root@domU-12-xx-xx-xx-75-81:/mnt# mount /dev/sdf /mnt/wikidata
 </pre>	
 	
-Copy the raw pagecount data up to S3 from the EBS volume using S3cmd:
+h4. Uploading the data to S3	
+	
+Hadoop can use Amazon S3 as a distributed file system out of the box, so it will be easier for future EC2 jobs if we store a full copy of the EBS data on S3.  We will copy the raw pagecount data up to S3 from the EBS volume using S3cmd.  This install and configuration can be automated later on, but for now you will need your AWS access keys handy for the configuration.
 
-TODO:
+<pre>
+	root@domU-12-xx-xx-xx-75-81:/mnt# apt-get install -y s3cmd
+	root@domU-12-xx-xx-xx-75-81:/mnt# s3cmd --configure
+</pre>
 
-Customize the Cloudera Ubuntu Hadoop launch scripts
+You can upload all the files with a single command, or select a subset based on the file name in case an upload fails:
+
+<pre>
+	/mnt# time s3cmd put --force pagecounts-200904* s3://trendingtopics/wikistats/
+	/mnt# time s3cmd put --force pagecounts-200903* s3://trendingtopics/wikistats/
+	/mnt# time s3cmd put --force pagecounts-200902* s3://trendingtopics/wikistats/
+	/mnt# time s3cmd put --force pagecounts-200901* s3://trendingtopics/wikistats/
+	/mnt# time s3cmd put --force pagecounts-200812* s3://trendingtopics/wikistats/
+	/mnt# time s3cmd put --force pagecounts-200811* s3://trendingtopics/wikistats/
+	/mnt# time s3cmd put --force pagecounts-200810* s3://trendingtopics/wikistats/	
+	....
+</pre>	
+
+Each month has approximately 40GB of compressed data and takes around 30 minutes tt upload from a small EC2 instance.  Data transfer between EC2 and S3 is free so it costs about 50 cents do do the entire one time upload.
+
+h4. Customize the Cloudera Hadoop Ubuntu launch scripts
+
+
 ... add packages for s3cmd, git, Rpy, etc
-TODO:
 
 
 I found the following settings to work well for c1.medium instances on EC2.  This will likely vary based on the nature of your Hadoop Job.  
@@ -140,8 +161,11 @@ I found the following settings to work well for c1.medium instances on EC2.  Thi
 	sys	0m0.324s	
 </pre>	
 
+For c1.xlarge instances, I used <code>MAX_MAP_TASKS=8</code> and <code>MAX_REDUCE_TASKS=4</code>.  
 
-For c1.xlarge instances, I used <code>MAX_MAP_TASKS=8</code> and <code>MAX_REDUCE_TASKS=4</code>.  To run the daily timeline generation across 8 months of data, I launched a 10 node c1.xlarge Hadoop cluster using the cloudera scripts:
+h4. Launch an EC2 Hadoop Cluster
+
+For running daily timeline aggregations across 8 months of data, we will start a 10 node c1.xlarge Hadoop cluster
 
 <pre>
 	skom:cloudera-for-hadoop-on-ec2-0.3.1 pskomoroch$ bin/hadoop-ec2 launch-cluster my-hadoop-cluster 10
@@ -158,27 +182,33 @@ When the file system is ready, fetch the trendingtopics code from github and the
 	$ bash trendingtopics/lib/scripts/run_daily_timelines.sh
 </pre>
 
-TODO: give more details on the Hadoop / Hive jobs along with code snippets.
- We are only using Hive here for some simple Joins and selects,
- but it has other powerful features for analytics...
+While the job is running, we can dig into the MapReduce code to see how it does the aggregation and data cleaning:
 
-You can monitor your jobs by using Foxy Proxy to view the Cloudera Hadoop Web UI (see the README included with the Cloudera EC2 scripts for more details).  The following command sets up a tunnel for the Web UI.
+------------------------
 
-<pre>
-	$ ssh -ND 8157 root@ec2-174-129-165-138.compute-1.amazonaws.com	
-</pre>	
-
------------------
 
 TODO:  What we are running: Python Streaming snippets and Hive Join
 
 Use filename in mapper trick, show hadoop tricks /tips
 
-----------------------
+TODO: give more details on the Hadoop / Hive jobs along with code snippets.
+ We are only using Hive here for some simple Joins and selects,
+ but it has other powerful features for analytics...
 
-When the job completes, we can inspect the results:
+
+------------------------
+
+You can monitor your job progress by using Foxy Proxy to view the Cloudera Hadoop Web UI (see the README included with the Cloudera EC2 scripts for more details).  The following command sets up a tunnel for the Web UI.
 
 <pre>
+	$ ssh -ND 8157 root@ec2-174-129-165-138.compute-1.amazonaws.com	
+</pre>	
+
+
+When the Hive job completes, we can inspect the results:
+
+<pre>
+	$ hive
 	SELECT COUNT(1) FROM raw_daily_stats_table; 
 	2823525
 	Time taken: 33.199 seconds
@@ -188,16 +218,13 @@ Some other simple queries you can try:
 
 <pre>
 	SELECT MAX(total_pageviews) FROM raw_daily_stats_table;
-	
 	+----------------------+
 	| MAX(total_pageviews) |
 	+----------------------+
 	|             33471178 | 
 	+----------------------+
 	
-	
 	SELECT redirect_title from raw_daily_stats_table SORT BY total_pageviews DESC LIMIT 10;
-	
 	+----------------+
 	| redirect_title |
 	+----------------+
@@ -212,10 +239,8 @@ Some other simple queries you can try:
 	| Eminem         | 
 	| World_War_II   | 
 	+----------------+
-
 	
 	SELECT redirect_title from raw_daily_stats_table SORT BY monthly_trend DESC LIMIT 10;
-
 	+-----------------------------------+
 	| redirect_title                    |
 	+-----------------------------------+
@@ -230,20 +255,20 @@ Some other simple queries you can try:
 	| Mike_Tyson                        | 
 	| Up_(2009_film)                    | 
 	+-----------------------------------+
-
-
 </pre>
+
+Along with powering the ranked lists of trending articles on the site, these rankings are used to rank autocomplete search results:
 
 !http://trendingtopics.s3.amazonaws.com/images/trend_autocomplete.png!
 
 
-Send the results over to the trendingtopics database server:
+Once we are confident in the results of the Hadoop jobs, we can send the results over to the trendingtopics database server:
 
 <pre>
 	$ scp /mnt/trendsdb.tar.gz root@www.trendingtopics.org:/mnt/
 </pre>
 
-Send a copy of the full data up to S3 for safe keeping along with a copy of the sample data for use later in development:
+We also send a copy of the full data up to S3 for safe keeping along with the sample data for development use
 
 <pre>
 	$ s3cmd put trendsdb.tar.gz s3://trendingtopics/archive/trendsdb.tar.gz
@@ -261,8 +286,12 @@ Jump over to the database server and execute the <code>load_history.sql</code> s
 
 h3. Task 2: Using Hadoop and Hive for Exploratory Analysis
 
+--------------------------
+
 TODO
 ...
+
+-------------------------
 !http://trendingtopics.s3.amazonaws.com/images/fit_example_small.png!
 
 
@@ -304,7 +333,7 @@ We can inspect a sample of the results before loading them into MySQL:
 	SORT BY trend DESC LIMIT 100;
 </code></pre>
 
-The raw trends are also sitting in the "finaltrendoutput" directory on hdfs after the job runs:
+The raw trends are also sitting in the "finaltrendoutput" directory on hdfs after the job runs
 
 <pre>
 	$ hadoop fs -cat finaloutput/part-00001 | head
@@ -314,7 +343,7 @@ The raw trends are also sitting in the "finaltrendoutput" directory on hdfs afte
 	Antebellum	181.963189695	0.00773800065214
 </pre>
 
-Send copies of the trend file & sample data up to amazons3 for use later in development:
+Next we send copies of the trend file & sample data up to Amazon S3 for development use later on
 
 <pre>
 	s3cmd put /mnt/daily_trends.txt s3://trendingtopics/archive/20090606/daily_trends.txt
@@ -353,10 +382,15 @@ Shut down the Hadoop cluster
 	INSTANCE	i-fd7b2c94	running	shutting-down
 </pre>	
 
-h2. Next Steps with MapReduce
+h2. Next Steps with MapReduce and TrendingTopics
 
-TODO
-
+* Cron / Rake tasks to automate the daily job
+* Plug in better trend algorithms
+* Explore Paritions/Buckets with Hive for fast analytics queries
+* Generate smaller representative sample datasets for R&D with Hive 
+* Merge the trends with text content from the raw wikipedia dumps using Hive to get trends for words/phrases/concepts 
+* Combine data with wikipedia link graph dataset on the EBS volume, show related articles for each trend
+* Find correlated trends and topics, look for predictive value
 
 h2. Appendix: Running the Rails app
 
