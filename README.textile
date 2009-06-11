@@ -10,7 +10,7 @@ h3. Application Features
 
 * Ranked list of the most significant trends over the last 30 days along with total pageviews
 * Ranked list of "Rising" articles trending in the last 24 hours
-* Daily time series charts and sparklines for over 2.5 Million wikipedia articles
+* Daily time series charts and "sparklines":http://en.wikipedia.org/wiki/Sparkline for over 2.5 Million wikipedia articles
 * Autocomplete functionality and search results ranked by article trend score
 
 h3. How Hadoop is Used in the Application
@@ -22,7 +22,7 @@ h3. How Hadoop is Used in the Application
 
 The rest of this document will walk through the code which powers the site and describe some basic approaches for extracting trends from log data with Hadoop and Hive.  The individual steps are run manually for the code walkthrough, but would but likely be automated with some combination of Rake, Cron, Puppet, or Chef in a real production environment.
 
-Prerequisites
+h3. Prerequisites
 
 * "Get an Amazon EC2 Account":http://aws.amazon.com/ec2/
 * Complete the "Amazon EC2 Getting Started Guide":http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/
@@ -126,6 +126,7 @@ h4. Uploading the Data to S3
 Hadoop can use Amazon S3 as a distributed file system out of the box, so it will be easier for future EC2 jobs if we store a full copy of the EBS data on S3.  We will copy the raw pagecount data up to S3 from the EBS volume using S3cmd.  This install and configuration can be automated later on, but for now you will need your AWS access keys handy for the configuration.
 
 <pre>
+	root@domU-12-xx-xx-xx-75-81:/mnt# apt-get update
 	root@domU-12-xx-xx-xx-75-81:/mnt# apt-get install -y s3cmd
 	root@domU-12-xx-xx-xx-75-81:/mnt# s3cmd --configure
 </pre>
@@ -133,13 +134,13 @@ Hadoop can use Amazon S3 as a distributed file system out of the box, so it will
 You can upload all the files with a single command, or select a subset based on the file name in case an upload fails:
 
 <pre>
-	/mnt# time s3cmd put --force pagecounts-200904* s3://trendingtopics/wikistats/
-	/mnt# time s3cmd put --force pagecounts-200903* s3://trendingtopics/wikistats/
-	/mnt# time s3cmd put --force pagecounts-200902* s3://trendingtopics/wikistats/
-	/mnt# time s3cmd put --force pagecounts-200901* s3://trendingtopics/wikistats/
-	/mnt# time s3cmd put --force pagecounts-200812* s3://trendingtopics/wikistats/
-	/mnt# time s3cmd put --force pagecounts-200811* s3://trendingtopics/wikistats/
-	/mnt# time s3cmd put --force pagecounts-200810* s3://trendingtopics/wikistats/	
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200904* s3://trendingtopics/wikistats/
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200903* s3://trendingtopics/wikistats/
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200902* s3://trendingtopics/wikistats/
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200901* s3://trendingtopics/wikistats/
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200812* s3://trendingtopics/wikistats/
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200811* s3://trendingtopics/wikistats/
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200810* s3://trendingtopics/wikistats/	
 	....
 </pre>	
 
@@ -155,7 +156,7 @@ Here are the packages we added:
 
 <pre>
 	# Specify user packages to install here, separated by whitespace (e.g. 'r-base' for R)
-	USER_PACKAGES='r-base r-base-core r-base-dev r-base-html r-base-latex r-cran-date python-rpy 
+	USER_PACKAGES='r-base r-base-core r-base-dev r-base-html r-base-latex r-cran-date python-rpy \
 	python-setuptools python-docutils python-support python-distutils-extra python-simplejson git-core s3cmd'	
 </pre>	
 
@@ -357,11 +358,14 @@ Now we can use a familar join syntax to quickly normalize the page titles with t
 
 h4. Inspecting the results
 
-
-You can monitor your job progress by using Foxy Proxy to view the Cloudera Hadoop Web UI (see the README included with the Cloudera EC2 scripts for more details).  The following command sets up a tunnel for the Web UI.
+You can monitor your job progress from the broswer by using Foxy Proxy to view the Cloudera Hadoop Web UI (see the "Cloudera EC2 documentation":http://www.cloudera.com/hadoop-ec2 for more details). The following command sets up a tunnel for the Web UI.
 
 <pre>
-	$ ssh -ND 8157 root@ec2-174-129-165-138.compute-1.amazonaws.com	
+    $ bin/hadoop-ec2 proxy my-hadoop-cluster
+    Proxying to host ec2-75-101-238-25.compute-1.amazonaws.com via local port 6666
+    Gangia:     http://ec2-75-101-238-25.compute-1.amazonaws.com/ganglia
+    JobTracker: http://ec2-75-101-238-25.compute-1.amazonaws.com:50030/
+    NameNode:   http://ec2-75-101-238-25.compute-1.amazonaws.com:50070/
 </pre>	
 
 
