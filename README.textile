@@ -446,21 +446,7 @@ Jump over to the database server and execute the <code>load_history.sql</code> s
 	$ mysql -u root trendingtopics_production < load_history.sql
 </pre>
 
-h3. Task 2: Using Hadoop and Hive for Exploratory Analysis
-
-
-
-
-TODO: Brief description of running 2 Million Regressions with R
-TODO: Mention Hive Sampling / Partition Bucket features
-
-!http://trendingtopics.s3.amazonaws.com/images/fit_example_small.png!
-
-
-
-
-
-h3. Task 3: Daily Trend Estimation
+h3. Task 2: Daily Trend Estimation
 
 After the initial historical timeline aggregation is complete, we can begin daily runs of to detect trending articles over the last 24 hours using new hourly log data.  This job still needs to access some historical data to for baseline comparisons or regressions, but it will be much faster than processing the full timeline.
 
@@ -552,6 +538,7 @@ Shut down the Hadoop cluster
 
 h2. Next Steps with MapReduce and TrendingTopics
 
+* Create a new daily job which pulls in recent log data from S3 into Hive and imports the Rails app MySQL tables with Sqoop. Aggregate and merge the last 24 hour of log data with the daily_timelines table, then estimate and replace the daily and monthly trends before exporting the new tables to MySQL
 * Cron / Rake tasks to automate the daily job
 * Plug in better trend algorithms
 * Explore Paritions/Buckets with Hive for fast analytics queries
