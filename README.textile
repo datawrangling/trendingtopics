@@ -22,6 +22,13 @@ h3. How Hadoop is Used in the Application
 
 The rest of this document will walk through the code which powers the site and describe some basic approaches for extracting trends from log data with Hadoop and Hive.  The individual steps are run manually for the code walkthrough, but would but likely be automated with some combination of Rake, Cron, Puppet, or Chef in a real production environment.
 
+Prerequisites
+
+* "Get an Amazon EC2 Account":http://aws.amazon.com/ec2/
+* Complete the "Amazon EC2 Getting Started Guide":http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/
+* Download "Cloudera EC2 Hadoop scripts":http://www.cloudera.com/hadoop-ec2
+* Clone the "trendingtopics code on github":http://github.com/datawrangling/trendingtopics/tree/master
+
 h2. Raw Data: Hourly Wikipedia Article Traffic Logs
 
 The "Wikipedia Traffic Statistics":http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2596 Amazon Public Dataset we will process covers a 7 month period from October, 01 2008 to April, 30 2009. This data is regularly logged from the wikipedia squid proxy by Domas Mituzas and was compiled by Data Wrangling for this demo.
@@ -536,7 +543,7 @@ Shut down the Hadoop cluster
 	INSTANCE	i-fd7b2c94	running	shutting-down
 </pre>	
 
-h2. Next Steps with MapReduce and TrendingTopics
+h2. Next Steps with Hadoop and TrendingTopics
 
 * Create a new daily job which pulls in recent log data from S3 into Hive and imports the Rails app MySQL tables with Sqoop. Aggregate and merge the last 24 hour of log data with the daily_timelines table, then estimate and replace the daily and monthly trends before exporting the new tables to MySQL
 * Cron / Rake tasks to automate the daily job
