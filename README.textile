@@ -134,13 +134,13 @@ Hadoop can use Amazon S3 as a distributed file system out of the box, so it will
 You can upload all the files with a single command, or select a subset based on the file name in case an upload fails:
 
 <pre>
-	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200904* s3://trendingtopics/wikistats/
-	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200903* s3://trendingtopics/wikistats/
-	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200902* s3://trendingtopics/wikistats/
-	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200901* s3://trendingtopics/wikistats/
-	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200812* s3://trendingtopics/wikistats/
-	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200811* s3://trendingtopics/wikistats/
-	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200810* s3://trendingtopics/wikistats/	
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200904* s3://MYBUCKET/wikistats/
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200903* s3://MYBUCKET/wikistats/
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200902* s3://MYBUCKET/wikistats/
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200901* s3://MYBUCKET/wikistats/
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200812* s3://MYBUCKET/wikistats/
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200811* s3://MYBUCKET/wikistats/
+	/mnt# time s3cmd put --force wikidata/wikistats/pagecounts/pagecounts-200810* s3://MYBUCKET/wikistats/	
 	....
 </pre>	
 
@@ -206,12 +206,11 @@ For running daily timeline aggregations across 8 months of data, we will start a
 	
 Once logged into the master node, you need to wait for the file system setup to complete before running the Hadoop & Hive Jobs.  A "hadoop" directory will appear in /mnt on the master node when the cluster is ready.  While you are waiting, configure S3cmd on the master node as we did previously when uploading the raw data to S3.
 
-
 When the file system is ready, fetch the trendingtopics code from github and then kick off the daily timeline job:
 
 <pre>
 	$ git clone git://github.com/datawrangling/trendingtopics.git
-	$ bash trendingtopics/lib/scripts/run_daily_timelines.sh
+	$ bash trendingtopics/lib/scripts/run_daily_timelines.sh MYBUCKET
 </pre>
 
 The bash script <code>run_daily_timelines.sh</code> executes a series of streaming hadoop jobs and Hive queries before emitting tab delimited output files ready for loading to MySQL.
@@ -444,8 +443,8 @@ Once we are confident in the results of the Hadoop jobs, we can send the results
 We also send a copy of the full data up to S3 for safe keeping along with the sample data for development use
 
 <pre>
-	$ s3cmd put trendsdb.tar.gz s3://trendingtopics/archive/trendsdb.tar.gz
-	$ s3cmd put --force /mnt/sample* s3://trendingtopics/sampledata/	
+	$ s3cmd put trendsdb.tar.gz s3://MYBUCKET/archive/trendsdb.tar.gz
+	$ s3cmd put --force /mnt/sample* s3://MYBUCKET/sampledata/	
 </pre>
 
 Jump over to the database server and execute the <code>load_history.sql</code> script against <code>trendingtopics_production</code>.  You will want to automate these logins and use proper authentication for your own app instead of manually loading the production database like this.  
@@ -467,18 +466,17 @@ To run the daily job, we repeat the initial cluster launch and configuration ste
 
 <pre>
 	$ cd /mnt
-	$ bash bash trendingtopics/lib/scripts/run_daily_trends.sh
+	$ bash trendingtopics/lib/scripts/run_daily_trends.sh s3n://MYBUCKET/wikistats/pagecounts-200906* s3n://MYBUCKET/wikistats/pagecounts-2009053*
 </pre>
 
-The job steps in the bash script are fairly similar to the first historical aggregation and monthly trend estimation, except that we pass the hourly data directly to the trend estimation script.
+The job steps in the bash script are fairly similar to the first historical aggregation and monthly trend estimation, except that we pass the hourly data directly to the trend estimation script, we need to be sure to pass at least 10 days of data by using wildcards on the s3 path.
 
-One trick worth noting in this script is that we use wildcards in the input paths to select a subset of the s3 files.  At this point we have thousands of hourly files sitting in an S3 bucket.  For the large historical aggregation this was fine, but if we only want to load a subset, then being careful with naming conventions can make your life easier.  Note that in operational mode these simple bash scripts would be parameterized by date, and probably replaced entirely with something more robust.
+One trick worth noting in this script is that we use wildcards in the input paths to select a subset of the s3 files.  At this point we have thousands of hourly files sitting in an S3 bucket.  For the large historical aggregation this was fine, but if we only want to load a subset, then being careful with naming conventions can make your life easier. You can also pass multiple input buckets by adding more -input lines to the hadoop command. Note that in operational mode these simple bash scripts would be parameterized by date, and probably replaced entirely with something more robust.
 
 <pre>
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
-  -input s3n://trendingtopics/wikistats/pagecounts-2009052* \
-  -input s3n://trendingtopics/wikistats/pagecounts-2009053* \
-  -input s3n://trendingtopics/wikistats/pagecounts-200906* \
+  -input $1 \
+  -input $2 \
   -output finaltrendoutput \
   -mapper "daily_trends.py mapper" \
   -reducer "daily_trends.py reducer 10" \
@@ -511,8 +509,8 @@ The raw trends are also sitting in the "finaltrendoutput" directory on hdfs afte
 Next we send copies of the trend file & sample data up to Amazon S3 for development use
 
 <pre>
-	s3cmd put /mnt/daily_trends.txt s3://trendingtopics/archive/20090606/daily_trends.txt
-	s3cmd put --force /mnt/sample_daily_trends.txt s3://trendingtopics/sampledata/sample_daily_trends.txt
+	s3cmd put /mnt/daily_trends.txt s3://MYBUCKET/archive/20090606/daily_trends.txt
+	s3cmd put --force /mnt/sample_daily_trends.txt s3://MYBUCKET/sampledata/sample_daily_trends.txt
 </pre>
 
 Copy the output file over to the trendingtopics server:
@@ -705,11 +703,9 @@ To renable the site:
 	$ cap deploy:web:enable
 </pre>
 
-Doing a "periodic swap":http://dev.mysql.com/doc/refman/5.1/en/rename-table.html of the data tables in MySQL:
+To load daily updates, we do a "periodic swap":http://dev.mysql.com/doc/refman/5.1/en/rename-table.html of the data tables in MySQL, replacing them entirely with the staging tables which are loaded from Hive dumps:
 
 <pre>
-CREATE TABLE new_pages (...);
-... load data
 RENAME TABLE pages TO backup_pages, new_pages TO pages;
 </pre>
 

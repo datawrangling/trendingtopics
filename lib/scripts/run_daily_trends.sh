@@ -9,7 +9,7 @@
 # Replace the input paths with your bucket and the desired range
 # then:
 #
-# $ bash bash trendingtopics/lib/scripts/run_daily_trends.sh
+# $ bash trendingtopics/lib/scripts/run_daily_trends.sh s3n://trendingtopics/wikistats/pagecounts-200906* s3n://trendingtopics/wikistats/pagecounts-2009053*
 #
 # Produces a tab delimited trend output file "/mnt/daily_trends.txt" 
 # ready to bulk load into the Rails app daily_trends table.
@@ -23,9 +23,8 @@
 
 # Run the streaming job on 10 nodes
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
-  -input s3n://trendingtopics/wikistats/pagecounts-2009052* \
-  -input s3n://trendingtopics/wikistats/pagecounts-2009053* \
-  -input s3n://trendingtopics/wikistats/pagecounts-200906* \
+  -input $1 \
+  -input $2 \
   -output finaltrendoutput \
   -mapper "daily_trends.py mapper" \
   -reducer "daily_trends.py reducer 10" \

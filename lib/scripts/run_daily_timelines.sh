@@ -10,7 +10,7 @@
 # Replace the input paths with your bucket and the desired range
 # then:
 #
-# $ bash trendingtopics/lib/scripts/run_daily_timelines.sh
+# $ bash trendingtopics/lib/scripts/run_daily_timelines.sh MYBUCKET
 #
 # Produces a tab delimited trend output file "daily_trends.txt" 
 # and a normalized "pages.txt" in /mnt/trendsdb.tar.gz
@@ -26,7 +26,7 @@
 
   
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
-  -input s3n://trendingtopics/wikistats/pagecounts-200* \
+  -input s3n://trendingtopics/$1/pagecounts-200* \
   -output stage1-output \
   -mapper "daily_timelines.py mapper1" \
   -reducer "daily_timelines.py reducer1" \
