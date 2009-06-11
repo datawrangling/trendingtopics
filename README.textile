@@ -695,3 +695,26 @@ To manually restart the apache service or mongrels:
 
 No data will be populated in the production deployed app until you run the included Hadoop Jobs.  To test the deployment, you can use Capistrano to run the db:develop task on the EC2 server, just wipe the dev data before loading real production data.
 
+To put the site in "maintenance mode":http://clarkware.com/cgi/blosxom/2007/01/05, we use the standard cap tasks:
+
+<pre>
+	$ cap deploy:web:disable
+</pre>
+
+To renable the site:
+
+<pre>
+	$ cap deploy:web:enable
+</pre>
+
+Doing a "periodic swap":http://dev.mysql.com/doc/refman/5.1/en/rename-table.html of the data tables in MySQL:
+
+<pre>
+CREATE TABLE new_pages (...);
+... load data
+RENAME TABLE pages TO backup_pages, new_pages TO pages;
+</pre>
+
+
+
+
