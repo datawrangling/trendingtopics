@@ -123,7 +123,7 @@ Next, ssh into the instance and mount the volume
 	
 h4. Uploading the Data to S3	
 	
-Hadoop can use Amazon S3 as a distributed file system out of the box, so it will be easier for future EC2 jobs if we store a full copy of the EBS data on S3.  We will copy the raw pagecount data up to S3 from the EBS volume using S3cmd.  This install and configuration can be automated later on, but for now you will need your AWS access keys handy for the configuration.
+Hadoop can use Amazon S3 as a distributed file system out of the box, so it will be easier for later EC2 jobs if we store a full copy of the EBS data on S3.  You could eliminate the need for this step by using the Beta of "Cloudera Hadoop with EBS Integration":http://www.cloudera.com/hadoop-ec2-ebs-beta (persistent temporary clusters on AWS).  We will copy the raw pagecount data up to S3 from the EBS volume using S3cmd.  This install and configuration can be automated later on, but for now you will need your AWS access keys handy for the configuration.
 
 <pre>
 	root@domU-12-xx-xx-xx-75-81:/mnt# apt-get update
