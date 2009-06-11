@@ -286,9 +286,9 @@ def calc_trend(dates, pageviews):
 
 h4. Hive MapReduce Jobs & HiveQL
 
-Doing Joins in MapReduce can be a bit of a pain, Hive hides a lot of tedious details behind a simple SQL like syntax most developers are familiar with.  Behind the scenes this compiles down to optimized MapReduce code executed by Hive.  import and export of data is also very natural and will be familar to MySQL users.  
+Doing Joins in MapReduce can be a bit of a pain, Hive hides a lot of tedious details behind a simple SQL like syntax most developers are familiar with.  Behind the scenes this compiles down to optimized MapReduce code executed by Hive.  Import and export of data is also very natural and will be familar to MySQL users.  
 
-We are only using Hive in this trend batch job for some simple joins and selects, but it has much more powerful features for analytics including partions, bucketing, and random sample of queries.  
+We are only using Hive in this trend batch job for some simple joins and selects, but it has much more powerful features for analytics including partions, bucketing, and random sampling.  
 
 Here is an example from <code>lib/hive/hive_daily_timelines.sql</code> which solves the redirect matching problem we mentioned above:
 
@@ -475,7 +475,7 @@ To run the daily job, we repeat the initial cluster launch and configuration ste
 
 The job steps in the bash script are fairly similar to the first historical aggregation and monthly trend estimation, except that we pass the hourly data directly to the trend estimation script.
 
-One trick worth noting in this script is that we use wildcards in the input paths to select a subset of the s3 files.  At this point we have thousands of hourly files sitting in an S3 bucket.  For the large historical aggregation this was fine, but if we only want to load a subset, then being careful with naming conventions can make you life easy.  Note that in operational mode these simple bash scripts would be parameterized by date, and probably replaced entirely with something more robust.
+One trick worth noting in this script is that we use wildcards in the input paths to select a subset of the s3 files.  At this point we have thousands of hourly files sitting in an S3 bucket.  For the large historical aggregation this was fine, but if we only want to load a subset, then being careful with naming conventions can make your life easier.  Note that in operational mode these simple bash scripts would be parameterized by date, and probably replaced entirely with something more robust.
 
 <pre>
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
@@ -511,7 +511,7 @@ The raw trends are also sitting in the "finaltrendoutput" directory on hdfs afte
 	Antebellum	181.963189695	0.00773800065214
 </pre>
 
-Next we send copies of the trend file & sample data up to Amazon S3 for development use later on
+Next we send copies of the trend file & sample data up to Amazon S3 for development use
 
 <pre>
 	s3cmd put /mnt/daily_trends.txt s3://trendingtopics/archive/20090606/daily_trends.txt
