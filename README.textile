@@ -204,7 +204,11 @@ For running daily timeline aggregations across 8 months of data, we will start a
 	$ cd /mnt	
 </pre>		
 	
-Once logged into the master node, you need to wait for the file system setup to complete before running the Hadoop & Hive Jobs.  A "hadoop" directory will appear in /mnt on the master node when the cluster is ready.  While you are waiting, configure S3cmd on the master node as we did previously when uploading the raw data to S3.
+Once logged into the master node, you need to wait for the file system setup to complete before running the Hadoop & Hive Jobs.  A "hadoop" directory will appear in /mnt on the master node when the cluster is ready.  While you are waiting, configure S3cmd on the master node as we did previously when uploading the raw data to S3:
+
+<pre>
+	$ s3cmd --configure
+</pre>
 
 When the file system is ready, fetch the trendingtopics code from github and then kick off the daily timeline job:
 
