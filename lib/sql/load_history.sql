@@ -8,15 +8,18 @@
 -- user 0m1.512s
 -- sys  0m9.237s
 
+TRUNCATE TABLE new_pages;
+TRUNCATE TABLE new_daily_timelines;
+
 set foreign_key_checks=0; 
 set sql_log_bin=0; 
 set unique_checks=0;
 
-ALTER TABLE pages DISABLE KEYS;
-ALTER TABLE daily_timelines DISABLE KEYS;
+ALTER TABLE new_pages DISABLE KEYS;
+ALTER TABLE new_daily_timelines DISABLE KEYS;
 
 LOAD DATA LOCAL INFILE '/mnt/pages.txt'
-INTO TABLE pages
+INTO TABLE new_pages
 FIELDS TERMINATED BY '\t'
 LINES TERMINATED BY '\n'
 (id, url, title, page_latest, total_pageviews, monthly_trend);
@@ -25,7 +28,7 @@ LINES TERMINATED BY '\n'
 -- Records: 2783939  Deleted: 0  Skipped: 0  Warnings: 0
 
 LOAD DATA LOCAL INFILE '/mnt/daily_timelines.txt'
-INTO TABLE daily_timelines
+INTO TABLE new_daily_timelines
 FIELDS TERMINATED BY '\t'
 LINES TERMINATED BY '\n'
 (page_id, dates, pageviews, total_pageviews);
@@ -33,24 +36,24 @@ LINES TERMINATED BY '\n'
 -- Query OK, 2783939 rows affected (3 min 56.88 sec)
 -- Records: 2783939  Deleted: 0  Skipped: 0  Warnings: 0
 
-ALTER TABLE pages ENABLE KEYS;
-ALTER TABLE daily_timelines ENABLE KEYS;
+ALTER TABLE new_pages ENABLE KEYS;
+ALTER TABLE new_daily_timelines ENABLE KEYS;
 
 set foreign_key_checks=1; 
 set unique_checks=1;
 
 -- for autocomplete 'like' query
-create index pages_autocomp_index on pages (title(64), total_pageviews);
+create index new_pages_autocomp_index on new_pages (title(64), total_pageviews);
 -- Query OK, 2783939 rows affected (6 min 20.95 sec)
 -- Records: 2783939  Duplicates: 0  Warnings: 0
 
 -- for main pagination
-create index pages_trend_index on pages (monthly_trend);
+create index new_pages_trend_index on new_pages (monthly_trend);
 -- Query OK, 2783939 rows affected (1 min 25.65 sec)
 -- Records: 2783939  Duplicates: 0  Warnings: 0
 
 -- for sparklines
-create index timeline_pageid_index on daily_timelines (page_id);
+create index new_timeline_pageid_index on new_daily_timelines (page_id);
 -- Query OK, 2783939 rows affected (4 min 19.52 sec)
 -- Records: 2783939  Duplicates: 0  Warnings: 0
 
