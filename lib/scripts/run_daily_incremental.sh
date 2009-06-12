@@ -21,6 +21,7 @@
 # TODO: make the parameters configurable 
 # TODO: convert to a rake task
 # TODO: replace evil hack to get the last 10 days of data from S3
+#   grab 1 extra day for slack...
 
 D0=`date --date "now -1 day" +"%Y%m%d"`
 D1=`date --date "now -2 day" +"%Y%m%d"`
@@ -32,7 +33,7 @@ D6=`date --date "now -7 day" +"%Y%m%d"`
 D7=`date --date "now -8 day" +"%Y%m%d"`
 D8=`date --date "now -9 day" +"%Y%m%d"`
 D9=`date --date "now -10 day" +"%Y%m%d"`
-
+D10=`date --date "now -11 day" +"%Y%m%d"`
 
 # Run the streaming job on 10 nodes
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
@@ -46,6 +47,7 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
   -input s3n://trendingtopics/wikistats/pagecounts-$D7* \
   -input s3n://trendingtopics/wikistats/pagecounts-$D8* \
   -input s3n://trendingtopics/wikistats/pagecounts-$D9* \
+  -input s3n://trendingtopics/wikistats/pagecounts-$D10* \
   -output finaltrendoutput \
   -mapper "daily_trends.py mapper" \
   -reducer "daily_trends.py reducer 10" \

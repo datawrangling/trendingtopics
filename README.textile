@@ -441,7 +441,7 @@ Once we are confident in the results of the Hadoop jobs, we can send the results
 We also send a copy of the full data up to S3 for safe keeping along with the sample data for development use
 
 <pre>
-	$ s3cmd put trendsdb.tar.gz s3://MYBUCKET/archive/trendsdb.tar.gz
+	$ s3cmd put trendsdb.tar.gz s3://MYBUCKET/archive/`date --date "now -1 day" +"%Y%m%d"`/trendsdb.tar.gz
 	$ s3cmd put --force /mnt/sample* s3://MYBUCKET/sampledata/	
 </pre>
 
