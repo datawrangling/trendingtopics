@@ -1,3 +1,6 @@
+drop table redirect_table;
+drop table sample_pages;
+
 CREATE TABLE redirect_table (redirect_title STRING, true_title STRING, page_id BIGINT, page_latest BIGINT) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
 
 CREATE TABLE raw_daily_trends_table (redirect_title STRING, trend DOUBLE, error DOUBLE) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
