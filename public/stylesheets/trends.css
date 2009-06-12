@@ -153,6 +153,10 @@ table#brands {
     width: 440px;
 }
 
+table#rising {
+    width: 300px;
+}
+
 /* Links */
 
 a {

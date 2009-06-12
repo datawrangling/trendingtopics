@@ -42,6 +42,9 @@ blacklist = [
 'Search'
 ]
 
+articledate_regex = re.compile('LongValueSum:(.*)\t([0-9].*)')
+
+
 def clean_anchors(page):
   """
   pages like Facebook#Website really are "Facebook",
