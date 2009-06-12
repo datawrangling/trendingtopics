@@ -4,7 +4,9 @@ development:
   admin_password: REPLACEME
   articles_per_page: 20  
   tracker_id: "UA-REPLACEME"
-  protocol: http  
+  protocol: http 
+  blacklist: 
+  - 10447140 
 
 test:
   rails_application_port: 3000
@@ -12,7 +14,9 @@ test:
   admin_password: REPLACEME
   articles_per_page: 20 
   tracker_id: "UA-REPLACEME"
-  protocol: http        
+  protocol: http 
+  blacklist: 
+  - 10447140       
 
 production:
   rails_application_port: 3000
@@ -21,3 +25,5 @@ production:
   articles_per_page: 20
   tracker_id: "UA-REPLACEME"
   protocol: http
+  blacklist: 
+  - 10447140

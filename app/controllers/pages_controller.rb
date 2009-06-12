@@ -27,7 +27,19 @@ class PagesController < ApplicationController
       @pages = Page.paginate(:page => params[:page], :conditions => ["id NOT IN (?)", APP_CONFIG['blacklist']], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
     end 
 
-    @page = DailyTrend.find(:first, :order => 'trend DESC', :conditions => ["page_id NOT IN (?)", APP_CONFIG['blacklist']] ).page   
+    # TODO: News @page needs to tie to this if selection random article...
+    # # random mover
+    # @page = Page.find(:all,:limit => 20, :order => 'monthly_trend DESC', :conditions => ["id NOT IN (?)", APP_CONFIG['blacklist']] ).rand  
+  
+    # # Top Mover
+    # @page = Page.find(:first, :order => 'monthly_trend DESC', :conditions => ["id NOT IN (?)", APP_CONFIG['blacklist']] )  
+  
+    # random rising, rotates
+    @page = DailyTrend.find(:all, :limit => 20 , :order => 'trend DESC', :conditions => ["page_id NOT IN (?)", APP_CONFIG['blacklist']] ).rand.page   
+    
+    # # fastest rising
+    # @page = DailyTrend.find(:first, :order => 'trend DESC', :conditions => ["page_id NOT IN (?)", APP_CONFIG['blacklist']] ).page   
+    
     # @rising = DailyTrend.find(:all, :limit => 20, :order => 'trend DESC')
     # @dropping = DailyTrend.find(:all, :limit => 6, :order => 'trend ASC')    
   

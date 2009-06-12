@@ -5,7 +5,7 @@
  <% else %>    
     <div id="timeline_chart" class="left">
     <% cache do %>
-      <h3>Fastest Rising Article: <%= link_to truncate(@page.title,35), @page %></h3>
+      <h3>Hot this Month: <%= link_to truncate(@page.title,35), @page %></h3>
       <%= render :partial => "timeline" %>
     <% end %>
   	</div> <!-- #timeline_chart -->	
