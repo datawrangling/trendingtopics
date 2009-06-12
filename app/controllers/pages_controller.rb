@@ -24,12 +24,13 @@ class PagesController < ApplicationController
     if params[:search]
       @pages = Page.title_like(params["search"]["query"]).paginate(:page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])  
     else   
-      @pages = Page.paginate(:page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
+      @pages = Page.paginate(:page => params[:page], :conditions => ["id NOT IN (?)", APP_CONFIG['blacklist']], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
     end 
 
-    @page = DailyTrend.find(:first, :order => 'trend DESC').page   
+    @page = DailyTrend.find(:first, :order => 'trend DESC', :conditions => ["page_id NOT IN (?)", APP_CONFIG['blacklist']] ).page   
     # @rising = DailyTrend.find(:all, :limit => 20, :order => 'trend DESC')
     # @dropping = DailyTrend.find(:all, :limit => 6, :order => 'trend ASC')    
+  
   
   
     unless params[:page]

@@ -17,7 +17,7 @@ LINES TERMINATED BY '\n'
 -- Marketing spammers
 delete from new_daily_trends where page_id = 10447140;
 
-create index daily_trends_index on daily_trends (page_id, trend);
+create index new_daily_trends_index on new_daily_trends (page_id, trend);
 
 ALTER TABLE daily_trends ENABLE KEYS;
 

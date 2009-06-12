@@ -71,7 +71,7 @@
                 <th>Trend</th>
                 <th>Article</th>
               </tr>                       
-                <% DailyTrend.find(:all, :limit => 20, :order => 'trend DESC').each_with_index do |rising, index| %>
+                <% DailyTrend.find(:all, :limit => 20,:conditions => ["page_id NOT IN (?)", APP_CONFIG['blacklist']], :order => 'trend DESC').each_with_index do |rising, index| %>
                   <tr>          
                     <td><%= link_to image_tag(rising.page.sparkline('888888', 30).to_url), rising.page %></td>
                     <td><%= link_to truncate(rising.page.title,20), rising.page, :class => "title" %></td> 
