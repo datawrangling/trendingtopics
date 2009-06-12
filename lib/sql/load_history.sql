@@ -11,9 +11,9 @@
 TRUNCATE TABLE new_pages;
 TRUNCATE TABLE new_daily_timelines;
 
-set foreign_key_checks=0; 
+--set foreign_key_checks=0; 
 set sql_log_bin=0; 
-set unique_checks=0;
+--set unique_checks=0;
 
 ALTER TABLE new_pages DISABLE KEYS;
 ALTER TABLE new_daily_timelines DISABLE KEYS;
@@ -39,8 +39,10 @@ LINES TERMINATED BY '\n'
 ALTER TABLE new_pages ENABLE KEYS;
 ALTER TABLE new_daily_timelines ENABLE KEYS;
 
-set foreign_key_checks=1; 
-set unique_checks=1;
+delete from new_pages where id = 10447140;
+
+--set foreign_key_checks=1; 
+--set unique_checks=1;
 
 -- for autocomplete 'like' query
 create index new_pages_autocomp_index on new_pages (title(64), total_pageviews);
@@ -54,8 +56,9 @@ create index new_pages_trend_index on new_pages (monthly_trend);
 
 -- for sparklines
 create index new_timeline_pageid_index on new_daily_timelines (page_id);
--- Query OK, 2783939 rows affected (4 min 19.52 sec)
--- Records: 2783939  Duplicates: 0  Warnings: 0
+-- Query OK, 2804057 rows affected (22 min 33.80 sec)
+-- Records: 2804057  Duplicates: 0  Warnings: 0
+
 
 
 
