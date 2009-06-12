@@ -2,14 +2,14 @@
 # run_daily_trends.sh
 #
 # Driver script for running daily trend estimation.
-# Assumes input data is on S3
+# Assumes input data is on S3 in MYBUCKET
 #
 # Usage:
 #
 # Replace the input paths with your bucket and the desired range
 # then:
 #
-# $ bash trendingtopics/lib/scripts/run_daily_trends.sh s3n://trendingtopics/wikistats/pagecounts-200906* s3n://trendingtopics/wikistats/pagecounts-2009053*
+# $ bash trendingtopics/lib/scripts/run_daily_trends.sh MYBUCKET
 #
 # Produces a tab delimited trend output file "/mnt/daily_trends.txt" 
 # ready to bulk load into the Rails app daily_trends table.
@@ -37,17 +37,17 @@ D10=`date --date "now -11 day" +"%Y%m%d"`
 
 # Run the streaming job on 10 nodes
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
-  -input s3n://trendingtopics/wikistats/pagecounts-$D0* \
-  -input s3n://trendingtopics/wikistats/pagecounts-$D1* \
-  -input s3n://trendingtopics/wikistats/pagecounts-$D2* \
-  -input s3n://trendingtopics/wikistats/pagecounts-$D3* \
-  -input s3n://trendingtopics/wikistats/pagecounts-$D4* \
-  -input s3n://trendingtopics/wikistats/pagecounts-$D5* \
-  -input s3n://trendingtopics/wikistats/pagecounts-$D6* \
-  -input s3n://trendingtopics/wikistats/pagecounts-$D7* \
-  -input s3n://trendingtopics/wikistats/pagecounts-$D8* \
-  -input s3n://trendingtopics/wikistats/pagecounts-$D9* \
-  -input s3n://trendingtopics/wikistats/pagecounts-$D10* \
+  -input s3n://$1/wikistats/pagecounts-$D0* \
+  -input s3n://$1/wikistats/pagecounts-$D1* \
+  -input s3n://$1/wikistats/pagecounts-$D2* \
+  -input s3n://$1/wikistats/pagecounts-$D3* \
+  -input s3n://$1/wikistats/pagecounts-$D4* \
+  -input s3n://$1/wikistats/pagecounts-$D5* \
+  -input s3n://$1/wikistats/pagecounts-$D6* \
+  -input s3n://$1/wikistats/pagecounts-$D7* \
+  -input s3n://$1/wikistats/pagecounts-$D8* \
+  -input s3n://$1/wikistats/pagecounts-$D9* \
+  -input s3n://$1/wikistats/pagecounts-$D10* \
   -output finaltrendoutput \
   -mapper "daily_trends.py mapper" \
   -reducer "daily_trends.py reducer 10" \

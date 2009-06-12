@@ -3,7 +3,7 @@
 #
 # Driver script for running daily timeline aggregation
 # and monthly trend estimation. Assumes input data is on S3
-# 
+# in MYBUCKET 
 # 
 #
 # Usage:
@@ -11,7 +11,7 @@
 # Replace the input paths with your bucket and the desired range
 # then:
 #
-# $ bash trendingtopics/lib/scripts/run_daily_timelines.sh trendingtopics
+# $ bash trendingtopics/lib/scripts/run_daily_timelines.sh MYBUCKET
 #
 # The streaming command has a hardcoded cutoff that requires a minimum of 
 # 45 days of data

@@ -451,12 +451,12 @@ Jump over to the database server and execute the <code>load_history.sql</code> s
 	$ ssh root@www.trendingtopics.org 
 	$ cd /mnt
 	$ tar -xzvf trendsdb.tar.gz
-	$ mysql -u root trendingtopics_production < load_history.sql
+	$ mysql -u root trendingtopics_production < app/current/lib/sql/load_history.sql
 </pre>
 
 h3. Task 2: Daily Trend Estimation
 
-After the initial historical timeline aggregation is complete, we can begin daily runs of to detect trending articles over the last 24 hours using new hourly log data.  This job still needs to access some historical data to for baseline comparisons or regressions, but it will be much faster than processing the full timeline.
+After the initial historical timeline aggregation is complete, we can begin daily runs to detect trending articles over the last 24 hours using new hourly log data.  This job still needs to access some historical data to for baseline comparisons or regressions, but it will be much faster than processing the full timeline.
 
 !http://trendingtopics.s3.amazonaws.com/images/monthly_and_daily_trends.png!
 
@@ -464,7 +464,7 @@ To run the daily job, we repeat the initial cluster launch and configuration ste
 
 <pre>
 	$ cd /mnt
-	$ bash trendingtopics/lib/scripts/run_daily_trends.sh s3n://MYBUCKET/wikistats/pagecounts-200906* s3n://MYBUCKET/wikistats/pagecounts-2009053*
+	$ bash trendingtopics/lib/scripts/run_daily_trends.sh MYBUCKET
 </pre>
 
 The job steps in the bash script are fairly similar to the first historical aggregation and monthly trend estimation, except that we pass the hourly data directly to the trend estimation script, we need to be sure to pass at least 10 days of data by using wildcards on the s3 path.
@@ -472,15 +472,19 @@ The job steps in the bash script are fairly similar to the first historical aggr
 One trick worth noting in this script is that we use wildcards in the input paths to select a subset of the s3 files.  At this point we have thousands of hourly files sitting in an S3 bucket.  For the large historical aggregation this was fine, but if we only want to load a subset, then being careful with naming conventions can make your life easier. You can also pass multiple input buckets by adding more -input lines to the hadoop command. Note that in operational mode these simple bash scripts would be parameterized by date, and probably replaced entirely with something more robust.
 
 <pre>
-hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
-  -input $1 \
-  -input $2 \
-  -output finaltrendoutput \
-  -mapper "daily_trends.py mapper" \
-  -reducer "daily_trends.py reducer 10" \
-  -file '/mnt/trendingtopics/lib/python_streaming/daily_trends.py' \
-  -jobconf mapred.reduce.tasks=40 \
-  -jobconf mapred.job.name=daily_trends
+	D0=`date --date "now -1 day" +"%Y%m%d"`
+	D1=`date --date "now -2 day" +"%Y%m%d"`	
+	
+	
+	hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
+  	-input s3n://$1/wikistats/pagecounts-$D0* \
+      -input s3n://$1/wikistats/pagecounts-$D1* \
+	  -output finaltrendoutput \
+	  -mapper "daily_trends.py mapper" \
+	  -reducer "daily_trends.py reducer 10" \
+	  -file '/mnt/trendingtopics/lib/python_streaming/daily_trends.py' \
+	  -jobconf mapred.reduce.tasks=40 \
+	  -jobconf mapred.job.name=daily_trends
 </pre>
 
 We can inspect a sample of the results in Hive before loading them into MySQL:
