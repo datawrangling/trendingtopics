@@ -529,7 +529,7 @@ Next we send copies of the trend file & sample data up to Amazon S3 for developm
 Copy the output file over to the trendingtopics server:
 
 <pre>
-scp /mnt/daily_trends.txt root@www.trendingtopics.org:/mnt/
+	scp /mnt/daily_trends.txt root@www.trendingtopics.org:/mnt/
 </pre>
 
 Load the daily trend data into MySQL on the prod server and build the trend indices:
@@ -537,7 +537,7 @@ Load the daily trend data into MySQL on the prod server and build the trend indi
 <pre>
 	ssh root@www.trendingtopics.org 
 	cd /mnt
-	mysql -u root trendingtopics_production < load_trends.sql
+	mysql -u root trendingtopics_production < app/current/lib/sql/load_trends.sql
 </pre>
 
 Shut down the Hadoop cluster
@@ -592,7 +592,7 @@ h3. Running locally in development mode
 Fetch the trendingtopics source code:
 
 <pre>
-git clone git://github.com/datawrangling/trendingtopics.git
+	$ git clone git://github.com/datawrangling/trendingtopics.git
 </pre>
 
 Navigate to the root of the source code directory and create the needed configuration files from the provided examples:
@@ -719,7 +719,7 @@ To renable the site:
 To load daily updates, we do a "periodic swap":http://dev.mysql.com/doc/refman/5.1/en/rename-table.html of the data tables in MySQL, replacing them entirely with the staging tables which are loaded from Hive dumps:
 
 <pre>
-RENAME TABLE pages TO backup_pages, new_pages TO pages;
+	RENAME TABLE pages TO backup_pages, new_pages TO pages;
 </pre>
 
 
