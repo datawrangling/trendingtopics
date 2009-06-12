@@ -14,9 +14,6 @@ FIELDS TERMINATED BY '\t'
 LINES TERMINATED BY '\n'
 (page_id,trend,error);
 
--- Marketing spammers
-delete from new_daily_trends where page_id = 10447140;
-
 create index new_daily_trends_index on new_daily_trends (page_id, trend);
 
 ALTER TABLE daily_trends ENABLE KEYS;

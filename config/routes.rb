@@ -9,7 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :pages, :collection => {:auto_complete_for_search_query => :get }
 
-
+  map.connect '/widgets/:chart_widget/:id', :controller => 'widgets', :action => 'chart_widget'
 
   map.with_options :controller => 'info' do |info|
     info.about 'about', :action => 'about'

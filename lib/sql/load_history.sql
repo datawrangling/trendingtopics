@@ -39,8 +39,6 @@ LINES TERMINATED BY '\n'
 ALTER TABLE new_pages ENABLE KEYS;
 ALTER TABLE new_daily_timelines ENABLE KEYS;
 
-delete from new_pages where id = 10447140;
-
 --set foreign_key_checks=1; 
 --set unique_checks=1;
 

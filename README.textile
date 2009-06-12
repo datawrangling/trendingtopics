@@ -720,7 +720,18 @@ To load daily updates, we do a "periodic swap":http://dev.mysql.com/doc/refman/5
 
 <pre>
 	RENAME TABLE pages TO backup_pages, new_pages TO pages;
+	RENAME TABLE daily_timelines TO backup_daily_timelines, new_daily_timelines TO daily_timelines;
+	RENAME TABLE daily_trends TO backup_daily_trends, new_daily_trends TO daily_trends;		
 </pre>
+
+Before the next daily load, we swap the "backup" tables back to "new", then they will be truncated before the bulk load starts.
+
+<pre>
+	RENAME TABLE backup_pages TO new_pages;
+	RENAME TABLE backup_daily_timelines TO new_daily_timelines;
+	RENAME TABLE backup_daily_trends TO new_daily_trends;
+</pre>		
+
 
 
 
