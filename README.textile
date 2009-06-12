@@ -277,9 +277,14 @@ Thanks to "Todd Lipcon":http://twitter.com/tlipcon for directing me to that hack
 
 These records are merged at the reducers to generate a daily time series for each article in serialized JSON format (for easy manipulation in R & Python, or quick loading for the Web UI). 
 
-<code>article\tdates\tpagecounts\ttotal_pageviews</code>
+Format:
 <pre>
-'Barack_Obama\t[20090419,20090420,20090421,20090422]\t[143,152,163,129]\t587'
+	article\tdates\tpagecounts\ttotal_pageviews
+</pre>
+
+Example:
+<pre>
+	'Barack_Obama\t[20090419,20090420,20090421,20090422]\t[143,152,163,129]\t587'
 </pre>
 
 While the daily article pageviews are in hand, we also calculate the most recent "monthly trend" for each article using a simple difference over the last 30 days.  You can easily drop in a more complicated trend detection model here as well
@@ -375,8 +380,7 @@ You can monitor your job progress from the broswer by using Foxy Proxy to view t
 When the Hive job completes, we can inspect the results:
 
 <pre>
-	$ hive
-	SELECT COUNT(1) FROM raw_daily_stats_table; 
+	hive> SELECT COUNT(1) FROM pages; 
 	2823525
 	Time taken: 33.199 seconds
 </pre>
@@ -384,57 +388,47 @@ When the Hive job completes, we can inspect the results:
 We can run a few more quick queries to show how similar HiveQL is to SQL.  Here we find article with the most pageviews over this time period had 33M views:
 
 <pre>
-	SELECT MAX(total_pageviews) FROM raw_daily_stats_table;
-	+----------------------+
-	| MAX(total_pageviews) |
-	+----------------------+
-	|             33471178 | 
-	+----------------------+
+	hive> SELECT MAX(total_pageviews) FROM pages;
+	33993049
 </pre>
-
-
 	
 <pre>	
-	SELECT redirect_title from raw_daily_stats_table SORT BY total_pageviews DESC LIMIT 10;
-	+----------------+
-	| redirect_title |
-	+----------------+
-	| Wiki           | 
-	| The_Beatles    | 
-	| Barack_Obama   | 
-	| YouTube        | 
-	| Wikipedia      | 
-	| United_States  | 
-	| Facebook       | 
-	| Deaths_in_2009 | 
-	| Eminem         | 
-	| World_War_II   | 
-	+----------------+
+	hive> SELECT title, total_pageviews from pages SORT BY total_pageviews DESC LIMIT 10;
+	Wiki	33993049
+	The Beatles	22153442
+	Barack Obama	19065629
+	YouTube	18935233
+	Wikipedia	12867511
+	United States	11574288
+	Facebook	11428940
+	Deaths in 2009	7540889
+	Eminem	7303015
+	World War II	7134040
+	
+    Time taken: 45.36 seconds	
 </pre>
 
 Not surprisingly, the article was "Wiki".  Overall this list of popular pages doesn't change much over time and provides little insight.  We can look at titles ranked by monthly trend instead:	
 	
 <pre>	
-	SELECT redirect_title from raw_daily_stats_table SORT BY monthly_trend DESC LIMIT 10;
-	+-----------------------------------+
-	| redirect_title                    |
-	+-----------------------------------+
-	| David_Carradine                   | 
-	| Sonia_Sotomayor                   | 
-	| North_Korea                       | 
-	| Tiananmen_Square_protests_of_1989 | 
-	| Land_of_the_Lost_(1974_TV_series) | 
-	| Britain's_Got_Talent              | 
-	| Lady_Gaga                         | 
-	| Bermuda_Triangle                  | 
-	| Mike_Tyson                        | 
-	| Up_(2009_film)                    | 
-	+-----------------------------------+
+	hive> SELECT title, monthly_trend from pages SORT BY monthly_trend DESC LIMIT 10;
+	David Carradine	1814665.0
+	Tiananmen Square protests of 1989	444343.0
+	Roger Federer	413170.0
+	Bermuda Triangle	354996.0
+	Up (2009 film)	333122.0
+	Normandy Landings	315228.0
+	North Korea	291515.0
+	Sacha Baron Cohen	288334.0
+	Father's Day	266678.0
+	Kristen Stewart	261492.0
+	
+    Time taken: 43.328 seconds
 </pre>
 
 These results seem much more interesting and timely.  This list looked strange to me at first, but apparently these are all really trending news items for the beginning of June.  I guess I need to stop coding once in a while and keep up with the news...
 
-Along with serving as the ranked lists of trending articles on the main page, these trends are used to power the site search engine and order autocomplete suggestions:
+In addition to serving as the ranked list of "Biggest Mover" articles on the main page of the site, these trends are used to power the site search engine and order autocomplete suggestions:
 
 !http://trendingtopics.s3.amazonaws.com/images/trend_autocomplete.png!
 

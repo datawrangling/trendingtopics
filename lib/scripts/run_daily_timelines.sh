@@ -4,6 +4,7 @@
 # Driver script for running daily timeline aggregation
 # and monthly trend estimation. Assumes input data is on S3
 # 
+# 
 #
 # Usage:
 #
@@ -11,6 +12,9 @@
 # then:
 #
 # $ bash trendingtopics/lib/scripts/run_daily_timelines.sh trendingtopics
+#
+# The streaming command has a hardcoded cutoff that requires a minimum of 
+# 45 days of data
 #
 # Produces a tab delimited trend output file "daily_trends.txt" 
 # and a normalized "pages.txt" in /mnt/trendsdb.tar.gz
