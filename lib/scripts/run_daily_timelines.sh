@@ -11,7 +11,7 @@
 # Replace the input paths with your bucket and the desired range
 # then:
 #
-# $ bash trendingtopics/lib/scripts/run_daily_timelines.sh MYBUCKET
+# $ bash trendingtopics/lib/scripts/run_daily_timelines.sh MYBUCKET MYSERVER MAILTO
 #
 # The streaming command has a hardcoded cutoff that requires a minimum of 
 # 45 days of data
@@ -27,8 +27,9 @@
 #
 # TODO: make the parameters configurable 
 # TODO: convert to a rake task
+ssh root@$2 'python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_timelines.sh starting $2 $3'
 
-  
+# start the hadoop streaming jobs
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
   -input s3n://$1/wikistats/pagecounts-200* \
   -output stage1-output \
@@ -64,5 +65,17 @@ hive -S -e 'SELECT * FROM sample_pages' > /mnt/sample_pages.txt
 hive -S -e 'SELECT daily_timelines.* FROM sample_pages JOIN daily_timelines ON (sample_pages.page_id = daily_timelines.page_id)' > /mnt/sample_daily_timelines.txt
 
 tar cvf - pages.txt daily_timelines.txt | gzip > /mnt/trendsdb.tar.gz
+scp /mnt/trendsdb.tar.gz root@$2:/mnt/
+s3cmd put trendsdb.tar.gz s3://$1/archive/`date --date "now -1 day" +"%Y%m%d"`/trendsdb.tar.gz
+s3cmd put trendsdb.tar.gz s3://$1/archive/trendsdb.tar.gz
+s3cmd put --force /mnt/sample* s3://$1/sampledata/
+ssh root@$2 'cd /mnt && tar -xzvf trendsdb.tar.gz'
+# need to do the table rename dance here...
+ssh root@$2 'cd /mnt && mysql -u root trendingtopics_production < app/current/lib/sql/load_history.sql'
+ssh root@$2 'python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_timelines.sh complete $2 $3'
+
+
+
+
 
 
