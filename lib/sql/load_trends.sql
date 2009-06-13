@@ -5,7 +5,7 @@
 set sql_log_bin=0; 
 
 TRUNCATE TABLE new_daily_trends;
-ALTER TABLE daily_trends DISABLE KEYS;
+ALTER TABLE new_daily_trends DISABLE KEYS;
 
 
 LOAD DATA LOCAL INFILE '/mnt/daily_trends.txt'
@@ -16,7 +16,7 @@ LINES TERMINATED BY '\n'
 
 create index new_daily_trends_index on new_daily_trends (page_id, trend);
 
-ALTER TABLE daily_trends ENABLE KEYS;
+ALTER TABLE new_daily_trends ENABLE KEYS;
 
 -- set foreign_key_checks=1; 
 -- set unique_checks=1;
