@@ -6,6 +6,13 @@ class PagesController < ApplicationController
 
   caches_page :show
   
+  
+  def to_param
+    "#{self.id}-#{self.title.parameterize}"
+  end  
+  
+ 
+  
   # def to_param
   #   require 'unicode'
   #   "#{id}"+Unicode::normalize_KD("-"+title+"-").downcase.gsub(/[^a-z0-9\s_-]+/,'').gsub(/[\s_-]+/,'-')[0..-2]

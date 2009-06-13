@@ -56,7 +56,7 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
 hadoop fs -rmr finaloutput/_logs
 
 # Fetch wikipedia page id lookup table
-s3cmd get s3://trendingtopics/wikidump/page_lookup_nonredirects.txt /mnt/page_lookup_nonredirects.txt
+s3cmd --config=/root/.s3cfg get s3://trendingtopics/wikidump/page_lookup_nonredirects.txt /mnt/page_lookup_nonredirects.txt
 
 # Kick off the HiveQL script 
 hive -f  /mnt/trendingtopics/lib/hive/hive_daily_timelines.sql  
@@ -71,9 +71,9 @@ hive -S -e 'SELECT daily_timelines.* FROM sample_pages JOIN daily_timelines ON (
 
 tar cvf - pages.txt daily_timelines.txt | gzip > /mnt/trendsdb.tar.gz
 scp /mnt/trendsdb.tar.gz root@$2:/mnt/
-s3cmd put trendsdb.tar.gz s3://$1/archive/`date --date "now -1 day" +"%Y%m%d"`/trendsdb.tar.gz
-s3cmd put trendsdb.tar.gz s3://$1/archive/trendsdb.tar.gz
-s3cmd put --force /mnt/sample* s3://$1/sampledata/
+s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$1/archive/`date --date "now -1 day" +"%Y%m%d"`/trendsdb.tar.gz
+s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$1/archive/trendsdb.tar.gz
+s3cmd --config=/root/.s3cfg put --force /mnt/sample* s3://$1/sampledata/
 ssh -o StrictHostKeyChecking=no root@$2 'cd /mnt && tar -xzvf trendsdb.tar.gz'
 # assumes "new_pages" exist
 ssh -o StrictHostKeyChecking=no root@$2 "cd /mnt && mysql -u root trendingtopics_production < app/current/lib/sql/load_history.sql"

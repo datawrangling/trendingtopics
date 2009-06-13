@@ -218,16 +218,18 @@ Once logged into the master node, you need to wait for the file system setup to 
 As we did earlier, set an environment variable MYBUCKET on the master node to a bucket you own on Amazon S3
 <pre>
 	root@domU-12-xx-xx-xx-75-81:/mnt# MYBUCKET=mytrendingtopics	
+	root@domU-12-xx-xx-xx-75-81:/mnt# MYSERVER=trendingtopics.org
+    root@domU-12-xx-xx-xx-75-81:/mnt# MAILTO=pete@datawrangling.com
 </pre>
 
 When the file system is ready, fetch the trendingtopics code from github and then kick off the daily timeline job:
 
 <pre>
 	$ git clone git://github.com/datawrangling/trendingtopics.git
-	$ bash trendingtopics/lib/scripts/run_daily_timelines.sh $MYBUCKET
+	$ bash trendingtopics/lib/scripts/run_daily_timelines.sh $MYBUCKET $MYSERVER $MAILTO
 </pre>
 
-The bash script <code>run_daily_timelines.sh</code> executes a series of streaming hadoop jobs and Hive queries before emitting tab delimited output files ready for loading to MySQL.
+The bash script <code>run_daily_timelines.sh</code> executes a series of streaming hadoop jobs and Hive queries before emitting tab delimited output files ready for loading to MySQL.  These files are loaded into our Rails app MySQL database on MYSERVER and job start/stop emails are sent to the MAILTO address.  See the article Appendix for details on the configuration of the Rails server, or edit the bash script to omit the database load & email steps.
 
 h4. Python Streaming Jobs 
 
