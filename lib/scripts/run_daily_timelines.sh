@@ -75,8 +75,6 @@ s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$MYBUCKET/archive/`date --d
 s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$MYBUCKET/archive/trendsdb.tar.gz
 s3cmd --config=/root/.s3cfg put --force /mnt/sample* s3://$MYBUCKET/sampledata/
 ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && tar -xzvf trendsdb.tar.gz'
-# assumes "new_pages" exist
-ssh -o StrictHostKeyChecking=no root@$MYSERVER "cd /mnt && mysql -u root trendingtopics_production < app/current/lib/sql/load_history.sql"
 ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_timelines.sh complete $MYSERVER $MAILTO"
 
 
