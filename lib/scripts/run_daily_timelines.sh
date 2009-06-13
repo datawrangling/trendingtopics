@@ -25,9 +25,14 @@
 # $ hadoop dfs -rmr stage1-output
 # $ hadoop dfs -rmr finaloutput
 #
+MYBUCKET=$1
+MYSERVER=$2
+MAILTO=$3
+
 # TODO: make the parameters configurable 
 # TODO: convert to a rake task
-ssh -o StrictHostKeyChecking=no root@$2 'python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_timelines.sh starting $2 $3'
+
+ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_timelines.sh starting $MYSERVER $MAILTO"
 
 # start the hadoop streaming jobs
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
@@ -71,8 +76,8 @@ s3cmd put trendsdb.tar.gz s3://$1/archive/trendsdb.tar.gz
 s3cmd put --force /mnt/sample* s3://$1/sampledata/
 ssh -o StrictHostKeyChecking=no root@$2 'cd /mnt && tar -xzvf trendsdb.tar.gz'
 # assumes "new_pages" exist
-ssh -o StrictHostKeyChecking=no root@$2 'cd /mnt && mysql -u root trendingtopics_production < app/current/lib/sql/load_history.sql'
-ssh -o StrictHostKeyChecking=no root@$2 'python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_timelines.sh complete $2 $3'
+ssh -o StrictHostKeyChecking=no root@$2 "cd /mnt && mysql -u root trendingtopics_production < app/current/lib/sql/load_history.sql"
+ssh -o StrictHostKeyChecking=no root@$2 "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_timelines.sh complete $2 $3"
 
 
 
