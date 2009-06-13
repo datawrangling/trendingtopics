@@ -7,11 +7,9 @@ class PagesController < ApplicationController
   caches_page :show
   
   
-  def to_param
-    "#{self.id}-#{self.title.parameterize}"
-  end  
-  
- 
+  # def to_param
+  #   "#{self.id}-#{self.title.parameterize}"
+  # end  
   
   # def to_param
   #   require 'unicode'
