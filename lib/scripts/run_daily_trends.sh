@@ -2,22 +2,6 @@
 # run_daily_trends.sh
 #
 # Driver script for running daily trend estimation.
-# Assumes input data is on S3
-#
-# Usage:
-#
-# Replace the input paths with your bucket and the desired range
-# then:
-#
-# $ bash trendingtopics/lib/scripts/run_daily_trends.sh s3n://trendingtopics/wikistats/pagecounts-200906* s3n://trendingtopics/wikistats/pagecounts-2009053*
-#
-# Produces a tab delimited trend output file "/mnt/daily_trends.txt" 
-# ready to bulk load into the Rails app daily_trends table.
-#
-#!/bin/sh
-# run_daily_trends.sh
-#
-# Driver script for running daily trend estimation.
 # Assumes input data is on S3 in MYBUCKET
 #
 # Usage:
