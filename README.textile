@@ -525,6 +525,7 @@ Next we send copies of the trend file & sample data up to Amazon S3 for developm
 <pre>
 	s3cmd put /mnt/daily_trends.txt s3://$MYBUCKET/archive/`date --date "now -1 day" +"%Y%m%d"`/daily_trends.txt
 	s3cmd put --force /mnt/sample_daily_trends.txt s3://$MYBUCKET/sampledata/sample_daily_trends.txt
+	s3cmd put /mnt/daily_trends.txt s3://$MYBUCKET/archive/daily_trends.txt
 </pre>
 
 Copy the output file over to the trendingtopics server:
