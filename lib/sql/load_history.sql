@@ -42,6 +42,37 @@ ALTER TABLE new_daily_timelines ENABLE KEYS;
 --set foreign_key_checks=1; 
 --set unique_checks=1;
 
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `dropindex` $$
+CREATE PROCEDURE `dropindex` (tblName VARCHAR(64), ndxName VARCHAR(64))
+BEGIN
+
+    DECLARE IndexColumnCount INT;
+    DECLARE SQLStatement VARCHAR(256);
+
+    SELECT COUNT(1) INTO IndexColumnCount
+    FROM information_schema.statistics
+    WHERE table_name = tblName
+    AND index_name = ndxName;
+
+    IF IndexColumnCount > 0 THEN
+        SET SQLStatement = CONCAT('ALTER TABLE `',tblName,'` DROP INDEX `',ndxName,'`');
+        SET @SQLStmt = SQLStatement;
+        PREPARE s FROM @SQLStmt;
+        EXECUTE s;
+        DEALLOCATE PREPARE s;
+    END IF;
+
+END $$
+
+DELIMITER ;
+
+
+CALL dropindex('new_pages', 'new_pages_autocomp_index');
+CALL dropindex('new_pages', 'new_pages_trend_index');
+CALL dropindex('new_daily_timelines', 'new_timeline_pageid_index');
+
 -- for autocomplete 'like' query
 create index new_pages_autocomp_index on new_pages (title(64), total_pageviews);
 -- Query OK, 2783939 rows affected (6 min 20.95 sec)
