@@ -1,0 +1,19 @@
+
+
+document.write("<ul>");
+document.write("<li>Hello world</li>");
+document.write("<li>Hello world2</li>");
+document.write("<li>Hello world3</li>");
+
+document.write("</ul>");
+
+
+document.write('<p>Daily Pageviews for: <span><%= link_to image_tag(@page.sparkline('999999', 30).to_url) , @page %></span></p>');
+document.write('<p><%= link_to truncate(@page.title,35), @page, :class => "articlelink"  %></p>');
+
+
+document.write("Powered by <img src='quarkruby' alt='quarkruby'/>");
+
+
+
+
