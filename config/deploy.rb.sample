@@ -124,7 +124,7 @@ end
 
 desc "Count number of records in new_pages "
 task :count_new_pages, :roles => [:app] do
-  run "cd /mnt && mysql -u root trendingtopics_production < #{current_path}/lib/sql/count.sql"
+  run "cd /mnt && mysql -u root trendingtopics_production -e 'select count(*) from new_pages;'"
 end
 
 
