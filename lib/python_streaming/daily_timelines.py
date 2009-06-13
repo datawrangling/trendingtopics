@@ -35,7 +35,6 @@ image_file_regex = re.compile('(.*).(jpg|gif|png|JPG|GIF|PNG|txt|ico)')
 # Exclude Mediawiki boilerplate
 blacklist = [
 '404_error/',
-'Wiki',
 'Main_Page',
 'Hypertext_Transfer_Protocol',
 'Favicon.ico',

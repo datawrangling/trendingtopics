@@ -271,6 +271,22 @@ The first Python Streaming job restricts pageviews to a subset of English wikipe
 	Barack_Obama}20090420  152
 </pre>
 
+You can inspect the hdfs output when the streaming job completes:
+
+<pre>
+	# hadoop fs -cat stage1-output/part-00032 | head -350000 | tail
+	Arlene_Rousseau}20090415	1
+	Arlene_Sanders}20090429	1
+	Arlene_Saunders}20090415	5
+	Arlene_Tolibas}20090412	1
+	Arlene_Vaughan}20090427	7
+	Arlene_Williams}20090414	8
+	Arlene_davis}20090422	1
+	Arlene_desousa}20090414	1
+	Arlene_donohue}20090412	1
+	Arlene_hunt}20090420	1
+</pre>
+
 As a side note, there is a little known Hadoop Streaming trick buried in this Python script.  You will notice that the date is not actually in the raw log data itself, but is part of the filename.  It turns out that Hadoop makes job parameters you would fetch in Java with something like <code>job.get("mapred.input.file")</code> available as environment variables for streaming jobs, with periods replaced with underscores:
 
 <pre>
