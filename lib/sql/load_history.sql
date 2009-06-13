@@ -11,9 +11,9 @@
 TRUNCATE TABLE new_pages;
 TRUNCATE TABLE new_daily_timelines;
 
---set foreign_key_checks=0; 
+set foreign_key_checks=0; 
 set sql_log_bin=0; 
---set unique_checks=0;
+set unique_checks=0;
 
 ALTER TABLE new_pages DISABLE KEYS;
 ALTER TABLE new_daily_timelines DISABLE KEYS;
@@ -39,8 +39,8 @@ LINES TERMINATED BY '\n'
 ALTER TABLE new_pages ENABLE KEYS;
 ALTER TABLE new_daily_timelines ENABLE KEYS;
 
---set foreign_key_checks=1; 
---set unique_checks=1;
+set foreign_key_checks=1; 
+set unique_checks=1;
 
 DELIMITER $$
 

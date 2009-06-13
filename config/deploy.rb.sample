@@ -117,6 +117,16 @@ task :seed_memcached, :roles => [:app] do
   run "python #{current_path}/lib/scripts/seed_memcached.py"
 end
 
+desc "Load staging data into new_* tables "
+task :load_staging_tables, :roles => [:app] do
+  run "cd /mnt && mysql -u root trendingtopics_production < #{current_path}/lib/sql/load_history.sql"
+end
+
+desc "Count number of records in new_pages "
+task :count_new_pages, :roles => [:app] do
+  run "cd /mnt && mysql -u root trendingtopics_production < #{current_path}/lib/sql/count.sql"
+end
+
 
 after 'deploy:update_code', :copy_nonvconfig
 after 'deploy:symlink', :update_config

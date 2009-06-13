@@ -47,7 +47,7 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
   -input stage1-output \
   -output finaloutput \
   -mapper "daily_timelines.py mapper2" \
-  -reducer "daily_timelines.py reducer2 20" \
+  -reducer "daily_timelines.py reducer2 45" \
   -file '/mnt/trendingtopics/lib/python_streaming/daily_timelines.py' \
   -jobconf mapred.reduce.tasks=40 \
   -jobconf mapred.job.name=daily_timelines_stage2
