@@ -32,10 +32,11 @@ def main(argv=None):
   TEXT = TEXT + '\nTime is %s\n' % datetime.datetime.now()  
 
   if argv[2] == 'complete' and argv[1] == 'run_daily_timelines.sh':
-    stdout_handle = os.popen('mysql -u root trendingtopics_production -e "select count(*) from new_pages;"', "r")
+    stdout_handle = os.popen('wc -l /mnt/pages.txt && wc -l /mnt/daily_timelines.txt', "r")
     mysql_text = stdout_handle.read()
-    mysql_text = "\nNumber of rows in new_pages: " + mysql_text +"\n"  
+    mysql_text = "\nNumber of lines in new_pages: " + mysql_text +"\n"  
     TEXT = TEXT + mysql_text  
+    TEXT = TEXT + "Terminate MySQL CLuster with: \ncloudera $ bin/hadoop-ec2 terminate-cluster my-hadoop-cluster\n Ready for MySQL load, run:\ntrendingtopics $ cap load_staging_tables"
 
   # Prepare actual message  
   message = string.join((

@@ -56,7 +56,7 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
 hadoop fs -rmr finaloutput/_logs
 
 # Fetch wikipedia page id lookup table
-s3cmd --config=/root/.s3cfg get s3://trendingtopics/wikidump/page_lookup_nonredirects.txt /mnt/page_lookup_nonredirects.txt
+s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/page_lookup_nonredirects.txt /mnt/page_lookup_nonredirects.txt
 
 # Kick off the HiveQL script 
 hive -f  /mnt/trendingtopics/lib/hive/hive_daily_timelines.sql  
@@ -70,14 +70,14 @@ hive -S -e 'SELECT * FROM sample_pages' > /mnt/sample_pages.txt
 hive -S -e 'SELECT daily_timelines.* FROM sample_pages JOIN daily_timelines ON (sample_pages.page_id = daily_timelines.page_id)' > /mnt/sample_daily_timelines.txt
 
 tar cvf - pages.txt daily_timelines.txt | gzip > /mnt/trendsdb.tar.gz
-scp /mnt/trendsdb.tar.gz root@$2:/mnt/
-s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$1/archive/`date --date "now -1 day" +"%Y%m%d"`/trendsdb.tar.gz
-s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$1/archive/trendsdb.tar.gz
-s3cmd --config=/root/.s3cfg put --force /mnt/sample* s3://$1/sampledata/
-ssh -o StrictHostKeyChecking=no root@$2 'cd /mnt && tar -xzvf trendsdb.tar.gz'
+scp /mnt/trendsdb.tar.gz root@$MYSERVER:/mnt/
+s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$MYBUCKET/archive/`date --date "now -1 day" +"%Y%m%d"`/trendsdb.tar.gz
+s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$MYBUCKET/archive/trendsdb.tar.gz
+s3cmd --config=/root/.s3cfg put --force /mnt/sample* s3://$MYBUCKET/sampledata/
+ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && tar -xzvf trendsdb.tar.gz'
 # assumes "new_pages" exist
-ssh -o StrictHostKeyChecking=no root@$2 "cd /mnt && mysql -u root trendingtopics_production < app/current/lib/sql/load_history.sql"
-ssh -o StrictHostKeyChecking=no root@$2 "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_timelines.sh complete $2 $3"
+ssh -o StrictHostKeyChecking=no root@$MYSERVER "cd /mnt && mysql -u root trendingtopics_production < app/current/lib/sql/load_history.sql"
+ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_timelines.sh complete $MYSERVER $MAILTO"
 
 
 
