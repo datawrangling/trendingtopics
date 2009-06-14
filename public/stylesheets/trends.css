@@ -44,6 +44,14 @@ body {
     margin-top: 30px;
 }
 
+#help {
+    font-size: 90%;
+    color: #888;  
+    margin-top: 5px;  
+    text-align: center;    
+}
+
+
 #search span {
     font-size: 140%;
     color: #888;
