@@ -22,6 +22,13 @@
 # TODO: convert to a rake task
 # TODO: replace evil hack to get the last 10 days of data from S3
 
+MYBUCKET=$1
+DAYS=`s3cmd --config=/root/.s3cfg ls s3://$MYBUCKET/wikistats/* | awk '{print $4}' | tail -240 | cut -d'.' -f1 | cut -d'-' -f2 | sort -u`
+
+# echo $DAYS
+# 20090603 20090604 20090605 20090606 20090607 20090608 20090609 20090610 20090611 20090612
+
+
 
 D0=`date --date "now -1 day" +"%Y%m%d"`
 D1=`date --date "now -2 day" +"%Y%m%d"`
@@ -37,15 +44,15 @@ D9=`date --date "now -10 day" +"%Y%m%d"`
 # Run the streaming job on 10 nodes
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
   -input s3n://$1/wikistats/pagecounts-$D0* \
-  -input s3n://$1/wikistats/pagecounts-$D1* \
-  -input s3n://$1/wikistats/pagecounts-$D2* \
-  -input s3n://$1/wikistats/pagecounts-$D3* \
-  -input s3n://$1/wikistats/pagecounts-$D4* \
-  -input s3n://$1/wikistats/pagecounts-$D5* \
-  -input s3n://$1/wikistats/pagecounts-$D6* \
-  -input s3n://$1/wikistats/pagecounts-$D7* \
-  -input s3n://$1/wikistats/pagecounts-$D8* \
-  -input s3n://$1/wikistats/pagecounts-$D9* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D1* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D2* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D3* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D4* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D5* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D6* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D7* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D8* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D9* \
   -output finaltrendoutput \
   -mapper "daily_trends.py mapper" \
   -reducer "daily_trends.py reducer 10" \

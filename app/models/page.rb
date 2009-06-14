@@ -3,23 +3,21 @@ class Page < ActiveRecord::Base
   has_one :daily_trend
   has_one :weekly_trend    
   named_scope :title_like, lambda { |query| { :conditions => ['title like ?', "#{query}%"], :order => '`monthly_trend` DESC', :limit => 12 } }
-  named_scope :full_title_like, lambda { |query| { :conditions => ['title like ?', "%#{query}%"], :order => '`monthly_trend` DESC', :limit => 12 } }  
-  
-
-  
+  named_scope :full_title_like, lambda { |query| { :conditions => ['title like ? and id NOT IN (?)', "%#{query}%", APP_CONFIG['blacklist']], :order => '`monthly_trend` DESC', :limit => 14 } }  
+    
   
   def normed_daily_pageviews( range=30)
     @pageviews = JSON.parse(self.daily_timeline.pageviews)
     @dates = JSON.parse(self.daily_timeline.dates)    
-    maxval = @pageviews.max
-    normed_values = @pageviews.collect { |x| x * (110.0 / maxval)}
     date_view_hash = {}
     @dates.each_with_index do |date, index|
-      date_view_hash[date] = normed_values[index]
+      date_view_hash[date] = @pageviews[index]
     end
     sorted_pageviews = []
     date_view_hash.keys.sort.each { |key| sorted_pageviews << date_view_hash[key] }
-    return sorted_pageviews[-range,range]
+    maxval = sorted_pageviews[-range,range].max
+    normed_values = sorted_pageviews[-range,range].collect { |x| x * (110.0 / maxval)}    
+    return normed_values
   end
   
   def sparkline( fillcolor='76A4FB', range=30 )
