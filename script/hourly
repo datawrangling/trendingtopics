@@ -7,5 +7,6 @@ cd tmp
 wget -r --quiet --no-directories --no-parent -L -A "pagecounts-$DATEHOUR*" http://dammit.lt/wikistats/ 
 # upload to s3 bucket
 FILENAME=`ls pagecounts-$DATEHOUR*`
-s3cmd --config=/root/.s3cfg put --force /mnt/pagecounts/$FILENAME s3://$MYBUCKET/wikistats/$FILENAME
+s3cmd --config=/root/.s3cfg put --force $FILENAME s3://$MYBUCKET/wikistats/$FILENAME
 # in the daily job, periodically wipe local copies of the pagecounts files
+cd ../
