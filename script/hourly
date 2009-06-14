@@ -2,12 +2,9 @@
 
 # fetch the latest wikistats files every hour
 MYBUCKET=trendingtopics
-sleep 5m
 DATE=`date --date "now +4 hours" +"%Y%m%d-%H"`
 mkdir -p /mnt/pagecounts
 cd /mnt/pagecounts
 wget -r --quiet --no-directories --no-parent -L -A "pagecounts-$DATE*" http://dammit.lt/wikistats/ 
 # upload to s3 bucket
-s3cmd --config=/root/.s3cfg put --force /mnt/pagecounts/pagecounts* s3://$MYBUCKET/wikistats/
-# delete the local copy
-rm pagecounts*
+s3cmd --config=/root/.s3cfg put --force /mnt/pagecounts/pagecounts-$DATE* s3://$MYBUCKET/wikistats/
