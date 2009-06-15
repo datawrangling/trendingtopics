@@ -98,10 +98,11 @@ def mapper1(args):
 
 def reducer1(args):
   '''
-  Barack_Obama  20090422  129
-  Barack_Obama  20090419  143
-  Barack_Obama  20090421  163
-  Barack_Obama  20090420  152
+  # hadoop fs -cat finaloutput/part-00010 | head -30000 | tail
+  Argument_from_degree	20090613	5
+  Argument_from_fallacy	20090613	41
+  Argument_from_incredulity	20090613	10
+
   
   '''
   last_articledate, articledate_sum = None, 0
