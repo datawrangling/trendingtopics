@@ -4,6 +4,7 @@ development:
   admin_password: REPLACEME
   articles_per_page: 20  
   tracker_id: "UA-REPLACEME"
+  verify_v1: "MK/gfdgdfgdfgfdgfdgfdgfdgfd"   
   protocol: http 
   blacklist: 
   - 10447140 
@@ -14,6 +15,7 @@ test:
   admin_password: REPLACEME
   articles_per_page: 20 
   tracker_id: "UA-REPLACEME"
+  verify_v1: "MK/gfdgdfgdfgfdgfdgfdgfdgfd"   
   protocol: http 
   blacklist: 
   - 10447140       
@@ -24,6 +26,7 @@ production:
   admin_password: REPLACEME
   articles_per_page: 20
   tracker_id: "UA-REPLACEME"
+  verify_v1: "MK/gfdgdfgdfgfdgfdgfdgfdgfd"   
   protocol: http
   blacklist: 
   - 10447140
