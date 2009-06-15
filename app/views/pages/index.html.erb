@@ -43,7 +43,7 @@
                     <tr>
                       <td class="center"><%= index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1) %></td>
                       <td class="pageviews"><%= number_with_delimiter(page.total_pageviews, ',') %></td>
-                      <td><%= link_to image_tag(page.sparkline('999999', 30).to_url) , page %></td>
+                      <td><%= link_to image_tag(page.sparkline('999999', 30).to_url, :alt => 'Recent Trend for ' + page.title ) , page %></td>
                       <td>
                         <%= link_to truncate(page.title,35), page, :class => "articlelink"  %>
                       <!--<%= link_to 'Wikilink', 'http://en.wikipedia.org/wiki/' + page.url, :class => "wikilink" %> --></td>
@@ -71,7 +71,7 @@
               </tr>                       
                 <% DailyTrend.find(:all, :limit => 20,:conditions => ["page_id NOT IN (?)", APP_CONFIG['blacklist']], :order => 'trend DESC').each_with_index do |rising, index| %>
                   <tr>          
-                    <td><%= link_to image_tag(rising.page.sparkline('888888', 30).to_url), rising.page %></td>
+                    <td><%= link_to image_tag(rising.page.sparkline('888888', 30).to_url, :alt => 'Rising Trend data for ' + rising.page.title), rising.page %></td>
                     <td><%= link_to truncate(rising.page.title,20), rising.page, :class => "title" %></td> 
                   </tr>
                 <% end %>
