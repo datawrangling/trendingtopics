@@ -6,7 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => "pages"  
   map.resources :daily_timelines
   
-
+  map.connect "sitemap.xml", :controller => "sitemap", :action => "sitemap"
                                                   
   map.resources :pages, :collection => {:auto_complete_for_search_query => :get }
 
