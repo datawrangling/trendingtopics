@@ -13,7 +13,11 @@ CREATE TABLE daily_timelines (page_id BIGINT, dates STRING, pageviews STRING, to
 
 CREATE TABLE new_daily_timelines (page_id BIGINT, dates STRING, pageviews STRING, total_pageviews BIGINT) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
 
+CREATE TABLE new_pages_raw (page_id BIGINT, total_pageviews BIGINT, monthly_trend DOUBLE) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
+
 CREATE TABLE new_pages (page_id BIGINT, url STRING, title STRING, page_latest BIGINT, total_pageviews BIGINT, monthly_trend DOUBLE) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
+
+CREATE TABLE new_daily_trends (page_id BIGINT, trend DOUBLE, error DOUBLE) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
 
 -- 2. imports raw_daily_pagecounts from streaming job hdfs dir.
 
@@ -23,22 +27,83 @@ LOAD DATA INPATH 'finaloutput' INTO TABLE raw_daily_pagecounts_table;
 
 LOAD DATA LOCAL INPATH '/mnt/page_lookup_nonredirects.txt' OVERWRITE INTO TABLE redirect_table;
 LOAD DATA LOCAL INPATH '/mnt/pages.txt' OVERWRITE INTO TABLE pages;
+-- 2804203 rows
+
 LOAD DATA LOCAL INPATH '/mnt/daily_timelines.txt' OVERWRITE INTO TABLE daily_timelines;
+-- Time taken: 274.38 seconds
+-- 2804203 rows
+
 
 -- 4. normalizes python streaming output table "raw_daily_pagecounts" with page_id
 
 INSERT OVERWRITE TABLE daily_pagecounts_table
-SELECT redirect_table.page_id, raw_daily_pagecounts_table.dates, raw_daily_pagecounts_table.pageviews, raw_daily_stats_table.total_pageviews FROM redirect_table JOIN raw_daily_pagecounts_table ON (redirect_table.redirect_title = raw_daily_pagecounts_table.redirect_title);
+SELECT redirect_table.page_id, raw_daily_pagecounts_table.dates, raw_daily_pagecounts_table.pageviews FROM redirect_table JOIN raw_daily_pagecounts_table ON (redirect_table.redirect_title = raw_daily_pagecounts_table.redirect_title);
+--Time taken: 70.444 seconds
+-- 2517783
 
 -- 5. populate new_daily_timelines: merges old daily_timelines with new, inserts into "new_daily_timelines"
+-- We could do a left outer join, so that timelines with no new data don't get dropped entirely, but
+-- because we are doing a concat, we lose rows if either side is missing data, so we do a union instead...
+-- INSERT OVERWRITE TABLE new_daily_timelines
+-- select dt.page_id, regexp_replace(dt.dates, ']', concat(',', concat(dp.dates, ']')) ), regexp_replace(dt.pageviews, ']', concat(',', concat(dp.pageviews, ']')) ),  cast(dt.total_pageviews as BIGINT) + cast(dp.pageviews as BIGINT)
+-- FROM daily_timelines dt JOIN daily_pagecounts_table dp ON (dt.page_id = dp.page_id);
+-- Time taken: 564.077 seconds
+-- 2012893 Rows loaded to new_daily_timelines JOIN
+
+INSERT OVERWRITE TABLE new_daily_timelines
+SELECT u.page_id, u.dates, u.pageviews, u.total_pageviews 
+FROM (
+select dt.page_id, regexp_replace(dt.dates, ']', concat(',', concat(dp.dates, ']')) ) AS dates, regexp_replace(dt.pageviews, ']', concat(',', concat(dp.pageviews, ']')) ) AS pageviews,  cast(dt.total_pageviews as BIGINT) + cast(dp.pageviews as BIGINT) AS total_pageviews
+FROM daily_timelines dt JOIN daily_pagecounts_table dp ON (dt.page_id = dp.page_id)
+UNION ALL 
+select dt.page_id, dt.dates, dt.pageviews, dt.total_pageviews
+FROM daily_timelines dt LEFT OUTER JOIN daily_pagecounts_table dp ON (dt.page_id = dp.page_id) where dp.page_id is NULL) u;
+-- Total MapReduce jobs = 3
+-- 2804203 Rows loaded to new_daily_timelines
+-- Time taken: 1261.71 seconds
 
 
-
--- 6. populate new_pages: run "monthly trend" python streaming script from Hive, calc 30 day trend and total pageviews
+-- 6. populate new_pages: run "hive_monthly_trend.py" python streaming scripts from Hive, calc 30 day trend and total pageviews
 --  insert to new_pages Hive table.
 
+-- add the python file to the cache:
 
--- 7. run daily_trend python streaming script from Hive, calc daily trend for all articles
+add FILE /mnt/trendingtopics/lib/python_streaming/hive_monthly_trend_mapper.py; 
+add FILE /mnt/trendingtopics/lib/python_streaming/hive_monthly_trend_reducer.py; 
+
+
+-- run the monthly streaming job:
+          
+FROM (
+  FROM new_daily_timelines
+  MAP new_daily_timelines.page_id, new_daily_timelines.dates, new_daily_timelines.pageviews, new_daily_timelines.total_pageviews
+  USING 'hive_monthly_trend_mapper.py'
+  CLUSTER BY key) map_output
+INSERT OVERWRITE TABLE new_pages_raw
+  REDUCE map_output.key, map_output.value
+  USING 'hive_monthly_trend_reducer.py'
+  AS page_id, total_pageviews, monthly_trend;
+
+-- join the output to pages table get urls, etc...
+INSERT OVERWRITE TABLE new_pages
+SELECT pages.page_id, pages.url, pages.title, pages.page_latest, new_pages_raw.total_pageviews, new_pages_raw.monthly_trend FROM pages JOIN new_pages_raw ON (pages.page_id = new_pages_raw.page_id);
+ 
+
+-- 7. run "hive_daily_trend.py" python streaming scripts from Hive, calc daily trend for all articles
 --  insert to new_daily_trends Hive table
 
+add FILE /mnt/trendingtopics/lib/python_streaming/hive_daily_trend_mapper.py; 
+add FILE /mnt/trendingtopics/lib/python_streaming/hive_daily_trend_reducer.py;
+
+-- run the daily streaming job (for now we will just use daily data, no hourly):
+          
+FROM (
+  FROM new_daily_timelines
+  MAP new_daily_timelines.page_id, new_daily_timelines.dates, new_daily_timelines.pageviews, new_daily_timelines.total_pageviews
+  USING 'hive_daily_trend_mapper.py'
+  CLUSTER BY key) map_output
+INSERT OVERWRITE TABLE new_daily_trends
+  REDUCE map_output.key, map_output.value
+  USING 'hive_daily_trend_reducer.py'
+  AS page_id, trend, error;
 
