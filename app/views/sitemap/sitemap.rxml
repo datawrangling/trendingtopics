@@ -2,19 +2,19 @@ xml.instruct!
  
 xml.urlset "xmlns" => "http://www.sitemaps.org/schemas/sitemap/0.9" do
   xml.url do
-    xml.loc         "http://www.trendingtopics.org/"
+    xml.loc         "http://"+ APP_CONFIG['domain']+"/"
     xml.lastmod     w3c_date(Time.now)
     xml.changefreq  "daily"
   end
   
   xml.url do
-    xml.loc         "http://www.trendingtopics.org/about"
+    xml.loc         "http://"+ APP_CONFIG['domain']+"/about"
     xml.lastmod     w3c_date(Time.now)
     xml.changefreq  "weekly"
   end
   
   xml.url do
-    xml.loc         "http://www.trendingtopics.org/contact"
+    xml.loc         "http://"+ APP_CONFIG['domain']+"/contact"
     xml.lastmod     w3c_date(Time.now)
     xml.changefreq  "weekly"
   end    

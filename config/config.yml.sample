@@ -1,5 +1,6 @@
 development:
   rails_application_port: 3000
+  domain: 'www.REPLACEME.org'  
   admin_user: REPLACEME
   admin_password: REPLACEME
   articles_per_page: 20  
@@ -11,6 +12,7 @@ development:
 
 test:
   rails_application_port: 3000
+  domain: 'www.REPLACEME.org'  
   admin_user: REPLACEME
   admin_password: REPLACEME
   articles_per_page: 20 
@@ -22,6 +24,7 @@ test:
 
 production:
   rails_application_port: 3000
+  domain: 'www.REPLACEME.org'  
   admin_user: REPLACEME
   admin_password: REPLACEME
   articles_per_page: 20
