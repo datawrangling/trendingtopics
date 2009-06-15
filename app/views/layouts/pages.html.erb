@@ -70,7 +70,11 @@
     	    <div class="left">
     	    
           
-    		      <%= link_to("XML feed", pages_path(:format => :xml, :page => 1)) %> | <%= link_to "Contact",  { :controller => "contact" } %> | <%= link_to "About", { :controller => "about" } %> |
+    	
+    		      
+    		<!-- <%= auto_discovery_link_tag(:rss, {:controller=>"daily_trends", :action => "index"}, {:title => "RSS Feed"}) %> -->
+    	
+    		      <%= link_to("XML feed", pages_path(:format => :xml, :page => 1)) %> | <%= link_to "Contact",  { :controller => "contact" } %> | <%= link_to "About", { :controller => "about" } %> | <a href='http://www.pledgie.com/campaigns/4790' target='_new'>Donate</a> |
                 &copy; Copyright 2009 <a href="http://www.datawrangling.com">Data Wrangling, LLC</a>
     	    </div> <!-- left -->
 	    

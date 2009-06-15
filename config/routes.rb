@@ -6,10 +6,17 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => "pages"  
   map.resources :daily_timelines
   
-  
+
+                                                  
   map.resources :pages, :collection => {:auto_complete_for_search_query => :get }
 
+  # map.connect '/pages/auto_complete_for_search_query', :controller => 'pages', :action => 'auto_complete_for_search_query'
+  # map.connect '/pages/:url', :controller => 'pages', :action => 'find_by_url',
+  #                                               :url => /.*/
+  # map.connect '/pages', :controller => 'pages', :action => 'index'                                       
+
   map.connect '/widgets/:chart_widget/:id', :controller => 'widgets', :action => 'chart_widget'
+
 
   map.with_options :controller => 'info' do |info|
     info.about 'about', :action => 'about'
