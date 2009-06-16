@@ -12,6 +12,7 @@ Copyright (c) 2009 Data Wrangling LLC. All rights reserved.
 """
 
 import sys, os, re
+import simplejson
 
 def calc_trend(dates, pageviews):
   dts,counts = zip( *sorted( zip (dates,pageviews)))
@@ -22,6 +23,8 @@ def calc_trend(dates, pageviews):
 
 for line in sys.stdin:
   (page_id, dates, pageviews, total_pageviews) = line.strip().split("\t")
+  dates = simplejson.loads(dates)
+  pageviews = simplejson.loads(pageviews)  
   try:
     monthly_trend = calc_trend(dates, pageviews)
   except:

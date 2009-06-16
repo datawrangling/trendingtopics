@@ -14,6 +14,7 @@ Copyright (c) 2009 Data Wrangling LLC. All rights reserved.
 import sys, os, re
 from datetime import date, datetime
 from math import log, sqrt
+import simplejson
 
 def trendvalue(dates, pageviews, total_pageviews):
   '''
@@ -32,6 +33,8 @@ def trendvalue(dates, pageviews, total_pageviews):
   
 for line in sys.stdin:
   (page_id, dates, pageviews, total_pageviews) = line.strip().split("\t")
+  dates = simplejson.loads(dates)
+  pageviews = simplejson.loads(pageviews)  
   try:
     daily_trend, error = trendvalue(dates, pageviews, total_pageviews)
   except:
