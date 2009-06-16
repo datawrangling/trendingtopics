@@ -36,14 +36,17 @@ if [ $HOURLYCOUNT -eq 24  ]; then
   # If there are 24 files, then we go ahead with the process:
    echo there are 24 files for $NEXTDATE, running daily merge
    ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh starting $MYSERVER $MAILTO"
-   # start the Hadoop streaming Python job, we use 5 c1.medium nodes for daily processing
+   # start the Hadoop streaming Python job, we use 10 c1.medium nodes for daily processing
+   # set the default number of reducers using the following formula:
+   # number of concurrent reducers per node * number of nodes * 1.75
+   # for 10 c1.medium = 2 * 10 * 1.75 = 35
    hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
      -input s3n://$MYBUCKET/wikistats/pagecounts-$NEXTDATE* \
      -output finaloutput \
      -mapper "daily_merge.py mapper1" \
      -reducer "daily_merge.py reducer1" \
      -file '/mnt/trendingtopics/lib/python_streaming/daily_merge.py' \
-     -jobconf mapred.reduce.tasks=20 \
+     -jobconf mapred.reduce.tasks=35 \
      -jobconf mapred.job.name=daily_merge   
    
    # Clear the logs so Hive can load the daily pagecount data 
