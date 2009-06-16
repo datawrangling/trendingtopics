@@ -13,7 +13,7 @@ CREATE TABLE daily_timelines (page_id BIGINT, dates STRING, pageviews STRING, to
 
 CREATE TABLE new_daily_timelines (page_id BIGINT, dates STRING, pageviews STRING, total_pageviews BIGINT) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
 
-CREATE TABLE new_pages_raw (page_id BIGINT, total_pageviews BIGINT, monthly_trend DOUBLE) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
+CREATE TABLE new_pages_raw (page_id BIGINT, total_pageviews BIGINT, monthly_trend DOUBLE, daily_trend DOUBLE, error DOUBLE) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
 
 CREATE TABLE new_pages (page_id BIGINT, url STRING, title STRING, page_latest BIGINT, total_pageviews BIGINT, monthly_trend DOUBLE) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
 
@@ -52,19 +52,15 @@ UNION ALL
 select dt.page_id, dt.dates, dt.pageviews, dt.total_pageviews
 FROM daily_timelines dt LEFT OUTER JOIN daily_pagecounts_table dp ON (dt.page_id = dp.page_id) where dp.page_id is NULL) u;
 
-add FILE /mnt/trendingtopics/lib/python_streaming/hive_monthly_trend_mapper.py;
+add FILE /mnt/trendingtopics/lib/python_streaming/hive_trend_mapper.py;
 
 INSERT OVERWRITE TABLE new_pages_raw
-SELECT u.page_id, u.total_pageviews, u.monthly_trend   
+SELECT u.page_id, u.total_pageviews, u.monthly_trend, u.daily_trend, u.error   
 FROM (        
-FROM new_daily_timelines ndt  MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews USING 'python hive_monthly_trend_mapper.py' AS page_id, total_pageviews, monthly_trend) u;
+FROM new_daily_timelines ndt  MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews USING 'python hive_trend_mapper.py' AS page_id, total_pageviews, monthly_trend, daily_trend, error) u;
 
 INSERT OVERWRITE TABLE new_pages
 SELECT pages.page_id, pages.url, pages.title, pages.page_latest, new_pages_raw.total_pageviews, new_pages_raw.monthly_trend FROM pages JOIN new_pages_raw ON (pages.page_id = new_pages_raw.page_id);
           
-add FILE /mnt/trendingtopics/lib/python_streaming/hive_daily_trend_mapper.py;
-
 INSERT OVERWRITE TABLE new_daily_trends 
-SELECT u.page_id, u.trend, u.error
-FROM (          
-FROM new_daily_timelines ndt  MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews USING 'python hive_daily_trend_mapper.py' AS page_id, trend, error) u;
+SELECT pages.page_id, new_pages_raw.daily_trend, new_pages_raw.error FROM pages JOIN new_pages_raw ON (pages.page_id = new_pages_raw.page_id);

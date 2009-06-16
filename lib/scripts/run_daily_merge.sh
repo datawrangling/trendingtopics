@@ -72,15 +72,16 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    hive -S -e 'SELECT * FROM new_daily_trends' > /mnt/new_daily_trends.txt   
    
    # gzip the data and send to prod and S3
-   # TODO: wait on this step until we are sure the Hive code works
-   # tar cvf - new_pages.txt new_daily_timelines.txt new_daily_trends | gzip > /mnt/trendsdb.tar.gz
-   # scp /mnt/trendsdb.tar.gz root@$MYSERVER:/mnt/
-   # s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$MYBUCKET/archive/`date --date "now -1 day" +"%Y%m%d"`/trendsdb.tar.gz
-   # s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$MYBUCKET/archive/trendsdb.tar.gz
-
-   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && tar -xzvf trendsdb.tar.gz'
-   ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh complete $MYSERVER $MAILTO"   
+   tar cvf - new_pages.txt new_daily_timelines.txt new_daily_trends.txt | gzip > /mnt/trendsdb.tar.gz
+   # real 8m7.590s
+   # user 7m31.984s
+   # sys  0m18.621s
+   
+   scp /mnt/trendsdb.tar.gz root@$MYSERVER:/mnt/
    # the remaining processing happens on the database server: loading tables, rebuilding indexes, swapping tables, flushing caches
+   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && bash /mnt/app/current/lib/scripts/daily_load.sh $MYBUCKET &'
+   ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh complete $MYSERVER $MAILTO"   
+
    
 else
   # If there are more/less than 24 files (wc -l), then we abort and send an email to the admin
