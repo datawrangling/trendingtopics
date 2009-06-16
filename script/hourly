@@ -1,4 +1,8 @@
 #!/bin/sh
+# TODO turn this into a python or ruby script,
+# and error handling, to retry if file missing etc...
+# use exponential backoff in wget requests
+
 MYBUCKET=trendingtopics
 DATEHOUR=`date --date "now +4 hours" +"%Y%m%d-%H"`
 
@@ -9,7 +13,7 @@ wget -r --quiet --no-directories --no-parent -L -A "pagecounts-$DATEHOUR*" http:
 # upload to s3 bucket
 FILENAME=`ls pagecounts-$DATEHOUR*`
 s3cmd --config=/root/.s3cfg put --force /mnt/app/current/tmp/$FILENAME s3://$MYBUCKET/wikistats/$FILENAME 1> /dev/null
-# wipe local copys of the pagecounts file
+# wipe local copies of the pagecounts file
 rm $FILENAME
 rm robots.*
 cd ../

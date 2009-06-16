@@ -32,7 +32,7 @@ def main(argv=None):
   TEXT = TEXT + '\nTime is %s\n' % datetime.datetime.now()  
 
   if argv[2] == 'complete' and argv[1] == 'run_daily_timelines.sh':
-    stdout_handle = os.popen('wc -l /mnt/pages.txt && wc -l /mnt/daily_timelines.txt', "r")
+    stdout_handle = os.popen('ls -lh /mnt/trendsdb.tar.gz', "r")
     mysql_text = stdout_handle.read()
     mysql_text = "\nNumber of lines in new_pages: \n" + mysql_text +"\n"  
     TEXT = TEXT + mysql_text  

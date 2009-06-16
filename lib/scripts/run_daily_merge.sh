@@ -67,19 +67,21 @@ if [ $HOURLYCOUNT -eq 24  ]; then
 
    # Spool the tab delimited data out of hive for bulk loading into MySQL
    # This can be replaced with Sqoop later
-   hive -S -e 'SELECT * FROM new_pages' > /mnt/new_pages.txt
-   hive -S -e 'SELECT * FROM new_daily_timelines' > /mnt/new_daily_timelines.txt
-   hive -S -e 'SELECT * FROM new_daily_trends' > /mnt/new_daily_trends.txt   
+   hive -S -e 'SELECT * FROM new_pages' > /mnt/pages.txt
+   hive -S -e 'SELECT * FROM new_daily_timelines' > /mnt/daily_timelines.txt
+   hive -S -e 'SELECT * FROM new_daily_trends' > /mnt/daily_trends.txt   
    
    # gzip the data and send to prod and S3
-   tar cvf - new_pages.txt new_daily_timelines.txt new_daily_trends.txt | gzip > /mnt/trendsdb.tar.gz
+   tar cvf - pages.txt daily_timelines.txt daily_trends.txt | gzip > /mnt/trendsdb.tar.gz
    # real 8m7.590s
    # user 7m31.984s
    # sys  0m18.621s
    
    scp /mnt/trendsdb.tar.gz root@$MYSERVER:/mnt/
+   
+   
    # Remaining processing happens on the db server: loading tables, rebuilding indexes, swapping tables, flushing caches 
-   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && nohup bash /mnt/app/current/lib/scripts/daily_load.sh $MYBUCKET $MYSERVER $MAILTO > daily_load.log &'
+   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && nohup bash /mnt/app/current/lib/scripts/daily_load.sh $MYBUCKET $MYSERVER $MAILTO > daily_load.log 2>&1' &
    ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh complete $MYSERVER $MAILTO"   
 
 else
