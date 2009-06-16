@@ -51,41 +51,20 @@ FROM daily_timelines dt JOIN daily_pagecounts_table dp ON (dt.page_id = dp.page_
 UNION ALL 
 select dt.page_id, dt.dates, dt.pageviews, dt.total_pageviews
 FROM daily_timelines dt LEFT OUTER JOIN daily_pagecounts_table dp ON (dt.page_id = dp.page_id) where dp.page_id is NULL) u;
--- Total MapReduce jobs = 3
--- 2804203 Rows loaded to new_daily_timelines
--- Time taken: 1261.71 seconds
 
+add FILE /mnt/trendingtopics/lib/python_streaming/hive_monthly_trend_mapper.py;
 
--- 6. populate new_pages: run "hive_monthly_trend.py" python streaming scripts from Hive, calc 30 day trend and total pageviews
---  insert to new_pages Hive table.
-
--- add the python file to the cache:
-add FILE /mnt/trendingtopics/lib/python_streaming/hive_monthly_trend_mapper.py; 
-
--- run the monthly streaming job:        
 INSERT OVERWRITE TABLE new_pages_raw
 SELECT u.page_id, u.total_pageviews, u.monthly_trend   
 FROM (        
 FROM new_daily_timelines ndt  MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews USING 'python hive_monthly_trend_mapper.py' AS page_id, total_pageviews, monthly_trend) u;
 
--- join the output to pages table get urls, etc...
 INSERT OVERWRITE TABLE new_pages
 SELECT pages.page_id, pages.url, pages.title, pages.page_latest, new_pages_raw.total_pageviews, new_pages_raw.monthly_trend FROM pages JOIN new_pages_raw ON (pages.page_id = new_pages_raw.page_id);
           
--- 7. run "hive_daily_trend.py" python streaming scripts from Hive, calc daily trend for all articles
---  insert to new_daily_trends Hive table
-
-add FILE /mnt/trendingtopics/lib/python_streaming/hive_daily_trend_mapper.py; 
-
--- run the daily streaming job (for now we will just use daily data, no hourly):
+add FILE /mnt/trendingtopics/lib/python_streaming/hive_daily_trend_mapper.py;
 
 INSERT OVERWRITE TABLE new_daily_trends 
 SELECT u.page_id, u.trend, u.error
 FROM (          
 FROM new_daily_timelines ndt  MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews USING 'python hive_daily_trend_mapper.py' AS page_id, trend, error) u;
-
--- to test you can add a where clause & limit and it will run *without* a full table scan
-
--- FROM new_daily_timelines ndt  MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews USING 'python hive_daily_trend_mapper.py' AS page_id, trend, error limit 10;
-
-
