@@ -78,11 +78,10 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    # sys  0m18.621s
    
    scp /mnt/trendsdb.tar.gz root@$MYSERVER:/mnt/
-   # the remaining processing happens on the database server: loading tables, rebuilding indexes, swapping tables, flushing caches
-   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && bash /mnt/app/current/lib/scripts/daily_load.sh $MYBUCKET &'
+   # Remaining processing happens on the db server: loading tables, rebuilding indexes, swapping tables, flushing caches 
+   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && nohup bash /mnt/app/current/lib/scripts/daily_load.sh $MYBUCKET $MYSERVER $MAILTO > daily_load.log &'
    ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh complete $MYSERVER $MAILTO"   
 
-   
 else
   # If there are more/less than 24 files (wc -l), then we abort and send an email to the admin
    echo the number of files for $NEXTDATE does not equal 24, aborting daily merge
