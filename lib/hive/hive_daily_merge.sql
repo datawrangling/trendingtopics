@@ -33,7 +33,6 @@ LOAD DATA LOCAL INPATH '/mnt/daily_timelines.txt' OVERWRITE INTO TABLE daily_tim
 -- Time taken: 274.38 seconds
 -- 2804203 rows
 
-
 -- 4. normalizes python streaming output table "raw_daily_pagecounts" with page_id
 
 INSERT OVERWRITE TABLE daily_pagecounts_table
@@ -42,13 +41,15 @@ SELECT redirect_table.page_id, raw_daily_pagecounts_table.dates, raw_daily_pagec
 -- 2517783
 
 -- 5. populate new_daily_timelines: merges old daily_timelines with new, inserts into "new_daily_timelines"
--- We could do a left outer join, so that timelines with no new data don't get dropped entirely, but
--- because we are doing a concat, we lose rows if either side is missing data, so we do a union instead...
+-- We could do a left outer join, so that timelines with no new data don't get dropped entirely
+
 -- INSERT OVERWRITE TABLE new_daily_timelines
 -- select dt.page_id, regexp_replace(dt.dates, ']', concat(',', concat(dp.dates, ']')) ), regexp_replace(dt.pageviews, ']', concat(',', concat(dp.pageviews, ']')) ),  cast(dt.total_pageviews as BIGINT) + cast(dp.pageviews as BIGINT)
 -- FROM daily_timelines dt JOIN daily_pagecounts_table dp ON (dt.page_id = dp.page_id);
 -- Time taken: 564.077 seconds
 -- 2012893 Rows loaded to new_daily_timelines JOIN
+
+-- but... because we are doing a concat, we lose rows if either side is missing data, so we do a union instead:
 
 INSERT OVERWRITE TABLE new_daily_timelines
 SELECT u.page_id, u.dates, u.pageviews, u.total_pageviews 
@@ -67,31 +68,18 @@ FROM daily_timelines dt LEFT OUTER JOIN daily_pagecounts_table dp ON (dt.page_id
 --  insert to new_pages Hive table.
 
 -- add the python file to the cache:
-
 add FILE /mnt/trendingtopics/lib/python_streaming/hive_monthly_trend_mapper.py; 
 
--- run the monthly streaming job:
-
---test:          
-INSERT OVERWRITE TABLE new_pages_raw          
-FROM new_daily_timelines ndt  MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews USING 'python hive_monthly_trend_mapper.py' AS page_id, total_pageviews, monthly_trend limit 10;
+-- run the monthly streaming job:        
+INSERT OVERWRITE TABLE new_pages_raw
+SELECT u.page_id, u.total_pageviews, u.monthly_trend   
+FROM (        
+FROM new_daily_timelines ndt  MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews USING 'python hive_monthly_trend_mapper.py' AS page_id, total_pageviews, monthly_trend) u;
 
 -- join the output to pages table get urls, etc...
 INSERT OVERWRITE TABLE new_pages
 SELECT pages.page_id, pages.url, pages.title, pages.page_latest, new_pages_raw.total_pageviews, new_pages_raw.monthly_trend FROM pages JOIN new_pages_raw ON (pages.page_id = new_pages_raw.page_id);
           
--- if you needed both Map and Reduce          
--- FROM (
---   FROM new_daily_timelines
---   MAP new_daily_timelines.page_id, new_daily_timelines.dates, new_daily_timelines.pageviews, new_daily_timelines.total_pageviews
---   USING 'hive_monthly_trend_mapper.py'
---   CLUSTER BY key) map_output
--- INSERT OVERWRITE TABLE new_pages_raw
---   REDUCE map_output.key, map_output.value
---   USING 'hive_monthly_trend_reducer.py'
---   AS page_id, total_pageviews, monthly_trend;
-
-
 -- 7. run "hive_daily_trend.py" python streaming scripts from Hive, calc daily trend for all articles
 --  insert to new_daily_trends Hive table
 
@@ -99,17 +87,13 @@ add FILE /mnt/trendingtopics/lib/python_streaming/hive_daily_trend_mapper.py;
 
 -- run the daily streaming job (for now we will just use daily data, no hourly):
 
-INSERT OVERWRITE TABLE new_daily_trends          
-FROM new_daily_timelines ndt  MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews USING 'python hive_daily_trend_mapper.py' AS page_id, trend, error limit 10;
+INSERT OVERWRITE TABLE new_daily_trends 
+SELECT u.page_id, u.trend, u.error
+FROM (          
+FROM new_daily_timelines ndt  MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews USING 'python hive_daily_trend_mapper.py' AS page_id, trend, error) u;
 
---           
--- FROM (
---   FROM new_daily_timelines
---   MAP new_daily_timelines.page_id, new_daily_timelines.dates, new_daily_timelines.pageviews, new_daily_timelines.total_pageviews
---   USING 'hive_daily_trend_mapper.py'
---   CLUSTER BY key) map_output
--- INSERT OVERWRITE TABLE new_daily_trends
---   REDUCE map_output.key, map_output.value
---   USING 'hive_daily_trend_reducer.py'
---   AS page_id, trend, error;
+-- to test you can add a where clause & limit and it will run *without* a full table scan
+
+-- FROM new_daily_timelines ndt  MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews USING 'python hive_daily_trend_mapper.py' AS page_id, trend, error limit 10;
+
 
