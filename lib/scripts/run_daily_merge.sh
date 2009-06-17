@@ -77,8 +77,14 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    # user 7m31.984s
    # sys  0m18.621s
    
-   scp /mnt/trendsdb.tar.gz root@$MYSERVER:/mnt/
+   #remove the old trendsdb files if they exist
+   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && rm -f trendsdb.tar.gz'  
+   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && rm -f pages.txt'  
+   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && rm -f daily_trends.txt'  
+   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && rm -f daily_timelines.txt'  
    
+   # copy over new trendsdb
+   scp /mnt/trendsdb.tar.gz root@$MYSERVER:/mnt/
    
    # Remaining processing happens on the db server: loading tables, rebuilding indexes, swapping tables, flushing caches 
    ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && nohup bash /mnt/app/current/lib/scripts/daily_load.sh > daily_load.log 2>&1' &

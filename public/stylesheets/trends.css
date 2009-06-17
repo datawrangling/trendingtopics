@@ -32,7 +32,7 @@ body {
 }
 
 #header {
-    padding: 10px 10px 10px 10px;
+    padding: 0px 10px 10px 10px;
 }
 
 #billboard {
@@ -79,11 +79,16 @@ body {
 
 .section { /* For a horizontal section of content */
     width: 940px; /* content - 20 (borders) */
-    padding: 0 10px;
+    padding: 0 0px;
 }
 
 #timeline_chart {}
-#news {}
+#download {
+      text-align: right;
+}
+#news {
+      margin-top: 11px;  
+}
 #biggest-movers {}
 #rising-articles {
     margin-bottom: 30px;

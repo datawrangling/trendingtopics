@@ -3,7 +3,7 @@
 <div id="first-section" class="section">
 
     <div id = "timeline_chart" class="left">
-        <h3>Daily Pageviews for <span><%= truncate(@page.title, 35) %></span></h3>  
+        <h3>Daily Pageviews for <span><%= truncate(@page.title, 35) %></span> <%= link_to image_tag("csv_icon.png", :alt => 'Trend CSV file for ' + @page.title), :controller => "pages", :action => "csv", :id => @page  %></h3>  
         <%= render :partial => "timeline"  %>
     </div>
 

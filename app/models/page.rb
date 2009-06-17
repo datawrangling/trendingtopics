@@ -20,6 +20,20 @@ class Page < ActiveRecord::Base
     return normed_values
   end
   
+  def linechart( fillcolor='76A4FB', range=30 )
+    dataset = GC4R::API::GoogleChartDataset.new :data => self.normed_daily_pageviews(range), 
+      :color => '999999', :fill => ['B', fillcolor ,'0','0','0']
+    # red => FF0000
+    # lightblue => 76A4FB
+    # green => 33FF00
+    # darkblue => 0000FF    
+    data = GC4R::API::GoogleChartData.new :datasets => dataset , :min => 0, :max => 120
+    # @chart = GoogleBarChart.new :width => 120, :height => 12
+    @chart = GC4R::API::GoogleLineChart.new :width => 620, :height => 280
+    @chart.data = data
+    return @chart
+  end  
+  
   def sparkline( fillcolor='76A4FB', range=30 )
     dataset = GC4R::API::GoogleChartDataset.new :data => self.normed_daily_pageviews(range), 
       :color => '999999', :fill => ['B', fillcolor ,'0','0','0']
@@ -42,6 +56,17 @@ class Page < ActiveRecord::Base
     end
     @data.sort
   end  
+  
+  def date_pageview_array
+    rawdates = JSON.parse(self.daily_timeline.dates)
+    pageviews = JSON.parse(self.daily_timeline.pageviews)    
+    @data = []
+    rawdates.each_with_index do |date, index|
+      @data << [DateTime.strptime( date.to_s, "%Y%m%d").strftime('%D'), pageviews[index]]
+    end
+    return @data
+  end
+  
   
   def timeline
     rawdates = JSON.parse(self.daily_timeline.dates)

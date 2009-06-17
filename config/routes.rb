@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.connect "sitemap.xml", :controller => "sitemap", :action => "sitemap"
                                                   
-  map.resources :pages, :collection => {:auto_complete_for_search_query => :get }
+  map.resources :pages, :member => {:csv => :get  }, :collection => {:auto_complete_for_search_query => :get }
 
   # map.connect '/pages/auto_complete_for_search_query', :controller => 'pages', :action => 'auto_complete_for_search_query'
   # map.connect '/pages/:url', :controller => 'pages', :action => 'find_by_url',

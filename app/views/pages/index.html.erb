@@ -4,8 +4,10 @@
     <!-- do nothing -->
  <% else %>    
     <div id="timeline_chart" class="left">
-      <h3>Hot Right Now: <%= link_to truncate(@page.title,35), @page %></h3>
+      <h3>Hot Right Now: <%= link_to truncate(@page.title,35), @page %> <%= link_to image_tag("csv_icon.png", :alt => 'Trend CSV file for ' + @page.title), :controller => "pages", :action => "csv", :id => @page  %></h3>            
       <%= render :partial => "timeline" %>
+     
+
   	</div> <!-- #timeline_chart -->	
 
     <div id="news" class="right">

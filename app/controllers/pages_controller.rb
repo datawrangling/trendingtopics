@@ -5,6 +5,7 @@ class PagesController < ApplicationController
   use_google_charts
 
   caches_page :show
+  caches_page :csv  
   
   
   # def to_param
@@ -73,6 +74,22 @@ class PagesController < ApplicationController
       format.xml  { render :xml => @page }
     end
   end
+  
+#### Custom REST actions #######  
+  
+  # GET /pages/1/csv
+  def csv
+    @page = Page.find(params[:id]) 
+    csv_array = ["Date,Pageviews"]
+    @page.date_pageview_array.each do |pair|
+      csv_array << "#{pair[0]},#{pair[1]}"
+    end
+    send_data csv_array.join("\n"), :type => 'text/csv; charset=utf-8', :filename=>"#{@page.url}.csv",
+    :disposition => 'attachment'
+    
+  end  
+  
+  
 
   # # GET /pages/new
   # # GET /pages/new.xml
