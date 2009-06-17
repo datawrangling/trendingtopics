@@ -60,7 +60,7 @@ FROM (
 FROM new_daily_timelines ndt  MAP ndt.page_id, ndt.dates, ndt.pageviews, ndt.total_pageviews USING 'python hive_trend_mapper.py' AS page_id, total_pageviews, monthly_trend, daily_trend, error) u;
 
 INSERT OVERWRITE TABLE new_pages
-SELECT pages.page_id, pages.url, pages.title, pages.page_latest, new_pages_raw.total_pageviews, new_pages_raw.monthly_trend FROM pages JOIN new_pages_raw ON (pages.page_id = new_pages_raw.page_id);
+SELECT DISTINCT pages.page_id, pages.url, pages.title, pages.page_latest, new_pages_raw.total_pageviews, new_pages_raw.monthly_trend FROM pages JOIN new_pages_raw ON (pages.page_id = new_pages_raw.page_id);
           
 INSERT OVERWRITE TABLE new_daily_trends 
-SELECT pages.page_id, new_pages_raw.daily_trend, new_pages_raw.error FROM pages JOIN new_pages_raw ON (pages.page_id = new_pages_raw.page_id);
+SELECT DISTINCT pages.page_id, new_pages_raw.daily_trend, new_pages_raw.error FROM pages JOIN new_pages_raw ON (pages.page_id = new_pages_raw.page_id);
