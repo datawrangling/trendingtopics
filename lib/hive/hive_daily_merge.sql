@@ -44,7 +44,7 @@ SELECT redirect_table.page_id, raw_daily_pagecounts_table.dates, raw_daily_pagec
 -- We do a left outer join, so that timelines with no new data don't get dropped entirely
 
 INSERT OVERWRITE TABLE new_daily_timelines
-SELECT u.page_id, u.dates, u.pageviews, u.total_pageviews 
+SELECT DISTINCT u.page_id, u.dates, u.pageviews, u.total_pageviews 
 FROM (
 select dt.page_id, regexp_replace(dt.dates, ']', concat(',', concat(dp.dates, ']')) ) AS dates, regexp_replace(dt.pageviews, ']', concat(',', concat(dp.pageviews, ']')) ) AS pageviews,  cast(dt.total_pageviews as BIGINT) + cast(dp.pageviews as BIGINT) AS total_pageviews
 FROM daily_timelines dt JOIN daily_pagecounts_table dp ON (dt.page_id = dp.page_id)
