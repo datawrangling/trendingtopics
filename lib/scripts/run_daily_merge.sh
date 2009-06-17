@@ -81,7 +81,7 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    
    
    # Remaining processing happens on the db server: loading tables, rebuilding indexes, swapping tables, flushing caches 
-   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && nohup bash /mnt/app/current/lib/scripts/daily_load.sh $MYBUCKET $MYSERVER $MAILTO > daily_load.log 2>&1' &
+   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && nohup bash /mnt/app/current/lib/scripts/daily_load.sh > daily_load.log 2>&1' &
    ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh complete $MYSERVER $MAILTO"   
 
 else

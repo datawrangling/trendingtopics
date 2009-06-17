@@ -43,7 +43,7 @@ for line in sys.stdin:
   pageviews = simplejson.loads(pageviews)  
   try:
     monthly_trend = calc_monthly_trend(dates, pageviews)
-    daily_trend, error = calc_daily_trend(dates, pageviews)
+    daily_trend, error = calc_daily_trend(dates, pageviews, total_pageviews)
   except:
     # skip bad rows
     monthly_trend = 0 

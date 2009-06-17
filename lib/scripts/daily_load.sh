@@ -2,9 +2,11 @@
 # daily_load.sh MYBUCKET MYSERVER MAILTO
 #
 # This production script is triggered remotely by the Hadoop cluster
-MYBUCKET=$1
-MYSERVER=$2
-MAILTO=$3
+# TODO: pull these variables from /mnt/app/current/config/config.yml
+# 
+MYBUCKET=trendingtopics
+MYSERVER=trendingtopics.org
+MAILTO=pete@datawrangling
 
 echo MYBUCKET is $MYBUCKET
 echo MYSERVER is $MYSERVER
@@ -58,6 +60,16 @@ time s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$MYBUCKET/archive/$MAX
 
 # We can swap the new tables to go live automatically, but comment out for now
 # time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/rename_new_to_live.sql
+
+# TODO: flush memcached
+# $ telnet localhost 11211
+# Trying 127.0.0.1...
+# Connected to localhost.localdomain.
+# Escape character is '^]'.
+# flush_all
+# OK
+# quit
+
 
 
 
