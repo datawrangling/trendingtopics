@@ -6,7 +6,7 @@
 # 
 MYBUCKET=trendingtopics
 MYSERVER=trendingtopics.org
-MAILTO=pete@datawrangling
+MAILTO=pete@datawrangling.com
 
 echo MYBUCKET is $MYBUCKET
 echo MYSERVER is $MYSERVER

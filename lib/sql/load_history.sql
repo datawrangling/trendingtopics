@@ -37,6 +37,9 @@ END $$
 
 DELIMITER ;
 
+CALL dropindex('new_pages', 'new_pages_autocomp_index');
+CALL dropindex('new_pages', 'new_pages_trend_index');
+CALL dropindex('new_daily_timelines', 'new_timeline_pageid_index');
 CALL dropindex('new_pages', 'pages_autocomp_index');
 CALL dropindex('new_pages', 'pages_trend_index');
 CALL dropindex('new_daily_timelines', 'timeline_pageid_index');
