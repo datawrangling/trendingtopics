@@ -7,7 +7,7 @@ MYBUCKET=trendingtopics
 DATEHOUR=`date --date "now +4 hours" +"%Y%m%d-%H"`
 
 # fetch the latest wikistats files every hour
-sleep 15m
+sleep 25m
 cd tmp
 wget -r --quiet --no-directories --no-parent -L -A "pagecounts-$DATEHOUR*" http://dammit.lt/wikistats/
 # upload to s3 bucket
