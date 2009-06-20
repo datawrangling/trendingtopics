@@ -33,8 +33,19 @@ HOURLYCOUNT=`s3cmd --config=/root/.s3cfg ls s3://$MYBUCKET/wikistats/pagecounts-
 # 24
 
 if [ $HOURLYCOUNT -eq 24  ]; then
+  echo there are 24 files for $NEXTDATE, running daily merge
+else
+  # If there are more/less than 24 files (wc -l), then we abort and send an email to the admin
+   echo the number of files for $NEXTDATE does not equal 24, attempting to fetch
+   cd /mnt
+   wget -r --quiet --no-directories --no-parent -L -A "pagecounts-$NEXTDATE*" http://dammit.lt/wikistats/
+   s3cmd --config=/root/.s3cfg put --force /mnt/pagecounts-$NEXTDATE* s3://$MYBUCKET/wikistats/
+fi  
+
+
+if [ $HOURLYCOUNT -eq 24  ]; then
   # If there are 24 files, then we go ahead with the process:
-   echo there are 24 files for $NEXTDATE, running daily merge
+
    ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh starting $MYSERVER $MAILTO"
    # start the Hadoop streaming Python job, we use 10 c1.medium nodes for daily processing
    # set the default number of reducers using the following formula:
