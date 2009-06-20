@@ -30,7 +30,7 @@ class PagesController < ApplicationController
     if params[:search]
       @pages = Page.title_like(params["search"]["query"]).paginate(:page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])  
     else   
-      @pages = Page.paginate(:page => params[:page], :conditions => ["id NOT IN (?)", APP_CONFIG['blacklist']], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
+      @pages = Page.paginate(:page => params[:page], :conditions => ["pages.id NOT IN (?)", APP_CONFIG['blacklist']], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
     end 
 
     # TODO: News @page needs to tie to this if selection random article...

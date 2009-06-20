@@ -26,6 +26,11 @@ else
   echo staging tables exist, loading data
 fi  
 
+# Fetch "People"
+s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/Living_people.txt /mnt/Living_people.txt
+# Fetch "Companies"
+s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/Companies_listed_on_the_New_York_Stock_Exchange.txt /mnt/Companies_listed_on_the_New_York_Stock_Exchange.txt
+
 # mysql load of "new tables"
 echo loading history tables
 time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/load_history.sql

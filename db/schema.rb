@@ -9,7 +9,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090611190137) do
+ActiveRecord::Schema.define(:version => 20090619212730) do
+
+  create_table "companies", :force => true do |t|
+    t.integer  "page_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "daily_timelines", :force => true do |t|
     t.integer  "page_id"
@@ -66,6 +72,18 @@ ActiveRecord::Schema.define(:version => 20090611190137) do
   end
 
   add_index "pages", ["title"], :name => "pages_title_index"
+
+  create_table "people", :force => true do |t|
+    t.integer  "page_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "people", ["page_id"], :name => "people_page_index"
+
+  create_table "sample_people", :id => false, :force => true do |t|
+    t.integer "page_id"
+  end
 
   create_table "weekly_trends", :force => true do |t|
     t.integer  "page_id"
