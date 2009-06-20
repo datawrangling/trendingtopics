@@ -73,7 +73,7 @@ except KeyError:
   # in testing...
   filename = 'pagecounts-20090419-020000.txt'
       
-def mapper1(args):
+def mapper(args):
   '''
   Clean article names, emit "en" subset in following format:
   LongValueSum:article}date\tcount
@@ -96,7 +96,7 @@ def mapper1(args):
             "").replace('}','').replace(' ','_'), date)   
             sys.stdout.write('LongValueSum:%s\t%s\n' % (key, count) )
 
-def reducer1(args):
+def reducer(args):
   '''
   # hadoop fs -cat finaloutput/part-00010 | head -30000 | tail
   Argument_from_degree	20090613	5
@@ -127,10 +127,10 @@ if __name__ == "__main__":
     print "Running sample data locally..."
     # Step 1
     os.system('cat smallpagecounts-20090419-020000.txt | '+ \
-    ' ./daily_merge.py mapper1 | LC_ALL=C sort |' + \
-    ' ./daily_merge.py reducer1 > mr_output.txt')
+    ' ./daily_merge.py mapper | LC_ALL=C sort |' + \
+    ' ./daily_merge.py reducer > mr_output.txt')
     os.system('head mr_output.txt')    
-  elif sys.argv[1] == "mapper1":
-    mapper1(sys.argv[2:])
-  elif sys.argv[1] == "reducer1":
-    reducer1(sys.argv[2:])
+  elif sys.argv[1] == "mapper":
+    mapper(sys.argv[2:])
+  elif sys.argv[1] == "reducer":
+    reducer(sys.argv[2:])

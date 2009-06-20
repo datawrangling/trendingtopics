@@ -10,19 +10,13 @@
 
 -- load entity metadata tables...
 TRUNCATE TABLE people;
-
-Companies_listed_on_the_New_York_Stock_Exchange
+TRUNCATE TABLE companies;
 
 LOAD DATA LOCAL INFILE '/mnt/Living_people.txt'
 INTO TABLE people
 FIELDS TERMINATED BY '\t'
 LINES TERMINATED BY '\n'
 (page_id);
-
-CALL dropindex('people', 'people_page_index');
-create index people_page_index on people (page_id);
-  
-TRUNCATE TABLE companies;
   
 LOAD DATA LOCAL INFILE '/mnt/Companies_listed_on_the_New_York_Stock_Exchange.txt'
 INTO TABLE companies
@@ -30,8 +24,10 @@ FIELDS TERMINATED BY '\t'
 LINES TERMINATED BY '\n'
 (page_id);
 
+CALL dropindex('people', 'people_page_index');
 CALL dropindex('companies', 'companies_page_index');
-create index companies_page_index on companies (page_id);  
+create index companies_page_index on companies (page_id); 
+create index people_page_index on people (page_id); 
   
 -- load data tables
 TRUNCATE TABLE new_pages;

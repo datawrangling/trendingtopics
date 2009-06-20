@@ -55,8 +55,8 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
      -input s3n://$MYBUCKET/wikistats/pagecounts-$NEXTDATE* \
      -output finaloutput \
-     -mapper "daily_merge.py mapper1" \
-     -reducer "daily_merge.py reducer1" \
+     -mapper "daily_merge.py mapper" \
+     -reducer "daily_merge.py reducer" \
      -file '/mnt/trendingtopics/lib/python_streaming/daily_merge.py' \
      -jobconf mapred.reduce.tasks=35 \
      -jobconf mapred.job.name=daily_merge   
