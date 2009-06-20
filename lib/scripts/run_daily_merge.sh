@@ -42,6 +42,7 @@ else
    s3cmd --config=/root/.s3cfg put --force /mnt/pagecounts-$NEXTDATE* s3://$MYBUCKET/wikistats/
 fi  
 
+HOURLYCOUNT=`s3cmd --config=/root/.s3cfg ls s3://$MYBUCKET/wikistats/pagecounts-$NEXTDATE* | grep pagecounts | wc -l`
 
 if [ $HOURLYCOUNT -eq 24  ]; then
   # If there are 24 files, then we go ahead with the process:
