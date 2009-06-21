@@ -21,7 +21,8 @@ ActionController::Routing::Routes.draw do |map|
   map.with_options :controller => 'info' do |info|
     info.about 'about', :action => 'about'
     info.contact 'contact', :action => 'contact'
-    info.frames 'frames', :action => 'frames'  
+    info.frames 'frames', :action => 'frames' 
+    info.finance 'finance', :action => 'finance'   
     info.auto_complete_for_search_query 'pages/auto_complete_for_search_query', :action => 'auto_complete_for_search_query'     
   end
   

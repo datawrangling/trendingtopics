@@ -1,0 +1,35 @@
+<div id="first-section" class="section">
+<div class="clear">
+</div> <!-- .clear -->
+</div>
+<div id="second-section" class="section">
+<% content_for :title, "Trending Companies Listed on the New York Stock Exchange" %>
+    <h3>Trending Stocks on Wikipedia</h3>
+    <p>
+    Trending Topics is a trend search engine that finds emerging news and topics on the web.
+    </p>
+    <table id="movers">
+      <tr>
+        <th>Rank</th>
+        <th>Views</th>
+        <th>Trend</th>
+        <th>Company</th>
+      </tr>             
+      <% @pages.each_with_index do |page, index| %>
+        <tr>
+          <td class="center"><%= index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1) %></td>
+          <td class="pageviews"><%= number_with_delimiter(page.total_pageviews, ',') %></td>
+          <td><%= link_to image_tag(page.sparkline('999999', 30).to_url, :alt => 'Recent Trend for ' + page.title ) , page %></td>
+          <td>
+            <%= link_to truncate(page.title,35), page, :class => "articlelink"  %>
+          <!--<%= link_to 'Wikilink', 'http://en.wikipedia.org/wiki/' + page.url, :class => "wikilink" %> --></td>
+          <!--td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td-->
+        </tr>
+      <% end %>
+    </table>
+    <center>
+        <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
+    </center>
+    
+</div>
+

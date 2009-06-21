@@ -24,7 +24,7 @@ def fetch_url(url):
 def fetchpages():
   # TODO: read queries and site from a file...
   autocomplete_template = 'pages/auto_complete_for_search_query?search%5Bquery%5D'
-  prefetch = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+  prefetch = "abcdefghijklmnopqrstuvwxyz"
 
   urls = [SITE + autocomplete_template + x for x in prefetch]  
 
