@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090621034525) do
+ActiveRecord::Schema.define(:version => 20090621055343) do
 
   create_table "companies", :force => true do |t|
     t.integer  "page_id"
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(:version => 20090621034525) do
     t.integer "page_latest"
     t.integer "total_pageviews"
     t.float   "monthly_trend"
+    t.boolean "featured",        :default => false
   end
 
   add_index "pages", ["title"], :name => "pages_title_index"

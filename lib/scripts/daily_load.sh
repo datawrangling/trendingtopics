@@ -62,6 +62,8 @@ cd /mnt
 python /mnt/app/current/lib/scripts/generate_featured_pages.py -d $MAXDATE > /mnt/featured_pages.txt
 time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/load_featured_pages.sql
 
+time mysql -u root trendingtopics_production -e "update pages p set p.featured = (select 1 from new_featured_pages fp where fp.page_id=p.id);"
+
 echo archiving the data to S3
 # back up the trendsdb data, this copy will be pulled by the next daily job
 time s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$MYBUCKET/archive/trendsdb.tar.gz
