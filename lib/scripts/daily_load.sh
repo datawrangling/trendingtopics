@@ -62,8 +62,12 @@ cd /mnt
 python /mnt/app/current/lib/scripts/generate_featured_pages.py -d $MAXDATE > /mnt/featured_pages.txt
 time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/load_featured_pages.sql
 
+
 time mysql -u root trendingtopics_production -e "UPDATE new_pages,new_featured_pages SET new_pages.featured=1
 WHERE new_pages.id=new_featured_pages.page_id;"
+
+time mysql -u root trendingtopics_production -e "CALL dropindex('new_pages', 'pages_feature_trend_index');"
+time mysql -u root trendingtopics_production -e "create index pages_feature_trend_index on new_pages (featured, monthly_trend);"
 
 echo archiving the data to S3
 # back up the trendsdb data, this copy will be pulled by the next daily job
