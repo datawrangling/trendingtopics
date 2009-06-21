@@ -66,6 +66,7 @@ CALL dropindex('new_pages', 'pages_autocomp_index');
 CALL dropindex('new_pages', 'pages_trend_index');
 CALL dropindex('new_daily_timelines', 'timeline_pageid_index');
 
+
 set foreign_key_checks=0; 
 set sql_log_bin=0; 
 set unique_checks=0;
@@ -102,6 +103,7 @@ set unique_checks=1;
 create index pages_autocomp_index on new_pages (title(64), total_pageviews);
 -- Query OK, 2783939 rows affected (6 min 20.95 sec)
 -- Records: 2783939  Duplicates: 0  Warnings: 0
+
 
 -- for main pagination
 create index pages_trend_index on new_pages (monthly_trend);

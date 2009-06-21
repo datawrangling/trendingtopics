@@ -15,8 +15,10 @@ echo MAILTO is $MAILTO
 cd /mnt && tar -xzvf trendsdb.tar.gz
 
 RESULTSET=`mysql -u root trendingtopics_production -e "select count(*) from information_schema.TABLES where Table_Name='new_pages' and TABLE_SCHEMA='trendingtopics_production';"`
-
 NEWCOUNT=`echo $RESULTSET | awk '{print $2}'`
+
+RESULTSET=`mysql -u root trendingtopics_production -e "select LEFT(RIGHT(dates,9),8) from daily_timelines where page_id=29812;"`
+LASTDATE=`echo $RESULTSET | awk '{print $2}'`
 
 # rename backup if staging tables don't exist:
 if [ $NEWCOUNT -eq 0  ]; then
@@ -54,6 +56,11 @@ RESULTSET=`mysql -u root trendingtopics_production -e "select LEFT(RIGHT(dates,9
 MAXDATE=`echo $RESULTSET | awk '{print $2}'`
 # echo $LASTDATE
 # 20090612
+
+echo loading featured pages
+cd /mnt
+python /mnt/app/current/lib/scripts/generate_featured_pages.py -d $MAXDATE > /mnt/featured_pages.txt
+time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/load_featured_pages.sql
 
 echo archiving the data to S3
 # back up the trendsdb data, this copy will be pulled by the next daily job

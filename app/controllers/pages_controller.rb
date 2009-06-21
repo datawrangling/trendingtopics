@@ -7,16 +7,6 @@ class PagesController < ApplicationController
   caches_page :show
   caches_page :csv  
   
-  
-  # def to_param
-  #   "#{self.id}-#{self.title.parameterize}"
-  # end  
-  
-  # def to_param
-  #   require 'unicode'
-  #   "#{id}"+Unicode::normalize_KD("-"+title+"-").downcase.gsub(/[^a-z0-9\s_-]+/,'').gsub(/[\s_-]+/,'-')[0..-2]
-  # end
-
 
   def auto_complete_for_search_query
     # look for autosuggest results in memcached
@@ -30,27 +20,12 @@ class PagesController < ApplicationController
     if params[:search]
       @pages = Page.title_like(params["search"]["query"]).paginate(:page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])  
     else   
-      @pages = Page.paginate(:page => params[:page], :conditions => ["pages.id NOT IN (?)", APP_CONFIG['blacklist']], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
+      @pages = Page.paginate(:page => params[:page], :conditions => ["pages.id NOT IN (?) and page_id NOT IN (select page_id from featured_pages)", APP_CONFIG['blacklist']], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
     end 
-
-    # TODO: News @page needs to tie to this if selection random article...
-    # # random mover
-    # @page = Page.find(:all,:limit => 20, :order => 'monthly_trend DESC', :conditions => ["id NOT IN (?)", APP_CONFIG['blacklist']] ).rand  
-  
-    # # Top Mover
-    # @page = Page.find(:first, :order => 'monthly_trend DESC', :conditions => ["id NOT IN (?)", APP_CONFIG['blacklist']] )  
   
     # random rising, rotates
     @page = DailyTrend.find(:all, :limit => 20 , :order => 'trend DESC', :conditions => ["page_id NOT IN (?)", APP_CONFIG['blacklist']] ).rand.page   
-    
-    # # fastest rising
-    # @page = DailyTrend.find(:first, :order => 'trend DESC', :conditions => ["page_id NOT IN (?)", APP_CONFIG['blacklist']] ).page   
-    
-    # @rising = DailyTrend.find(:all, :limit => 20, :order => 'trend DESC')
-    # @dropping = DailyTrend.find(:all, :limit => 6, :order => 'trend ASC')    
-  
-  
-  
+      
     unless params[:page]
       params[:page]='1'
     end  
@@ -60,9 +35,6 @@ class PagesController < ApplicationController
       format.xml  { render :xml => @pages }
       format.atom { render :layout => false}
     end      
-      
-
-    
   end
 
   # GET /pages/1
@@ -88,68 +60,5 @@ class PagesController < ApplicationController
     :disposition => 'attachment'
     
   end  
-  
-  
 
-  # # GET /pages/new
-  # # GET /pages/new.xml
-  # def new
-  #   @page = Page.new
-  # 
-  #   respond_to do |format|
-  #     format.html # new.html.erb
-  #     format.xml  { render :xml => @page }
-  #   end
-  # end
-  # 
-  # # GET /pages/1/edit
-  # def edit
-  #   @page = Page.find(params[:id])
-  # end
-  # 
-  # # POST /pages
-  # # POST /pages.xml
-  # def create
-  #   @page = Page.new(params[:page])
-  # 
-  #   respond_to do |format|
-  #     if @page.save
-  #       flash[:notice] = 'Page was successfully created.'
-  #       format.html { redirect_to(@page) }
-  #       format.xml  { render :xml => @page, :status => :created, :location => @page }
-  #     else
-  #       format.html { render :action => "new" }
-  #       format.xml  { render :xml => @page.errors, :status => :unprocessable_entity }
-  #     end
-  #   end
-  # end
-  # 
-  # # PUT /pages/1
-  # # PUT /pages/1.xml
-  # def update
-  #   @page = Page.find(params[:id])
-  # 
-  #   respond_to do |format|
-  #     if @page.update_attributes(params[:page])
-  #       flash[:notice] = 'Page was successfully updated.'
-  #       format.html { redirect_to(@page) }
-  #       format.xml  { head :ok }
-  #     else
-  #       format.html { render :action => "edit" }
-  #       format.xml  { render :xml => @page.errors, :status => :unprocessable_entity }
-  #     end
-  #   end
-  # end
-  # 
-  # # DELETE /pages/1
-  # # DELETE /pages/1.xml
-  # def destroy
-  #   @page = Page.find(params[:id])
-  #   @page.destroy
-  # 
-  #   respond_to do |format|
-  #     format.html { redirect_to(pages_url) }
-  #     format.xml  { head :ok }
-  #   end
-  # end
 end

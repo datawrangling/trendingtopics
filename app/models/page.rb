@@ -4,7 +4,7 @@ class Page < ActiveRecord::Base
   has_one :person
   has_one :company
   has_one :weekly_trend    
-  named_scope :title_like, lambda { |query| { :conditions => ['title like ? and id NOT IN (?)', "#{query}%", APP_CONFIG['blacklist']], :order => '`monthly_trend` DESC', :limit => 14 } }
+  named_scope :title_like, lambda { |query| { :conditions => ['title like ? and id NOT IN (?) and page_id NOT IN (select page_id from featured_pages)', "#{query}%", APP_CONFIG['blacklist']], :order => '`monthly_trend` DESC', :limit => 14 } }
   named_scope :full_title_like, lambda { |query| { :conditions => ['title like ? and id NOT IN (?)', "%#{query}%", APP_CONFIG['blacklist']], :order => '`monthly_trend` DESC', :limit => 14 } }  
     
   
