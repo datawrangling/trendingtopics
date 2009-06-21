@@ -12,6 +12,7 @@ Copyright (c) 2009 Data Wrangling LLC. All rights reserved.
 import sys
 import os
 import urllib2
+import time
 
 SITE = 'http://www.trendingtopics.org/'
 
@@ -40,6 +41,7 @@ def fetchpages():
   for url in urls:
     print "fetching", url
     fetch_url(url)
+    time.sleep(1)
 
 
 def main():

@@ -101,7 +101,7 @@ set unique_checks=1;
 
 
 -- for autocomplete 'like' query
-create index pages_autocomp_index on new_pages (title(64), total_pageviews);
+create index pages_autocomp_index on new_pages (title(64), monthly_trend);
 -- Query OK, 2783939 rows affected (6 min 20.95 sec)
 -- Records: 2783939  Duplicates: 0  Warnings: 0
 
