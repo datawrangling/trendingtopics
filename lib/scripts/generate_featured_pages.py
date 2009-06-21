@@ -70,17 +70,23 @@ def featured_pages(date):
   base = 'http://en.wikipedia.org/wiki/Wikipedia:Today%27s_featured_article/' 
   # get previous 3 days of featured articles...
   url = base + date.strftime("%B_%d,_%Y")
-  soup = soupify_url(url)
-  div = soup.findAll(id="bodyContent")
-  titles = get_titles(div[0])
+  try:
+    soup = soupify_url(url)
+    div = soup.findAll(id="bodyContent")
+    titles = get_titles(div[0])
+  except:
+    titles = []  
   return titles
   
 def featured_pictures(date):
   base = 'http://en.wikipedia.org/wiki/Template:POTD/'
   url = base + date.strftime("%Y-%m-%d")
-  soup = soupify_url(url)
-  table = soup.findAll(cellspacing="5")
-  titles = get_titles(table[0])  
+  try:
+    soup = soupify_url(url)
+    table = soup.findAll(cellspacing="5")
+    titles = get_titles(table[0])  
+  except:
+    titles = []    
   return titles
   
 def date_pages(date):
@@ -89,9 +95,12 @@ def date_pages(date):
 def anniversaries(date):
   base = 'http://en.wikipedia.org/wiki/Wikipedia:Selected_anniversaries/'
   url = base + date.strftime("%B_%d")
-  soup = soupify_url(url)
-  div = soup.findAll(id="bodyContent")
-  titles = get_titles(div[0])
+  try:
+    soup = soupify_url(url)
+    div = soup.findAll(id="bodyContent")
+    titles = get_titles(div[0])
+  except:
+    titles = []    
   return titles  
   
 def titles_for_date(date):
