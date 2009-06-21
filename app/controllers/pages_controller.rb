@@ -20,7 +20,7 @@ class PagesController < ApplicationController
     if params[:search]
       @pages = Page.title_like(params["search"]["query"]).paginate(:page => params[:page], :order => 'total_pageviews DESC', :per_page => APP_CONFIG['articles_per_page'])  
     else   
-      @pages = Page.paginate(:page => params[:page], :conditions => ["pages.id NOT IN (?) and NOT EXISTS (select page_id from featured_pages fp where fp.page_id = pages.id)", APP_CONFIG['blacklist']], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
+      @pages = Page.paginate(:page => params[:page], :conditions => ["pages.id NOT IN (?) and featured=0", APP_CONFIG['blacklist']], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
     end 
   
     # random rising, rotates
