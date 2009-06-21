@@ -63,6 +63,7 @@ CALL dropindex('new_pages', 'new_pages_autocomp_index');
 CALL dropindex('new_pages', 'new_pages_trend_index');
 CALL dropindex('new_daily_timelines', 'new_timeline_pageid_index');
 CALL dropindex('new_pages', 'pages_autocomp_index');
+CALL dropindex('new_pages', 'pages_id_index');
 -- CALL dropindex('new_pages', 'pages_autocomp_trend_index');
 CALL dropindex('new_pages', 'pages_trend_index');
 CALL dropindex('new_daily_timelines', 'timeline_pageid_index');
@@ -104,6 +105,13 @@ set unique_checks=1;
 create index pages_autocomp_index on new_pages (title(64), monthly_trend);
 -- Query OK, 2783939 rows affected (6 min 20.95 sec)
 -- Records: 2783939  Duplicates: 0  Warnings: 0
+
+-- for finance and people queries:
+
+create index pages_id_index on new_pages (id);
+--Query OK, 2804203 rows affected (9 min 57.82 sec)
+  
+
 
 -- create index pages_autocomp_trend_index on new_pages (title(64), monthly_trend);
 -- Query OK, 2783939 rows affected (6 min 20.95 sec)

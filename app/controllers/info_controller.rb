@@ -9,25 +9,39 @@ class InfoController < ApplicationController
   def frames
   end
   
-  def finance
-    @pages = Page.paginate(:page => params[:page], :joins => [:daily_trend, :company], :order => 'daily_trends.trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
-    
-    @page = Page.find(:first, :joins => [:daily_trend, :company], :order => 'daily_trends.trend DESC' )
-    if @page.nil?
-      @page = Page.find(:first)
-    end
-          
-    
+  
+  def people
     unless params[:page]
       params[:page]='1'
-    end  
-    
-    
+    end    
+    unless read_fragment({:page => params[:page]}) 
+      @pages = Page.paginate(:page => params[:page], :joins => [ :person], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
+      @page = Page.find(:first, :joins => [ :person], :order => 'monthly_trend DESC' )
+      if @page.nil?
+        @page = Page.find(:first)
+      end
+    end
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @pages }
     end    
-      
+  end
+  
+  def finance
+    unless params[:page]
+      params[:page]='1'
+    end    
+    unless read_fragment({:page => params[:page]}) 
+      @pages = Page.paginate(:page => params[:page], :joins => [ :company], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
+      @page = Page.find(:first, :joins => [ :company], :order => 'monthly_trend DESC' )
+      if @page.nil?
+        @page = Page.find(:first)
+      end
+    end
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @pages }
+    end    
   end  
   
   def alphabet
