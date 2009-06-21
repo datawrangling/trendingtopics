@@ -77,17 +77,18 @@ time s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$MYBUCKET/archive/tren
 # Archive the data by date
 time s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$MYBUCKET/archive/$MAXDATE/trendsdb.tar.gz
 
-# We can swap the new tables to go live automatically, but comment out for now
-# time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/rename_new_to_live.sql
+# We swap the new tables to go live automatically
+time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/rename_new_to_live.sql
 
-# TODO: flush memcached
-# $ telnet localhost 11211
-# Trying 127.0.0.1...
-# Connected to localhost.localdomain.
-# Escape character is '^]'.
-# flush_all
-# OK
-# quit
+# flush memcached
+expect << EOF
+set timeout 20
+spawn telnet localhost 11211
+expect "Escape character is '^]'."
+send "flush_all"
+send "quit"
+exit
+EOF
 
 
 
