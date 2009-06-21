@@ -1,13 +1,27 @@
 <div id="first-section" class="section">
 <div class="clear">
 </div> <!-- .clear -->
+  <% if params[:search] %>
+    <!-- do nothing -->
+ <% else %>    
+    <div id="timeline_chart" class="left">
+      <h3>Hottest Stock Right Now: <%= link_to truncate(@page.title,35), @page %> </h3>            
+      <%= render :partial => "pages/timeline" %>
+     
+
+  	</div> <!-- #timeline_chart -->	
+
+    <div id="news" class="right">
+        <%= render :partial => "pages/news_results"  %> 
+    </div>	<!-- #news -->		
+<% end %>
+<div class="clear">
+</div> <!-- .clear -->
+
 </div>
 <div id="second-section" class="section">
 <% content_for :title, "Trending Companies Listed on the New York Stock Exchange" %>
-    <h3>Trending Stocks on Wikipedia</h3>
-    <p>
-    Trending Topics is a trend search engine that finds emerging news and topics on the web.
-    </p>
+    <h3>Stocks Trending on Wikipedia over the last 30 days</h3>
     <table id="movers">
       <tr>
         <th>Rank</th>
