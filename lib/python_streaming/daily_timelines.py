@@ -8,7 +8,6 @@ aggregate hourly log data to daily level, and estimate
 monthly trends  
 
 TODO: refactor out code in common with daily_timelines
-TODO: add a real trend algorithm
 TODO: emit hourly time series for web app to display
 
 Created by Peter Skomoroch on 2009-06-10.
