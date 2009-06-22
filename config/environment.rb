@@ -20,6 +20,7 @@ Rails::Initializer.run do |config|
   config.gem "ya2yaml"
   config.gem 'rubaidh-google_analytics', :lib => 'rubaidh/google_analytics', :source => 'http://gems.github.com'
   config.gem "json"
+  config.gem "jpignata-bossman", :lib => 'bossman'
   config.gem 'mislav-will_paginate', :version => '~> 2.3.8', :lib => 'will_paginate', 
       :source => 'http://gems.github.com'
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"

@@ -6,7 +6,7 @@
       <!-- do nothing -->
    <% else %>    
       <div id="timeline_chart" class="left">
-        <h3>Hottest Person Right Now: <%= link_to truncate(@page.title,35), @page %> </h3>            
+        <h3>Trending Right Now: <%= link_to truncate(@page.title,35), @page %> </h3>            
         <%= render :partial => "pages/timeline" %>
      
 
@@ -20,31 +20,31 @@
   </div> <!-- .clear -->
 
   </div>
-  <div id="second-section" class="section">
-  <% content_for :title, "People Trending Right Now" %>
-      <h3>People Trending on Wikipedia</h3>
-      <table id="movers">
-        <tr>
-          <th>Rank</th>
-          <th>Views</th>
-          <th>Trend</th>
-          <th>Person</th>
-        </tr>             
-        <% @pages.each_with_index do |page, index| %>
-          <tr>
-            <td class="center"><%= index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1) %></td>
-            <td class="pageviews"><%= number_with_delimiter(page.total_pageviews, ',') %></td>
-            <td><%= link_to image_tag(page.sparkline('999999', 30).to_url, :alt => 'Recent Trend for ' + page.title ) , page %></td>
-            <td>
-              <%= link_to truncate(page.title,35), page, :class => "articlelink"  %>
-            <!--<%= link_to 'Wikilink', 'http://en.wikipedia.org/wiki/' + page.url, :class => "wikilink" %> --></td>
-            <!--td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td-->
-          </tr>
-        <% end %>
-      </table>
-      <center>
-          <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
-      </center>
-    
+  <div id="second-section" class="peoplesection">
+    <div id="main-column" class="left">
+    <% content_for :title, "People Trending Right Now" %>
+        <h3>People Trending on Wikipedia</h3>
+            <table >            
+              <% @pages.each_with_index do |page, index| %>
+              
+                <tr class="peoplerow">
+       
+                  <td class="people"><p><%= link_to (index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1)).to_s + ". " + truncate(page.title,35), page, :class => "articlelink"  %></p><%= link_to image_tag(page.sparkline('999999', 30).to_url, :alt => 'Recent Trend for ' + page.title ) , page %><BR>
+                  Pageviews: <%= number_with_delimiter(page.total_pageviews, ',') %></td> 
+                  <% unless APP_CONFIG['yahoo_boss_id'] == "REPLACEME" %>
+                    <td ><%= link_to image_tag(page.picture, :alt => page.title, :size =>page.picture_size(120)), page %></td>                    
+                  <% end %>
+                
+                
+                          
+                </tr>
+              <% end %>
+            </table>
+
+      
+        <center>
+            <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
+        </center>
+    </div>
   </div>
 <% end %>

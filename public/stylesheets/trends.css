@@ -82,6 +82,12 @@ body {
     padding: 0 0px;
 }
 
+.peoplesection { /* For a horizontal section of content */
+    width: 640px; /* content - 20 (borders) */
+    padding: 0 0px;
+}
+
+
 #timeline_chart {}
 #download {
       text-align: right;
@@ -149,6 +155,17 @@ th {
 td {
     color: #666;
     padding: 5px 5px;
+}
+
+td.people {
+  padding-right: 0px;
+  text-align: center;  
+  
+}
+
+tr.peoplerow { 
+    BORDER-BOTTOM: 1px solid #000000;  
+  
 }
 
 td.pageviews {

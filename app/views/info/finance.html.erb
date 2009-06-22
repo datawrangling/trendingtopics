@@ -7,7 +7,7 @@
       <!-- do nothing -->
    <% else %>    
       <div id="timeline_chart" class="left">
-        <h3>Hottest Stock Right Now: <%= link_to truncate(@page.title,35), @page %> </h3>            
+        <h3>Trending Stock: <%= link_to truncate(@page.title,35), @page %> </h3>            
         <%= render :partial => "pages/timeline" %>
      
 
