@@ -22,11 +22,14 @@ def fetch_url(url):
   html = response.read()
 
 def fetchpages():
+  
+  urls = [SITE, SITE+'finance', SITE+'people']
+  
   # TODO: read queries and site from a file...
   autocomplete_template = 'pages/auto_complete_for_search_query?search%5Bquery%5D'
   prefetch = "abcdefghijklmnopqrstuvwxyz"
-
-  urls = [SITE + autocomplete_template + x for x in prefetch]  
+  autocomplete_urls = [SITE + autocomplete_template + x for x in prefetch]  
+  urls.extend(autocomplete_urls)  
 
   digraph = "th he an in er on re ed nd ha at en es of nt ea ti to io le is ou ar as de rt ve"
   digraph_urls = [SITE + autocomplete_template + x for x in digraph.split()]
@@ -35,8 +38,6 @@ def fetchpages():
   search_template = 'pages?search[query]='
   search_urls = [SITE + search_template + x for x in prefetch] 
   urls.extend(search_urls)
-  
-  urls.append(SITE)
 
   for url in urls:
     print "fetching", url
