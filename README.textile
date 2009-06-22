@@ -1,8 +1,8 @@
 h1. Tracking Trends with Hadoop & Hive on EC2
 
-This repository contains the full source code for "Trendingtopics.org":http://www.trendingtopics.org, built by "Data Wrangling":http://www,datawrangling.com to demonstrate how Hadoop & EC2 can power a data driven website. The trend statistics and time series data that run the site are updated periodically by launching a temporary EC2 cluster running the "Cloudera Hadoop Distribution":http://www.cloudera.com/hadoop-ec2. Our initial seed data consists of the raw wikipedia database content dump along with hourly "traffic logs":http://stats.grok.se/ for all articles collected from the wikipedia squid proxy (curated by Domas Mituzas). We made the first 7 months of this hourly data for all articles available as an Amazon Public Dataset.
+This repository contains the full source code for "Trendingtopics.org":http://www.trendingtopics.org, built by "Data Wrangling":http://www,datawrangling.com to demonstrate how Hadoop & EC2 can power a data driven website. The trend statistics and time series data that run the site are updated periodically by launching a temporary EC2 cluster running the "Cloudera Hadoop Distribution":http://www.cloudera.com/hadoop-ec2. Our initial seed data consists of the raw Wikipedia database content dump along with hourly "traffic logs":http://stats.grok.se/ for all articles collected from the Wikipedia squid proxy (curated by Domas Mituzas). We made the first 7 months of this hourly data for all articles available as an Amazon Public Dataset.
 
-The current trend calculations are run with Hadoop Streaming and Hive.  The output produced by these Hadoop jobs is loaded into MySQL and indexed to power the live site. The demo data included with the Rails app on Github was generated from a sample of 100 trending articles on June 6th 2009. A much larger snapshot is available on Amazon Public Datasets (snap-753dfc1c). The Rails app and MySQL database are deployed on Amazon EC2 using Paul Downman’s "EC2onRails":http://ec2onrails.rubyforge.org/.
+The current trend calculations are run with Hadoop Streaming and Hive.  The output produced by these Hadoop jobs is loaded into MySQL and indexed to power the live site. The demo data included with the Rails app on Github was generated from a sample of 100 trending articles on June 6th 2009. A much larger snapshot is available on Amazon Public Datasets (snap-753dfc1c). The Rails app and MySQL database are deployed on Amazon EC2 using Paul Dowman’s "EC2onRails":http://ec2onrails.rubyforge.org/.
 
 !http://trendingtopics.s3.amazonaws.com/images/trendingtopics_dashboard.png!
 
@@ -10,12 +10,12 @@ h3. Application Features
 
 * Ranked list of the most significant trends over the last 30 days along with total pageviews
 * Ranked list of "Rising" articles trending in the last 24 hours
-* Daily time series charts and "sparklines":http://en.wikipedia.org/wiki/Sparkline for over 2.5 Million wikipedia articles
+* Daily time series charts and "sparklines":http://en.wikipedia.org/wiki/Sparkline for over 2.5 Million Wikipedia articles
 * Autocomplete functionality and search results ranked by article trend score
 
 h3. How Hadoop is Used in the Application
 
-* Cleaning raw log data and joining title strings with wikipedia page ids
+* Cleaning raw log data and joining title strings with Wikipedia page ids
 * Aggregating hourly time series data for daily pageview charts and sparklines 
 * Generating Statistics that power search autocomplete and the ranking of search results
 * Running periodic trend estimation jobs / regressions
@@ -31,7 +31,7 @@ h3. Prerequisites
 
 h2. Raw Data: Hourly Wikipedia Article Traffic Logs
 
-The "Wikipedia Traffic Statistics":http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2596 Amazon Public Dataset we will process covers a 7 month period from October, 01 2008 to April, 30 2009. This data is regularly logged from the wikipedia squid proxy by Domas Mituzas and was compiled by Data Wrangling for this demo.
+The "Wikipedia Traffic Statistics":http://developer.amazonwebservices.com/connect/entry.jspa?externalID=2596 Amazon Public Dataset we will process covers a 7 month period from October, 01 2008 to April, 30 2009. This data is regularly logged from the Wikipedia squid proxy by Domas Mituzas and was compiled by Data Wrangling for this demo.
 
 h3. Log file format
 
@@ -53,7 +53,7 @@ Each line has 4 fields: <code>projectcode, pagename, pageviews, bytes</code>
       en Barack_Obama,_Jr 2 285755
 </pre>
 
-Many of the raw wiki log page titles are percent-encoded. To match these with the page titles in the wikipedia database, you can transform them as follows in Python:
+Many of the raw wiki log page titles are percent-encoded. To match these with the page titles in the Wikipedia database, you can transform them as follows in Python:
 
 <pre>
       $ python
@@ -66,7 +66,7 @@ Many of the raw wiki log page titles are percent-encoded. To match these with th
 
 h3. Handling Wikipedia Redirects
 
-To further complicate the raw data processing, many page titles are actually wikipedia redirects which do not match to the primary key of the wikipedia "Pages" table.  The non-redirect articles are referred to as belonging to "namespace-0".  As part of our Hadoop pre-processing, we can perform a join against a redirect lookup table to find the true wikipedia pageid for a given article title.
+To further complicate the raw data processing, many page titles are actually Wikipedia redirects which do not match to the primary key of the Wikipedia "Pages" table.  The non-redirect articles are referred to as belonging to "namespace-0".  As part of our Hadoop pre-processing, we can perform a join against a redirect lookup table to find the true Wikipedia pageid for a given article title.
 
 <pre>
    mysql> select * from page_lookups where page_id = 534366;
@@ -94,7 +94,7 @@ Processing large log datasets like this is a typical use case for Hadoop.  By us
 
 h3. Task 1: Generate Daily Timelines from 1TB of Historical Hourly Logs
 
-Our first task is to calculate daily page views for all 2.5 million English Wikipedia articles, so we can display dynamic Google finance style timelines on the site.
+Our first task is to calculate daily page views for all 2.5 million english Wikipedia articles, so we can display dynamic Google finance style timelines on the site.
 
 !http://trendingtopics.s3.amazonaws.com/images/american_idol_daily_pageviews.png!
 
@@ -262,7 +262,7 @@ A quick look at lib/python_streaming/daily_timelines.py shows the filtering we a
 	]
 </pre>
 
-The first Python Streaming job restricts pageviews to a subset of English wikipedia pages, filters out bad records, then sums hourly pageviews keyed by Article-Date. It emits output something like this:
+The first Python Streaming job restricts pageviews to a subset of english Wikipedia pages, filters out bad records, then sums hourly pageviews keyed by Article-Date. It emits output something like this:
 
 <pre>
 	Barack_Obama}20090422  129
@@ -332,7 +332,7 @@ h4. Hive MapReduce Jobs & HiveQL
 
 Doing Joins in MapReduce can be a bit of a pain, Hive hides a lot of tedious details behind a simple SQL like syntax most developers are familiar with.  Behind the scenes this compiles down to optimized MapReduce code executed by Hive.  Import and export of data is also very natural and will be familar to MySQL users.  
 
-We are only using Hive in this trend batch job for some simple joins and selects, but it has much more powerful features for analytics including partions, bucketing, and random sampling.  
+We are only using Hive in this trend batch job for some simple joins and selects, but it has much more powerful features for analytics including partitions, bucketing, and random sampling.  
 
 Here is an example from <code>lib/hive/hive_daily_timelines.sql</code> which solves the redirect matching problem we mentioned above:
 
@@ -585,8 +585,8 @@ h2. Next Steps with Hadoop and TrendingTopics
 * Plug in better trend algorithms
 * Explore Paritions/Buckets with Hive for fast analytics queries
 * Generate smaller representative sample datasets for R&D with Hive 
-* Merge the trends with text content from the raw wikipedia dumps using Hive to get trends for words/phrases/concepts 
-* Combine data with wikipedia link graph dataset on the EBS volume, show related articles for each trend
+* Merge the trends with text content from the raw Wikipedia dumps using Hive to get trends for words/phrases/concepts 
+* Combine data with Wikipedia link graph dataset on the EBS volume, show related articles for each trend
 * Find correlated trends and topics, look for predictive value
 
 h2. Appendix: Running the Rails app
@@ -677,7 +677,7 @@ Launch an instance of the latest ec2onrails ami and note the returned instance a
 	$ ec2-describe-instances
 </pre>
 
-Create the needed configuration files from the provided examples and edit them, filling in your instance address information, keypairs, and other configuration information as indicated in the comments of each file. See the ec2onrails documentation or source code for more details on each setting.  If you want to make changes to the elasticwulf code, be sure to replace the base github repository in deploy.rb and config.yml with your own github location.
+Create the needed configuration files from the provided examples and edit them, filling in your instance address information, keypairs, and other configuration information as indicated in the comments of each file. See the ec2onrails documentation or source code for more details on each setting.  
 
 <pre>
 	$ cp config/deploy.rb.example config/deploy.rb
@@ -707,7 +707,7 @@ Deploy the app to your launched EC2 instance with Capistrano (this wil take seve
     $ cap deploy:cold
 </pre>
 
-If you have auth enabled, you can use the admin login information you set in config.yml to access the dashboard from a web browser or as web service at the url of the instance you provided in deploy.rb: http://ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com . You can also ssh into your running EC2 instance as usual with your keypairs to debug any issues.  See the ec2onrails forums for more help debugging deployment issues.
+You should now be able to access your app from a web browser or as web service at the url of the instance you provided in deploy.rb: http://ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com.  You can also ssh into your running EC2 instance as usual with your keypairs to debug any issues. See the ec2onrails forums for more help with debugging.
 
 To redeploy the app after making changes to the base trendingtopics code, just do the usual cap deploy:
 
@@ -722,7 +722,7 @@ To manually restart the apache service or mongrels:
     $ cap deploy:restart
 </pre>
 
-No data will be populated in the production deployed app until you run the included Hadoop Jobs.  To test the deployment, you can use Capistrano to run the db:develop task on the EC2 server, just wipe the dev data before loading real production data.
+No data will be populated in the production deployed app until you run the included Hadoop Jobs and import the resulting data to MySQL. To test the deployment, you can use Capistrano to run the db:develop task on the EC2 server, just wipe the dev data before loading real production data.
 
 To put the site in "maintenance mode":http://clarkware.com/cgi/blosxom/2007/01/05, we use the standard cap tasks:
 
@@ -736,7 +736,7 @@ To renable the site:
 	$ cap deploy:web:enable
 </pre>
 
-To load daily updates, we do a "periodic swap":http://dev.mysql.com/doc/refman/5.1/en/rename-table.html of the data tables in MySQL, replacing them entirely with the staging tables which are loaded from Hive dumps:
+To load daily updates, we do a "periodic swap":http://dev.mysql.com/doc/refman/5.1/en/rename-table.html of the data tables in MySQL, replacing them entirely with the staging tables which are loaded from Hive dumps.
 
 <pre>
 	RENAME TABLE pages TO backup_pages, new_pages TO pages;

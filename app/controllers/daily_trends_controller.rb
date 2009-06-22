@@ -10,7 +10,8 @@ class DailyTrendsController < ApplicationController
   
     
   def index
-    @daily_trends = DailyTrend.find(:all, :limit => 20,:conditions => ["page_id NOT IN (?)", APP_CONFIG['blacklist']], :order => 'trend DESC')
+    # @daily_trends = DailyTrend.find(:all, :limit => 20,:conditions => ["page_id NOT IN (?)", APP_CONFIG['blacklist']], :order => 'trend DESC')
+    @pages = Page.paginate(:page => params[:page], :joins => [:daily_trend ], :conditions => ["pages.id NOT IN (?) and featured=0", APP_CONFIG['blacklist']], :order => 'daily_trends.trend DESC', :per_page => APP_CONFIG['articles_per_page'])       
     
     respond_to do |format|
       format.html # index.html.erb

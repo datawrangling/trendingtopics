@@ -1,17 +1,26 @@
 
-<div id="rising-articles">
-  <h3>Rising Trends for <%= Time.now.strftime("%A, %B %d, %Y") %></h3>
+<div id="second-section" class="section">
+    
+    <div id="main-column" class="left">
 
-  <table id="rising">
-  <% @daily_trends.each_with_index do |daily_trend, index| %>
-    <tr>
-      <td><%=h index + 1 %></td>
-      <td><%= link_to daily_trend.page.title, daily_trend.page %></td>
-    </tr>
-  <% end %>
-  </table>
 
-  <br />
-</div>
+        <div id="rising-articles">
+          <h3>Rising Trends for <%= Time.now.strftime("%A, %B %d, %Y") %></h3>
 
-        
+          <table id="rising">
+          <% @pages.each_with_index do |page, index| %>
+            <tr>
+              <td><%=h index + 1 %></td>
+              <td><%= link_to image_tag(page.sparkline('999999', 30).to_url, :alt => 'Recent Trend for ' + page.title ) , page %></td>
+              <td><%= link_to page.title, page %></td>
+            </tr>
+          <% end %>
+          </table>
+          <center>
+              <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
+          </center>
+          <br />
+        </div>
+
+    </div>
+</div>        
