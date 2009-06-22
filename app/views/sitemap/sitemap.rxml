@@ -4,8 +4,21 @@ xml.urlset "xmlns" => "http://www.sitemaps.org/schemas/sitemap/0.9" do
   xml.url do
     xml.loc         "http://"+ APP_CONFIG['domain']+"/"
     xml.lastmod     w3c_date(Time.now)
-    xml.changefreq  "daily"
+    xml.changefreq  "hourly"
   end
+
+  xml.url do
+    xml.loc         "http://"+ APP_CONFIG['domain']+"/people"
+    xml.lastmod     w3c_date(Time.now)
+    xml.changefreq  "hourly"
+  end
+  
+  xml.url do
+    xml.loc         "http://"+ APP_CONFIG['domain']+"/finance"
+    xml.lastmod     w3c_date(Time.now)
+    xml.changefreq  "hourly"
+  end    
+  
   
   xml.url do
     xml.loc         "http://"+ APP_CONFIG['domain']+"/about"
@@ -18,5 +31,6 @@ xml.urlset "xmlns" => "http://www.sitemaps.org/schemas/sitemap/0.9" do
     xml.lastmod     w3c_date(Time.now)
     xml.changefreq  "weekly"
   end    
+ 
  
 end
