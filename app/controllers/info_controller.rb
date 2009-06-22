@@ -32,8 +32,8 @@ class InfoController < ApplicationController
       params[:page]='1'
     end    
     unless read_fragment({:page => params[:page]}) 
-      @pages = Page.paginate(:page => params[:page], :joins => [ :company, :daily_trend], :order => 'daily_trends.trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
-      @page = Page.find(:first, :joins => [ :company, :daily_trend], :order => 'daily_trends.trend DESC' )
+      @pages = Page.paginate(:page => params[:page], :joins => [ :company], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
+      @page = Page.find(:first, :joins => [ :company ], :order => 'monthly_trend DESC' )
       if @page.nil?
         @page = Page.find(:first)
       end
