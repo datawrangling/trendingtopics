@@ -68,7 +68,7 @@ WHERE new_pages.id=new_featured_pages.page_id;"
 time mysql -u root trendingtopics_production -e "CALL dropindex('new_pages', 'pages_feature_trend_index');"
 time mysql -u root trendingtopics_production -e "create index pages_feature_trend_index on new_pages (featured, monthly_trend);"
 time mysql -u root trendingtopics_production -e "CALL dropindex('new_pages', 'pages_feature_id_index');"
-time mysql -u root trendingtopics_production -e "create index pages_feature_id_index on new_pages (featured, id);"
+#time mysql -u root trendingtopics_production -e "create index pages_feature_id_index on new_pages (featured, id);"
 
 echo archiving the data to S3
 # back up the trendsdb data, this copy will be pulled by the next daily job

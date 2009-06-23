@@ -68,7 +68,7 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/page_lookup_nonredirects.txt /mnt/page_lookup_nonredirects.txt
    
    # fetch the old page, timelines, & trends tables:
-   s3cmd --force --config=/root/.s3cfg get s3://$MYBUCKET/archive/trendsdb.tar.gz /mnt/trendsdb.tar.gz
+   s3cmd --force --config=/root/.s3cfg get s3://$MYBUCKET/archive/$LASTDATE/trendsdb.tar.gz /mnt/trendsdb.tar.gz
    
    # Quick hack to verify size of s3 download   
    S3_DB_SIZE=`s3cmd ls s3://trendingtopics/archive/trendsdb.tar.gz | tail -1 | awk '{print $3}'`
