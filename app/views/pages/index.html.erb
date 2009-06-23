@@ -23,44 +23,37 @@
 <div id="second-section" class="section">
     
     <div id="main-column" class="left">
+    
+    
         <div id="biggest-movers" class="left">
             <% if params[:search] %>
               <h3>Search Results for <span><%= params[:search][:query] %></span></h3> 
               <% content_for :title, 'Trending Topics: Search Results for "' + params[:search][:query] +'"' %>
+              <% cache ({:page => params[:page], :query => params["search"]["query"]}) do %>
+                  <%= render :partial => "movers"  %> 
+              <% end %> <! --#cache -->   
+              <BR>
+              <center>
+                  <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
+              </center> 
+              <BR>
               
             <% else %>
               <h3>Trending Topics (Last 30 Days)</h3>
-              <% content_for :title, "Trending Topics: Search for Topics & News Trending Now" %>
-              
+              <% content_for :title, "Trending Topics: Search for Topics & News Trending Now" %> 
+              <% cache ({:page => params[:page] }) do %>
+                  <%= render :partial => "movers"  %> 
+              <% end %> <! --#cache -->   
+              <BR>
+              <center>
+                  <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
+              </center> 
+              <BR>                                       
             <% end %>  	
+                         
+          </div> <!-- #biggest movers -->
 
-            <table id="movers">
-              <tr>
-                <th>Rank</th>
-                <th>Views</th>
-                <th>Trend</th>
-                <th>Article</th>
-              </tr>             
-              <% @pages.each_with_index do |page, index| %>
-                <tr>
-                  <td class="center"><%= index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1) %></td>
-                  <td class="pageviews"><%= number_with_delimiter(page.total_pageviews, ',') %></td>
-                  <td><%= link_to image_tag(page.sparkline('999999', 30).to_url, :alt => 'Recent Trend for ' + page.title ) , page %></td>
-                  <td>
-                    <%= link_to truncate(page.title,35), page, :class => "articlelink"  %>
-                  <!--<%= link_to 'Wikilink', 'http://en.wikipedia.org/wiki/' + page.url, :class => "wikilink" %> --></td>
-                  <!--td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td-->
-                </tr>
-              <% end %>
-            </table>
-                <BR>
-                <center>
-                    <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
-                </center> 
-                <BR>           
-        </div>
-
-    </div>
+    </div> <!-- #main column left -->
     
 
     <div id="side-column" class="right">
