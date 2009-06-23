@@ -24,7 +24,7 @@ class PagesController < ApplicationController
     end 
   
     # random rising, rotates
-    @page = DailyTrend.find(:all, :limit => 20 , :order => 'trend DESC', :conditions => ["page_id NOT IN (?) and page_id NOT IN (select page_id from featured_pages)", APP_CONFIG['blacklist']] ).rand.page   
+    @page = DailyTrend.find(:all, :limit => APP_CONFIG['articles_per_page'] , :order => 'trend DESC', :conditions => ["page_id NOT IN (?) and page_id NOT IN (select page_id from featured_pages)", APP_CONFIG['blacklist']] ).rand.page   
       
     unless params[:page]
       params[:page]='1'

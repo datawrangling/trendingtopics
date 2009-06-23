@@ -34,25 +34,25 @@
               
             <% end %>  	
 
-                <table id="movers">
-                  <tr>
-                    <th>Rank</th>
-                    <th>Views</th>
-                    <th>Trend</th>
-                    <th>Article</th>
-                  </tr>             
-                  <% @pages.each_with_index do |page, index| %>
-                    <tr>
-                      <td class="center"><%= index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1) %></td>
-                      <td class="pageviews"><%= number_with_delimiter(page.total_pageviews, ',') %></td>
-                      <td><%= link_to image_tag(page.sparkline('999999', 30).to_url, :alt => 'Recent Trend for ' + page.title ) , page %></td>
-                      <td>
-                        <%= link_to truncate(page.title,35), page, :class => "articlelink"  %>
-                      <!--<%= link_to 'Wikilink', 'http://en.wikipedia.org/wiki/' + page.url, :class => "wikilink" %> --></td>
-                      <!--td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td-->
-                    </tr>
-                  <% end %>
-                </table>
+            <table id="movers">
+              <tr>
+                <th>Rank</th>
+                <th>Views</th>
+                <th>Trend</th>
+                <th>Article</th>
+              </tr>             
+              <% @pages.each_with_index do |page, index| %>
+                <tr>
+                  <td class="center"><%= index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1) %></td>
+                  <td class="pageviews"><%= number_with_delimiter(page.total_pageviews, ',') %></td>
+                  <td><%= link_to image_tag(page.sparkline('999999', 30).to_url, :alt => 'Recent Trend for ' + page.title ) , page %></td>
+                  <td>
+                    <%= link_to truncate(page.title,35), page, :class => "articlelink"  %>
+                  <!--<%= link_to 'Wikilink', 'http://en.wikipedia.org/wiki/' + page.url, :class => "wikilink" %> --></td>
+                  <!--td><%= link_to 'http://en.wikipedia.org/wiki/' + page.url, 'http://en.wikipedia.org/wiki/' + page.url %></td-->
+                </tr>
+              <% end %>
+            </table>
                 <BR>
                 <center>
                     <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
@@ -68,15 +68,14 @@
           <div id="rising-articles">
             <h3>Rising (Last 24 hours):</h3>   
      
-              <table id="rising">
-              <tr>
-                <th>Trend</th>
-                <th>Article</th>
-              </tr>                       
-                <% DailyTrend.find(:all, :limit => 20,:conditions => ["page_id NOT IN (?) and page_id NOT IN (select page_id from featured_pages)", APP_CONFIG['blacklist']], :order => 'trend DESC').each_with_index do |rising, index| %>
-                  <tr>          
-                    <td><%= link_to image_tag(rising.page.sparkline('888888', 30).to_url, :alt => 'Rising Trend data for ' + rising.page.title), rising.page %></td>
-                    <td><%= link_to truncate(rising.page.title,20), rising.page, :class => "title" %></td> 
+              <table id="rising">                  
+                <% DailyTrend.find(:all, :limit =>  20 ,:conditions => ["page_id NOT IN (?) and page_id NOT IN (select page_id from featured_pages)", APP_CONFIG['blacklist']], :order => 'trend DESC').each_with_index do |rising, index| %>
+                  <tr >
+                  <td class="risingtitle"><p><%= link_to (index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1)).to_s + ". " + truncate(rising.page.title,35), rising.page, :class => "articlelink"  %></p><%= link_to image_tag(rising.page.sparkline('999999', 30).to_url, :alt => 'Recent Trend for ' + rising.page.title ) , rising.page %><BR>
+                  Pageviews: <%= number_with_delimiter(rising.page.total_pageviews, ',') %></td> 
+                  <% unless APP_CONFIG['yahoo_boss_id'] == "REPLACEME" %>
+                    <td  ><%= link_to image_tag(rising.page.picture, :alt => rising.page.title, :size =>rising.page.picture_size(70)), rising.page %></td>                    
+                  <% end %>
                   </tr>
                 <% end %>
               </table>

@@ -177,6 +177,10 @@ td.pageviews {
     padding-right: 10px;
 }
 
+td.risingtitle {
+     font-size: 75%; 
+}
+
 .center {
     text-align: center;
 }
