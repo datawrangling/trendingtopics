@@ -44,8 +44,7 @@ time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/load_tr
 # At this point we are ready to swap the MySQL tables if the new data looks good...
 # for now we will leave this as a manual step so we can QA the results.
 
-# Send an email signalling staging tables are ready
-echo "$MYSERVER staging tables ready for QA" | mail -s "$MYSERVER staging complete" $MAILTO
+
 
 
 
@@ -92,7 +91,8 @@ send "quit"
 exit
 EOF
 
-
+# Send an email signalling staging tables are ready
+echo "$MYSERVER staging tables ready for QA" | mail -s "$MYSERVER staging complete" $MAILTO
 
 
 
