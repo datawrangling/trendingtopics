@@ -153,30 +153,62 @@ Each month has approximately 40GB of compressed data and takes around 30 minutes
 
 h4. Customize the Cloudera Hadoop Ubuntu launch scripts
 
-One nice feature of the Cloudera Hadoop Distribution for EC2 is that you have full control over the instances for installing non-standard packages or customizing nodes.  
+One of the advantages of the Cloudera Hadoop distribution is that it allows you to customize your Hadoop cluster and operating system environment on EC2 to meet the specific needs of your MapReduce jobs.  We will customize our cluster by making several additional edits to the files bin/hadoop-ec2-env.sh and bin/hadoop-ec2-init-remote-cloudera-ubuntu.sh.
 
-For example, you can add apt-get installs by editing the USER_PACKAGES section in <code>hadoop-ec2-init-remote-cloudera-ubuntu.sh</code>
-
-Here are the packages we added:
+By default, the scripts launch a Fedora instance. We can see which images are available by typing "ec2-describe-images -a | grep cloudera" at the command line. For this tutorial we will be using Ubuntu instances, so comment out the fedora version
 
 <pre>
-	# Specify user packages to install here, separated by whitespace (e.g. 'r-base' for R)
-	USER_PACKAGES='r-base r-base-core r-base-dev r-base-html r-base-latex r-cran-date python-rpy \
-	python-setuptools python-docutils python-support python-distutils-extra python-simplejson git-core s3cmd'	
-</pre>	
+# HADOOP_VERSION=fedora-20090602
+HADOOP_VERSION=ubuntu-20090602
+</pre>
 
-Since we want to use S3 as an input file system, we also make the following change so Hadoop knows about our AWS keys:
+Also change USER_DATA_FILE to point to the Ubuntu script (hadoop-ec2-init-remote-cloudera-ubuntu.sh).
 
 <pre>
-	<property>
-	 <name>fs.s3n.awsAccessKeyId</name>
-	 <value>BBBIBIBBBBBBBBNPSINC</value>
-	</property>
-	<property>
-	 <name>fs.s3n.awsSecretAccessKey</name>
-	 <value>BJKBJBJK/NNNNNNNNNNinINNIONIONION</value>
-	</property>	
-</pre>	
+# The script to run on instance boot.
+#USER_DATA_FILE=hadoop-ec2-init-remote-cloudera-fedora.sh
+USER_DATA_FILE=hadoop-ec2-init-remote-cloudera-ubuntu.sh
+</pre>
+
+We can optionally select a larger EC2 instance type to use in the cluster.  Using one of the high CPU instances (c1.medium or c1.xlarge) is recommended:
+
+<pre>
+# The EC2 instance type: m1.small, m1.large, m1.xlarge
+#INSTANCE_TYPE="m1.small"
+#INSTANCE_TYPE="m1.large"
+#INSTANCE_TYPE="m1.xlarge"
+INSTANCE_TYPE="c1.medium"
+#INSTANCE_TYPE="c1.xlarge"
+</pre>
+
+We will install several extra packages on the Ubuntu instances by editing the USER_PACKAGES setting at the top of the bin/hadoop-ec2-init-remote-cloudera-ubuntu.sh file:
+
+<pre>
+# Specify user packages to install here, separated by whitespace (e.g. 'r-base' for R)
+USER_PACKAGES='r-base r-base-core r-base-dev r-base-html r-base-latex r-cran-date python-rpy python-setuptools python-docutils python-support python-distutils-extra python-simplejson git-core s3cmd'
+</pre>
+
+We also add our AWS keys so that our Hadoop cluster will be configured to use S3 as a file system.  To configure Hadoop with our keys we need to add properties for fs.s3n.awsAccessKeyId and fs.s3n.awsSecretAccessKey to the hadoop-site.xml section of bin/hadoop-ec2-init-remote-cloudera-ubuntu.sh
+
+<pre>
+cat > /etc/hadoop/conf.dist/hadoop-site.xml <<EOF
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+<property>
+ <name>fs.s3n.awsAccessKeyId</name>
+ <value>YOUR_ACCESS_KEY_HERE</value>
+</property>
+<property>
+ <name>fs.s3n.awsSecretAccessKey</name>
+ <value>YOUR_SECRET_ACCESS_KEY_HERE</value>
+</property>
+<property>
+  <name>dfs.block.size</name>
+  <value>134217728</value>
+  <final>true</final>
+</property>
+</pre>
 
 We can also change the default maximums for map and reduce tasks based on the EC2 instance type and the nature of the Hadoop jobs we will be running.  I found the following settings to work well for c1.medium instances on EC2 for the jobs we ran.  This will likely vary based on the nature of your MapReduce code and data.  
 
