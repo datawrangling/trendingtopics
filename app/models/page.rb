@@ -110,7 +110,7 @@ class Page < ActiveRecord::Base
         
     @data ={}
     rawdates.each_with_index do |date, index|
-      @data[DateTime.strptime( date.to_s, "%Y%m%d")] = {:page_views => pageviews[index]}
+      @data[DateTime.strptime( date.to_s, "%Y%m%d")] = {:wikipedia_page_views => pageviews[index]}
     end
     return @data
   end
