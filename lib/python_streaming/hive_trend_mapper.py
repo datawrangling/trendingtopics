@@ -31,9 +31,11 @@ def calc_daily_trend(dates, pageviews, total_pageviews):
   y2 = pageviews[-1]
   # ~Yesterdays pageviews...
   y1 = pageviews[-8]
+  # ~Significance factor based on previous week's pageviews
+  weekly_pageviews = sum(pageviews[-8:-2])  
   # Simple baseline trend algorithm
   slope = y2 / (1.0*y1)
-  trend = slope  * (1.0 + log(1.0 +int(total_pageviews)))
+  trend = slope  * (1.0 + log(1.0 +int(weekly_pageviews)))
   error = 1.0/sqrt(int(total_pageviews))  
   return trend, error  
 
