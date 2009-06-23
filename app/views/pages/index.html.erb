@@ -69,7 +69,7 @@
             <h3>Rising (Last 24 hours):</h3>   
      
               <table id="rising">                  
-                <% DailyTrend.find(:all, :limit =>  20 ,:conditions => ["page_id NOT IN (?) and page_id NOT IN (select page_id from featured_pages)", APP_CONFIG['blacklist']], :order => 'trend DESC').each_with_index do |rising, index| %>
+                <% DailyTrend.find(:all, :limit =>  APP_CONFIG['sidebar_articles'] ,:conditions => ["page_id NOT IN (?) and page_id NOT IN (select page_id from featured_pages)", APP_CONFIG['blacklist']], :order => 'trend DESC').each_with_index do |rising, index| %>
                   <tr >
                   <td class="risingtitle"><p><%= link_to (index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1)).to_s + ". " + truncate(rising.page.title,35), rising.page, :class => "articlelink"  %></p><%= link_to image_tag(rising.page.sparkline('999999', 30).to_url, :alt => 'Recent Trend for ' + rising.page.title ) , rising.page %><BR>
                   Pageviews: <%= number_with_delimiter(rising.page.total_pageviews, ',') %></td> 

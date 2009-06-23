@@ -3,7 +3,8 @@ development:
   domain: 'www.REPLACEME.org'  
   admin_user: REPLACEME
   admin_password: REPLACEME
-  articles_per_page: 20  
+  articles_per_page: 50  
+  sidebar_articles: 19
   tracker_id: "UA-REPLACEME"
   yahoo_boss_id: "REPLACEME"
   verify_v1: "MK/gfdgdfgdfgfdgfdgfdgfdgfd"   
@@ -16,7 +17,8 @@ test:
   domain: 'www.REPLACEME.org'  
   admin_user: REPLACEME
   admin_password: REPLACEME
-  articles_per_page: 20 
+  articles_per_page: 50 
+  sidebar_articles: 19
   tracker_id: "UA-REPLACEME"
   yahoo_boss_id: "REPLACEME"
   verify_v1: "MK/gfdgdfgdfgfdgfdgfdgfdgfd"   
@@ -29,7 +31,8 @@ production:
   domain: 'www.REPLACEME.org'  
   admin_user: REPLACEME
   admin_password: REPLACEME
-  articles_per_page: 20
+  articles_per_page: 50
+  sidebar_articles: 19
   tracker_id: "UA-REPLACEME"
   yahoo_boss_id: "REPLACEME"
   verify_v1: "MK/gfdgdfgdfgfdgfdgfdgfdgfd"   
