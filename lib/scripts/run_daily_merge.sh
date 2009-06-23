@@ -70,6 +70,16 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    # fetch the old page, timelines, & trends tables:
    s3cmd --force --config=/root/.s3cfg get s3://$MYBUCKET/archive/trendsdb.tar.gz /mnt/trendsdb.tar.gz
    
+   # Quick hack to verify size of s3 download   
+   S3_DB_SIZE=`s3cmd ls s3://trendingtopics/archive/trendsdb.tar.gz | tail -1 | awk '{print $3}'`
+   LOCAL_DB_SIZE=`ls -l trendsdb.tar.gz | awk '{print $5}'`
+   if [ $S3_DB_SIZE != $LOCAL_DB_SIZE  ]; then {
+     echo ERROR the MD5 for downloaded trendsdb.tar.gz did not equal the MD5 on S3, aborting run
+     ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh FAILED $MYSERVER $MAILTO"      
+     exit 1
+   }
+   fi
+   
    # unpack the old pages, timelines, trends table txt files:
    cd /mnt
    tar -xzvf trendsdb.tar.gz
@@ -82,6 +92,16 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    hive -S -e 'SELECT * FROM new_pages' > /mnt/pages.txt
    hive -S -e 'SELECT * FROM new_daily_timelines' > /mnt/daily_timelines.txt
    hive -S -e 'SELECT * FROM new_daily_trends' > /mnt/daily_trends.txt   
+   
+   PAGES_SIZE=`ls -l pages.txt | awk {'print $5'}`
+   # Quick Hack to check the size of the pages.txt file
+   if [ $PAGES_SIZE -eq 0  ]; then {
+     echo ERROR the size of pages.txt was 0, aborting run
+     ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh FAILED $MYSERVER $MAILTO"      
+     exit 1
+   }
+   fi
+   
    
    # gzip the data and send to prod and S3
    tar cvf - pages.txt daily_timelines.txt daily_trends.txt | gzip > /mnt/trendsdb.tar.gz
