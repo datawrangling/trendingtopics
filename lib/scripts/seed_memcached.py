@@ -31,10 +31,6 @@ def fetchpages():
   autocomplete_urls = [SITE + autocomplete_template + x for x in prefetch]  
   urls.extend(autocomplete_urls)  
 
-  digraph = "th he an in er on re ed ha at en es of ea ti to io le is ou ar as de ve"
-  digraph_urls = [SITE + autocomplete_template + x for x in digraph.split()]
-  urls.extend(digraph_urls)
-
   search_template = 'pages?search[query]='
   search_urls = [SITE + search_template + x for x in prefetch] 
   urls.extend(search_urls)
