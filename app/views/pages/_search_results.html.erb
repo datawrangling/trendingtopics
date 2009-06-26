@@ -1,7 +1,7 @@
 <% cache ({:query => params["search"]["query"]}) do %>
   <ul>
   	<% for page in @pages %>
-  	<li><%= link_to h(page.title), :controller=>"pages", :action=>"show", :id=>page %></li>
+  	<li><%= link_to h(page.title), :controller=>"pages", :action=>"show", :url=>page.url %></li>
     	<% end %>
   </ul>
 <% end %>
