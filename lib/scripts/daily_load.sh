@@ -81,15 +81,18 @@ time s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$MYBUCKET/archive/$MAX
 # We swap the new tables to go live automatically
 time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/rename_new_to_live.sql
 
-# flush memcached
-expect << EOF
-set timeout 20
-spawn telnet localhost 11211
-expect "Escape character is '^]'."
-send "flush_all"
-send "quit"
-exit
-EOF
+## TODO flush memcached
+# expect << EOF
+# set timeout 20
+# spawn telnet localhost 11211
+# expect "Escape character is '^]'."
+# send "flush_all"
+# send "quit"
+# exit
+# EOF
+
+# wipe static page caches
+sudo rm -R /mnt/app/current/public/pages
 
 # Send an email signalling staging tables are ready
 echo "$MYSERVER staging tables ready for QA" | mail -s "$MYSERVER staging complete" $MAILTO
