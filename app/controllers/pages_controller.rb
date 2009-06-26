@@ -40,7 +40,7 @@ class PagesController < ApplicationController
   # GET /pages/1
   # GET /pages/1.xml
   def show
-    @page = Page.find(params[:id])
+    @page = Page.find_by_url(params[:url].join('/'))
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @page }
@@ -51,7 +51,7 @@ class PagesController < ApplicationController
   
   # GET /pages/1/csv
   def csv
-    @page = Page.find(params[:id]) 
+    @page = Page.find_by_url(params[:url].join('/')) 
     csv_array = ["Date,Pageviews"]
     @page.date_pageview_array.each do |pair|
       csv_array << "#{pair[0]},#{pair[1]}"

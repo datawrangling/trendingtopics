@@ -1,5 +1,5 @@
 class InfoController < ApplicationController
-  layout "pages"
+  layout "pages", :except => [:frames]
   def about
   end
   
@@ -7,6 +7,7 @@ class InfoController < ApplicationController
   end
   
   def frames
+    @page = Page.find_by_url(params[:url])
   end
   
   

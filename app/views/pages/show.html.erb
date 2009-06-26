@@ -17,13 +17,14 @@
 </div> <!-- first-section -->
 
 <div id="second-section" class="section">
-    <h3><%= link_to @page.title, 'http://en.wikipedia.org/wiki/' + @page.url, :class => "wikilink" %> on Wikipedia</h3>
-    <iframe 
-        name="cwindow"
-        class="wikiframe" 
-        height="800" 
-        src="<%='http://en.wikipedia.org/wiki/' + @page.url %>">
-    </iframe>  
+<h3><%= link_to @page.title, 'http://en.wikipedia.org/wiki/' + @page.url, :class => "wikilink" %> on Wikipedia</h3>
+<iframe 
+    name="cwindow"
+    class="wikiframe" 
+    height="800" 
+    src="<%='http://en.wikipedia.org/wiki/' + @page.url %>">  
+    <!-- src="<%= url_for(:controller=>'info', :action=>'frames', :url => @page) %>"> -->
+</iframe>
 </div>
 
 <!--div class="left">

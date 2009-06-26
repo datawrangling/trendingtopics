@@ -111,6 +111,9 @@ create index pages_autocomp_index on new_pages (title(64), monthly_trend);
 create index pages_id_index on new_pages (id);
 --Query OK, 2804203 rows affected (9 min 57.82 sec)
   
+create index pages_url_index on new_pages(url(64));
+--Query OK, 2804203 rows affected (12 min 40.48 sec)
+  
 
 
 -- create index pages_autocomp_trend_index on new_pages (title(64), monthly_trend);

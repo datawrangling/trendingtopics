@@ -10,6 +10,12 @@ class Page < ActiveRecord::Base
   
   # for images in "people" trends, optional
   BOSSMan.application_id = APP_CONFIG['yahoo_boss_id']
+  
+  def to_param
+    "#{url}"
+  end
+  
+  
     
   def normed_daily_pageviews( range=30)
     @pageviews = JSON.parse(self.daily_timeline.pageviews)
