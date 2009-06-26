@@ -6,7 +6,8 @@ set :application, "trendingtopics"
 
 set :scm, :git
 set :repository, "git@github.com:datawrangling/trendingtopics.git"
-set :branch, "master"
+#set :branch, "master"
+set :branch, "experimental"
 default_run_options[:shell] = false
 
 set :deploy_via, :copy
