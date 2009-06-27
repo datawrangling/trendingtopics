@@ -67,7 +67,7 @@ CALL dropindex('new_pages', 'pages_id_index');
 -- CALL dropindex('new_pages', 'pages_autocomp_trend_index');
 CALL dropindex('new_pages', 'pages_trend_index');
 CALL dropindex('new_daily_timelines', 'timeline_pageid_index');
-
+CALL dropindex('new_pages', 'pages_url_index');
 
 set foreign_key_checks=0; 
 set sql_log_bin=0; 

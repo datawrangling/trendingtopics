@@ -92,6 +92,7 @@ time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/rename_
 # EOF
 
 # wipe static page caches
+sudo rm -R /mnt/app/current/public/page
 sudo rm -R /mnt/app/current/public/pages
 
 # Send an email signalling staging tables are ready

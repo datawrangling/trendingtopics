@@ -59,9 +59,40 @@ class Page < ActiveRecord::Base
     return @chart
   end  
   
+  def snippet_title
+    @newsboss = BOSSMan::Search.news(self.title, { :filter => "-porn"}) || @newsboss
+    if @newsboss.totalhits.to_i > 0
+      result = @newsboss.results[0]      
+      @title = result.title      # Title of news story
+    else   
+      @title = "..."  
+    end  
+  end  
+  
+  def snippet_url
+    @newsboss = BOSSMan::Search.news(self.title, { :filter => "-porn"}) || @newsboss
+    if @newsboss.totalhits.to_i > 0
+      result = @newsboss.results[0]      
+      @clickurl = result.clickurl  # url of lead news story
+    else   
+      @clickurl = self.url
+    end  
+  end  
+  
+  
+  def news_snippet
+    @newsboss = BOSSMan::Search.news(self.title, { :filter => "-porn"}) || @newsboss
+    if @newsboss.totalhits.to_i > 0
+      result = @newsboss.results[0]         
+      @abstract = result.abstract    # Description of news story 
+    else   
+      @abstract = '...'  
+    end  
+  end  
+  
+  
   
   def picture
-    puts self.title
     boss = BOSSMan::Search.images(self.title, { :filter => "-porn"})
     if boss.totalhits.to_i > 0
       result = boss.results[0]

@@ -43,7 +43,7 @@
                     <td class="people"><p><%= link_to (index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1)).to_s + ". " + truncate(page.title,35), page, :class => "articlelink"  %></p><%= link_to image_tag(page.sparkline('999999', 30).to_url, :alt => 'Recent Trend for ' + page.title ) , page %><BR>
                     Pageviews: <%= number_with_delimiter(page.total_pageviews, ',') %></td> 
                     <% unless APP_CONFIG['yahoo_boss_id'] == "REPLACEME" %>
-                      <td ><%= link_to image_tag(page.picture, :alt => page.title, :size =>page.picture_size(120)), page %></td>                    
+                      <td ><%= link_to image_tag(page.picture, :alt => page.title, :size =>page.picture_size(120)), page %></td>           
                     <% end %>
 
 
