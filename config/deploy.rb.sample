@@ -98,14 +98,17 @@ set :ec2onrails_config, {
 set :nonvc_configs, ['config/config.yml', 'config/s3.yml', 'config/database.yml']
 
 desc "Copies non versioned configuration files after setup"
-task :copy_nonvconfig, :roles => [:app, :db, :web, :memcache] do
-  host = find_servers_for_task(current_task).first.host
-  privkey = ssh_options[:keys][0]
-  # ensure config folder is in shared_path
-  run "mkdir -p #{shared_path}/config"
-  nonvc_configs.each do |config|
-    run_local "scp -i '#{privkey}' #{config} app@#{host}:#{shared_path}/config"
-  end
+task :copy_nonvconfig, :roles => [:app, :db] do
+  find_servers_for_task(current_task).each do |server|
+    host = server.host
+    privkey = ssh_options[:keys][0]
+    # ensure config folder is in shared_path
+    run "mkdir -p #{shared_path}/config"
+    nonvc_configs.each do |config|
+      run_local "scp -i '#{privkey}' #{config} app@#{host}:#{shared_path}/config"
+    end
+    
+  end  
 end
 
 desc "Moves over server config files after deploying the code"
