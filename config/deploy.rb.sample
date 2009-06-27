@@ -98,7 +98,7 @@ set :ec2onrails_config, {
 set :nonvc_configs, ['config/config.yml', 'config/s3.yml', 'config/database.yml']
 
 desc "Copies non versioned configuration files after setup"
-task :copy_nonvconfig, :roles => [:app] do
+task :copy_nonvconfig, :roles => [:app, :db, :web, :memcache] do
   host = find_servers_for_task(current_task).first.host
   privkey = ssh_options[:keys][0]
   # ensure config folder is in shared_path
@@ -109,7 +109,7 @@ task :copy_nonvconfig, :roles => [:app] do
 end
 
 desc "Moves over server config files after deploying the code"
-task :update_config, :roles => [:app] do
+task :update_config, :roles => [:app, :db, :web, :memcache] do
   run "cp -Rf #{shared_path}/config/* #{current_path}/config"
 end
 
@@ -119,12 +119,12 @@ task :seed_memcached, :roles => [:app] do
 end
 
 desc "Load staging data into new_* tables "
-task :load_staging_tables, :roles => [:app] do
+task :load_staging_tables, :roles => [:db] do
   run "cd /mnt && mysql -u root trendingtopics_production < #{current_path}/lib/sql/load_history.sql"
 end
 
 desc "Count number of records in new_pages "
-task :count_new_pages, :roles => [:app] do
+task :count_new_pages, :roles => [:db] do
   run "cd /mnt && mysql -u root trendingtopics_production -e 'select count(*) from new_pages;'"
 end
 
