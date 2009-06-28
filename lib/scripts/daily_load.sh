@@ -47,7 +47,7 @@ do
   let COUNTER=COUNTER+1
 done
 # merge pages
-time cat pages/* > pages.txt
+time cat pages/* | sort -n > pages.txt
 
 # Fetch "DailyTimelines" moved to S3 by distcp
 mkdir -p /mnt/daily_timelines
