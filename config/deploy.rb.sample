@@ -32,6 +32,7 @@ role :memcache, "ec2-XXX-XXX-XXX-XX.compute-1.amazonaws.com"
 # on the server. Your app and your hourly/daily/weekly/monthly scripts
 # will run with RAILS_ENV set to this value.
 set :rails_env, "production"
+APP_CONFIG = YAML.load_file("config/config.yml")["production"]
 
 # EC2 on Rails config. 
 # NOTE: Some of these should be omitted if not needed.
@@ -129,6 +130,13 @@ end
 desc "Count number of records in new_pages "
 task :count_new_pages, :roles => [:db] do
   run "cd /mnt && mysql -u root trendingtopics_production -e 'select count(*) from new_pages;'"
+end
+
+desc "Set blacklist items featured flag"
+task :set_blacklist_flags, :roles => [:db] do
+  APP_CONFIG['blacklist'].each do |badpage|
+    run "cd /mnt && mysql -u root trendingtopics_production -e 'update pages set featured=1 where id = #{badpage};'"
+  end  
 end
 
 
