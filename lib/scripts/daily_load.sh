@@ -20,6 +20,7 @@ NEWCOUNT=`echo $RESULTSET | awk '{print $2}'`
 RESULTSET=`mysql -u root trendingtopics_production -e "select LEFT(RIGHT(dates,9),8) from daily_timelines where page_id=29812;"`
 LASTDATE=`echo $RESULTSET | awk '{print $2}'`
 NEXTDATE=`date --date "-d $LASTDATE +1 day" +"%Y%m%d"`
+echo NEXTDATE is $NEXTDATE
 
 # rename backup if staging tables don't exist:
 if [ $NEWCOUNT -eq 0  ]; then
