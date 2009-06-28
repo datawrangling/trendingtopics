@@ -1,5 +1,7 @@
 --- 
 pages_001: 
+  daily_trend: "50570.6"
+  featured: "0"
   id: "1806"
   monthly_trend: "105821"
   page_latest: "275751121"
@@ -7,6 +9,8 @@ pages_001:
   total_pageviews: "828377"
   url: Arnold_Schwarzenegger
 pages_002: 
+  daily_trend: "-5093.53"
+  featured: "0"
   id: "13443"
   monthly_trend: "231649"
   page_latest: "275019528"
@@ -14,6 +18,8 @@ pages_002:
   total_pageviews: "280870"
   url: Hypertext_Transfer_Protocol
 pages_003: 
+  daily_trend: "22633.5"
+  featured: "0"
   id: "14187"
   monthly_trend: "666355"
   page_latest: "275998376"
@@ -21,6 +27,8 @@ pages_003:
   total_pageviews: "1790313"
   url: Henry_VIII_of_England
 pages_004: 
+  daily_trend: "-528489"
+  featured: "0"
   id: "16506"
   monthly_trend: "122855"
   page_latest: "276001907"
@@ -28,6 +36,8 @@ pages_004:
   total_pageviews: "397565"
   url: Jay_Leno
 pages_005: 
+  daily_trend: "184.355"
+  featured: "0"
   id: "18606"
   monthly_trend: "228415"
   page_latest: "275528588"
@@ -35,6 +45,8 @@ pages_005:
   total_pageviews: "523456"
   url: Liberation_Tigers_of_Tamil_Eelam
 pages_006: 
+  daily_trend: "753.109"
+  featured: "0"
   id: "20308"
   monthly_trend: "826621"
   page_latest: "276198099"
@@ -42,6 +54,8 @@ pages_006:
   total_pageviews: "884596"
   url: Mary_Cassatt
 pages_007: 
+  daily_trend: "20454.9"
+  featured: "0"
   id: "20796"
   monthly_trend: "138348"
   page_latest: "276130336"
@@ -49,6 +63,8 @@ pages_007:
   total_pageviews: "645605"
   url: Malcolm_X
 pages_008: 
+  daily_trend: "-112326"
+  featured: "0"
   id: "21255"
   monthly_trend: "337136"
   page_latest: "276108702"
@@ -56,6 +72,8 @@ pages_008:
   total_pageviews: "957555"
   url: North_Korea
 pages_009: 
+  daily_trend: "3667.95"
+  featured: "0"
   id: "26750"
   monthly_trend: "86689"
   page_latest: "275119209"
@@ -63,6 +81,8 @@ pages_009:
   total_pageviews: "591071"
   url: Sri_Lanka
 pages_010: 
+  daily_trend: "-142210"
+  featured: "0"
   id: "29812"
   monthly_trend: "120282"
   page_latest: "276191373"
@@ -70,6 +90,8 @@ pages_010:
   total_pageviews: "6815542"
   url: The_Beatles
 pages_011: 
+  daily_trend: "34144.1"
+  featured: "0"
   id: "30327"
   monthly_trend: "199959"
   page_latest: "275811188"
@@ -77,6 +99,8 @@ pages_011:
   total_pageviews: "556271"
   url: The_Terminator
 pages_012: 
+  daily_trend: "14319.4"
+  featured: "0"
   id: "30346"
   monthly_trend: "111469"
   page_latest: "275012135"
@@ -84,6 +108,8 @@ pages_012:
   total_pageviews: "301405"
   url: "Terminator_2:_Judgment_Day"
 pages_013: 
+  daily_trend: "18229.7"
+  featured: "0"
   id: "31227"
   monthly_trend: "103628"
   page_latest: "275515447"
@@ -91,6 +117,8 @@ pages_013:
   total_pageviews: "317514"
   url: Terminator
 pages_014: 
+  daily_trend: "795.304"
+  featured: "0"
   id: "32173"
   monthly_trend: "83806"
   page_latest: "275820037"
@@ -98,6 +126,8 @@ pages_014:
   total_pageviews: "171110"
   url: United_States_Military_Academy
 pages_015: 
+  daily_trend: "-11366.4"
+  featured: "0"
   id: "37313"
   monthly_trend: "103381"
   page_latest: "276198024"
@@ -105,6 +135,8 @@ pages_015:
   total_pageviews: "803064"
   url: Bruce_Lee
 pages_016: 
+  daily_trend: "-41741.9"
+  featured: "0"
   id: "39027"
   monthly_trend: "270622"
   page_latest: "276196700"
@@ -112,6 +144,8 @@ pages_016:
   total_pageviews: "882357"
   url: Mike_Tyson
 pages_017: 
+  daily_trend: "-160.568"
+  featured: "0"
   id: "42010"
   monthly_trend: "101031"
   page_latest: "276188867"
@@ -119,6 +153,8 @@ pages_017:
   total_pageviews: "647392"
   url: Queen_(band)
 pages_018: 
+  daily_trend: "-21666.7"
+  featured: "0"
   id: "44220"
   monthly_trend: "122926"
   page_latest: "275719387"
@@ -126,6 +162,8 @@ pages_018:
   total_pageviews: "879504"
   url: UEFA_Champions_League
 pages_019: 
+  daily_trend: "-187518"
+  featured: "0"
   id: "44700"
   monthly_trend: "161240"
   page_latest: "276178896"
@@ -133,6 +171,8 @@ pages_019:
   total_pageviews: "440595"
   url: Leprosy
 pages_020: 
+  daily_trend: "304021"
+  featured: "0"
   id: "45971"
   monthly_trend: "96707"
   page_latest: "274090189"
@@ -140,6 +180,8 @@ pages_020:
   total_pageviews: "252451"
   url: Pentecost
 pages_021: 
+  daily_trend: "-8004.53"
+  featured: "0"
   id: "56191"
   monthly_trend: "459940"
   page_latest: "274610044"
@@ -147,6 +189,8 @@ pages_021:
   total_pageviews: "1224990"
   url: Memorial_Day
 pages_022: 
+  daily_trend: "-45161.6"
+  featured: "0"
   id: "68187"
   monthly_trend: "123309"
   page_latest: "275980923"
@@ -154,6 +198,8 @@ pages_022:
   total_pageviews: "776093"
   url: FC_Barcelona
 pages_023: 
+  daily_trend: "18698.8"
+  featured: "0"
   id: "68769"
   monthly_trend: "83726"
   page_latest: "276195777"
@@ -161,6 +207,8 @@ pages_023:
   total_pageviews: "854861"
   url: 24_(TV_series)
 pages_024: 
+  daily_trend: "-13804.3"
+  featured: "0"
   id: "103548"
   monthly_trend: "97584"
   page_latest: "271093602"
@@ -168,6 +216,8 @@ pages_024:
   total_pageviews: "111282"
   url: Jerboa
 pages_025: 
+  daily_trend: "2109.52"
+  featured: "0"
   id: "105407"
   monthly_trend: "113542"
   page_latest: "276174996"
@@ -175,6 +225,8 @@ pages_025:
   total_pageviews: "306164"
   url: Rod_Stewart
 pages_026: 
+  daily_trend: "571.464"
+  featured: "0"
   id: "142238"
   monthly_trend: "121844"
   page_latest: "276083903"
@@ -182,6 +234,8 @@ pages_026:
   total_pageviews: "591166"
   url: Kiss_(band)
 pages_027: 
+  daily_trend: "-13464.5"
+  featured: "0"
   id: "147810"
   monthly_trend: "103458"
   page_latest: "276137832"
@@ -189,6 +243,8 @@ pages_027:
   total_pageviews: "320757"
   url: Boys_Over_Flowers
 pages_028: 
+  daily_trend: "-37055.6"
+  featured: "0"
   id: "154099"
   monthly_trend: "112860"
   page_latest: "276183179"
@@ -196,6 +252,8 @@ pages_028:
   total_pageviews: "383690"
   url: Kim_Jong-il
 pages_029: 
+  daily_trend: "666.926"
+  featured: "0"
   id: "167335"
   monthly_trend: "82639"
   page_latest: "274965810"
@@ -203,6 +261,8 @@ pages_029:
   total_pageviews: "98590"
   url: Edward_VIII_abdication_crisis
 pages_030: 
+  daily_trend: "-33627.2"
+  featured: "0"
   id: "169979"
   monthly_trend: "95311"
   page_latest: "275733766"
@@ -210,6 +270,8 @@ pages_030:
   total_pageviews: "203539"
   url: George_Strait
 pages_031: 
+  daily_trend: "-7853.16"
+  featured: "0"
   id: "170342"
   monthly_trend: "285707"
   page_latest: "275149808"
@@ -217,6 +279,8 @@ pages_031:
   total_pageviews: "390049"
   url: Land_of_the_Lost_(1974_TV_series)
 pages_032: 
+  daily_trend: "-343413"
+  featured: "0"
   id: "178895"
   monthly_trend: "94336"
   page_latest: "273276221"
@@ -224,6 +288,8 @@ pages_032:
   total_pageviews: "314435"
   url: Lana_Clarkson
 pages_033: 
+  daily_trend: "7879.04"
+  featured: "0"
   id: "191890"
   monthly_trend: "118931"
   page_latest: "276221777"
@@ -231,6 +297,8 @@ pages_033:
   total_pageviews: "1390948"
   url: American_Idol
 pages_034: 
+  daily_trend: "17785"
+  featured: "0"
   id: "210453"
   monthly_trend: "77053"
   page_latest: "275753455"
@@ -238,6 +306,8 @@ pages_034:
   total_pageviews: "604466"
   url: Black_Eyed_Peas
 pages_035: 
+  daily_trend: "40439.1"
+  featured: "0"
   id: "225615"
   monthly_trend: "137549"
   page_latest: "275765717"
@@ -245,6 +315,8 @@ pages_035:
   total_pageviews: "348307"
   url: "Terminator_3:_Rise_of_the_Machines"
 pages_036: 
+  daily_trend: "202325"
+  featured: "0"
   id: "240940"
   monthly_trend: "106673"
   page_latest: "275862499"
@@ -252,6 +324,8 @@ pages_036:
   total_pageviews: "838414"
   url: LeBron_James
 pages_037: 
+  daily_trend: "-82112.7"
+  featured: "0"
   id: "246185"
   monthly_trend: "130214"
   page_latest: "276183081"
@@ -259,6 +333,8 @@ pages_037:
   total_pageviews: "704692"
   url: Kobe_Bryant
 pages_038: 
+  daily_trend: "33870"
+  featured: "0"
   id: "246363"
   monthly_trend: "183041"
   page_latest: "275729385"
@@ -266,6 +342,8 @@ pages_038:
   total_pageviews: "497702"
   url: Terminator_(franchise)
 pages_039: 
+  daily_trend: "-69.8406"
+  featured: "0"
   id: "262120"
   monthly_trend: "105386"
   page_latest: "271893386"
@@ -273,6 +351,8 @@ pages_039:
   total_pageviews: "113561"
   url: Operation_Uranus
 pages_040: 
+  daily_trend: "-3284.4"
+  featured: "0"
   id: "272705"
   monthly_trend: "95377"
   page_latest: "275978183"
@@ -280,6 +360,8 @@ pages_040:
   total_pageviews: "109715"
   url: Fran_Tarkenton
 pages_041: 
+  daily_trend: "64816"
+  featured: "0"
   id: "276890"
   monthly_trend: "105026"
   page_latest: "276048697"
@@ -287,6 +369,8 @@ pages_041:
   total_pageviews: "1016461"
   url: Simon_Cowell
 pages_042: 
+  daily_trend: "2658.06"
+  featured: "0"
   id: "292273"
   monthly_trend: "173639"
   page_latest: "275894337"
@@ -294,6 +378,8 @@ pages_042:
   total_pageviews: "1028956"
   url: Amanda_Holden
 pages_043: 
+  daily_trend: "30335.7"
+  featured: "0"
   id: "331124"
   monthly_trend: "86687"
   page_latest: "272045123"
@@ -301,6 +387,8 @@ pages_043:
   total_pageviews: "559864"
   url: Christian_Bale
 pages_044: 
+  daily_trend: "6056.82"
+  featured: "0"
   id: "445658"
   monthly_trend: "370631"
   page_latest: "275465984"
@@ -308,6 +396,8 @@ pages_044:
   total_pageviews: "480073"
   url: Velupillai_Prabhakaran
 pages_045: 
+  daily_trend: "470890"
+  featured: "0"
   id: "479273"
   monthly_trend: "143756"
   page_latest: "276064491"
@@ -315,6 +405,8 @@ pages_045:
   total_pageviews: "355762"
   url: Dwight_Howard
 pages_046: 
+  daily_trend: "-18521.6"
+  featured: "0"
   id: "493900"
   monthly_trend: "80513"
   page_latest: "275900479"
@@ -322,6 +414,8 @@ pages_046:
   total_pageviews: "541138"
   url: Patrick_Swayze
 pages_047: 
+  daily_trend: "-1458.23"
+  featured: "0"
   id: "592368"
   monthly_trend: "80510"
   page_latest: "274786455"
@@ -329,6 +423,8 @@ pages_047:
   total_pageviews: "128020"
   url: Towel_Day
 pages_048: 
+  daily_trend: "30049.3"
+  featured: "0"
   id: "702117"
   monthly_trend: "95880"
   page_latest: "276018065"
@@ -336,6 +432,8 @@ pages_048:
   total_pageviews: "299497"
   url: Spider-Man_3
 pages_049: 
+  daily_trend: "27274.3"
+  featured: "0"
   id: "786916"
   monthly_trend: "154295"
   page_latest: "275698097"
@@ -343,6 +441,8 @@ pages_049:
   total_pageviews: "401009"
   url: Terminator_(character)
 pages_050: 
+  daily_trend: "-3570.21"
+  featured: "0"
   id: "787815"
   monthly_trend: "99161"
   page_latest: "274837840"
@@ -350,6 +450,8 @@ pages_050:
   total_pageviews: "108185"
   url: Jay_Bennett
 pages_051: 
+  daily_trend: "11857.9"
+  featured: "0"
   id: "871281"
   monthly_trend: "89899"
   page_latest: "275538200"
@@ -357,6 +459,8 @@ pages_051:
   total_pageviews: "256725"
   url: Bryce_Dallas_Howard
 pages_052: 
+  daily_trend: "1018.83"
+  featured: "0"
   id: "928917"
   monthly_trend: "124510"
   page_latest: "276097434"
@@ -364,6 +468,8 @@ pages_052:
   total_pageviews: "160523"
   url: Glee
 pages_053: 
+  daily_trend: "16830"
+  featured: "0"
   id: "928959"
   monthly_trend: "96229"
   page_latest: "275933466"
@@ -371,6 +477,8 @@ pages_053:
   total_pageviews: "365219"
   url: Adriana_Lima
 pages_054: 
+  daily_trend: "-18520.7"
+  featured: "0"
   id: "1277712"
   monthly_trend: "179583"
   page_latest: "276222203"
@@ -378,6 +486,8 @@ pages_054:
   total_pageviews: "561571"
   url: Kara_DioGuardi
 pages_055: 
+  daily_trend: "15980"
+  featured: "0"
   id: "1447821"
   monthly_trend: "86577"
   page_latest: "275400677"
@@ -385,6 +495,8 @@ pages_055:
   total_pageviews: "239806"
   url: Kyle_Reese
 pages_056: 
+  daily_trend: "10887"
+  featured: "0"
   id: "1886352"
   monthly_trend: "84569"
   page_latest: "276156531"
@@ -392,6 +504,8 @@ pages_056:
   total_pageviews: "229481"
   url: Danica_Patrick
 pages_057: 
+  daily_trend: "84726.6"
+  featured: "0"
   id: "2005448"
   monthly_trend: "167019"
   page_latest: "275627277"
@@ -399,6 +513,8 @@ pages_057:
   total_pageviews: "953343"
   url: Prison_Break
 pages_058: 
+  daily_trend: "-81878.6"
+  featured: "0"
   id: "2095829"
   monthly_trend: "715712"
   page_latest: "273495412"
@@ -406,6 +522,8 @@ pages_058:
   total_pageviews: "934019"
   url: Sonia_Sotomayor
 pages_059: 
+  daily_trend: "-34414.9"
+  featured: "0"
   id: "2150841"
   monthly_trend: "115707"
   page_latest: "275950472"
@@ -413,6 +531,8 @@ pages_059:
   total_pageviews: "530045"
   url: Lionel_Messi
 pages_060: 
+  daily_trend: "-93823.1"
+  featured: "0"
   id: "2456273"
   monthly_trend: "101337"
   page_latest: "276206435"
@@ -420,6 +540,8 @@ pages_060:
   total_pageviews: "387836"
   url: Chris_Andersen
 pages_061: 
+  daily_trend: "-7153.13"
+  featured: "0"
   id: "2903913"
   monthly_trend: "90630"
   page_latest: "276152096"
@@ -427,6 +549,8 @@ pages_061:
   total_pageviews: "275784"
   url: Rashad_Evans
 pages_062: 
+  daily_trend: "15761.1"
+  featured: "0"
   id: "2964059"
   monthly_trend: "97834"
   page_latest: "276224744"
@@ -434,6 +558,8 @@ pages_062:
   total_pageviews: "293241"
   url: Sam_Worthington
 pages_063: 
+  daily_trend: "-23556.2"
+  featured: "0"
   id: "3179931"
   monthly_trend: "229742"
   page_latest: "273887361"
@@ -441,6 +567,8 @@ pages_063:
   total_pageviews: "240736"
   url: Roh_Moo-hyun
 pages_064: 
+  daily_trend: "22594.9"
+  featured: "0"
   id: "3830432"
   monthly_trend: "88299"
   page_latest: "275565114"
@@ -448,6 +576,8 @@ pages_064:
   total_pageviews: "284847"
   url: Amy_Adams
 pages_065: 
+  daily_trend: "120351"
+  featured: "0"
   id: "4167411"
   monthly_trend: "101427"
   page_latest: "275500807"
@@ -455,6 +585,8 @@ pages_065:
   total_pageviews: "253193"
   url: Night_at_the_Museum
 pages_066: 
+  daily_trend: "-6802.23"
+  featured: "0"
   id: "5451380"
   monthly_trend: "238876"
   page_latest: "276092144"
@@ -462,6 +594,8 @@ pages_066:
   total_pageviews: "445153"
   url: Lyoto_Machida
 pages_067: 
+  daily_trend: "5608.52"
+  featured: "0"
   id: "5690462"
   monthly_trend: "132578"
   page_latest: "276070503"
@@ -469,6 +603,8 @@ pages_067:
   total_pageviews: "273490"
   url: Moon_Bloodgood
 pages_068: 
+  daily_trend: "15452.2"
+  featured: "0"
   id: "5794648"
   monthly_trend: "94170"
   page_latest: "275839779"
@@ -476,6 +612,8 @@ pages_068:
   total_pageviews: "922874"
   url: Angels_&_Demons_(film)
 pages_069: 
+  daily_trend: "-6973.41"
+  featured: "0"
   id: "8127963"
   monthly_trend: "275533"
   page_latest: "276114535"
@@ -483,6 +621,8 @@ pages_069:
   total_pageviews: "480851"
   url: Alexander_Rybak
 pages_070: 
+  daily_trend: "63575.5"
+  featured: "0"
   id: "8245873"
   monthly_trend: "156193"
   page_latest: "275889917"
@@ -490,6 +630,8 @@ pages_070:
   total_pageviews: "474788"
   url: The_Sims_3
 pages_071: 
+  daily_trend: "2872.19"
+  featured: "0"
   id: "8517686"
   monthly_trend: "321117"
   page_latest: "274800656"
@@ -497,6 +639,8 @@ pages_071:
   total_pageviews: "1215536"
   url: Britain's_Got_Talent
 pages_072: 
+  daily_trend: "25325.4"
+  featured: "0"
   id: "10552268"
   monthly_trend: "118991"
   page_latest: "276132967"
@@ -504,6 +648,8 @@ pages_072:
   total_pageviews: "373052"
   url: Valkyrie_(film)
 pages_073: 
+  daily_trend: "-88425.2"
+  featured: "0"
   id: "10732335"
   monthly_trend: "255587"
   page_latest: "276181729"
@@ -511,6 +657,8 @@ pages_073:
   total_pageviews: "621037"
   url: Jon_&_Kate_Plus_8
 pages_074: 
+  daily_trend: "-993.467"
+  featured: "0"
   id: "10953971"
   monthly_trend: "93464"
   page_latest: "271021171"
@@ -518,6 +666,8 @@ pages_074:
   total_pageviews: "119115"
   url: Lea_Michele
 pages_075: 
+  daily_trend: "-87478.6"
+  featured: "0"
   id: "11101357"
   monthly_trend: "91536"
   page_latest: "273326774"
@@ -525,6 +675,8 @@ pages_075:
   total_pageviews: "97212"
   url: Papyrus_(typeface)
 pages_076: 
+  daily_trend: "35974.6"
+  featured: "0"
   id: "11659396"
   monthly_trend: "155065"
   page_latest: "275794568"
@@ -532,6 +684,8 @@ pages_076:
   total_pageviews: "422732"
   url: Up_(2009_film)
 pages_077: 
+  daily_trend: "18663.3"
+  featured: "0"
   id: "11799749"
   monthly_trend: "152946"
   page_latest: "261518276"
@@ -539,6 +693,8 @@ pages_077:
   total_pageviews: "153379"
   url: Lucy_Gordon
 pages_078: 
+  daily_trend: "-36881.3"
+  featured: "0"
   id: "11801727"
   monthly_trend: "131816"
   page_latest: "276145513"
@@ -546,6 +702,8 @@ pages_078:
   total_pageviews: "413217"
   url: 2009_UEFA_Champions_League_Final
 pages_079: 
+  daily_trend: "-33201.6"
+  featured: "0"
   id: "12220354"
   monthly_trend: "113068"
   page_latest: "275785486"
@@ -553,6 +711,8 @@ pages_079:
   total_pageviews: "293802"
   url: InFamous
 pages_080: 
+  daily_trend: "-565712"
+  featured: "0"
   id: "13118744"
   monthly_trend: "155198"
   page_latest: "275992514"
@@ -560,6 +720,8 @@ pages_080:
   total_pageviews: "629481"
   url: Scientology
 pages_081: 
+  daily_trend: "94288.1"
+  featured: "0"
   id: "13670373"
   monthly_trend: "609561"
   page_latest: "276185271"
@@ -567,6 +729,8 @@ pages_081:
   total_pageviews: "1805099"
   url: Terminator_Salvation
 pages_082: 
+  daily_trend: "-1496.51"
+  featured: "0"
   id: "13809881"
   monthly_trend: "87826"
   page_latest: "270450055"
@@ -574,6 +738,8 @@ pages_082:
   total_pageviews: "99870"
   url: Kathy_Coleman
 pages_083: 
+  daily_trend: "-5678.96"
+  featured: "0"
   id: "15570857"
   monthly_trend: "423457"
   page_latest: "275551574"
@@ -581,6 +747,8 @@ pages_083:
   total_pageviews: "440351"
   url: Dolla_(rapper)
 pages_084: 
+  daily_trend: "-1651.47"
+  featured: "0"
   id: "15777582"
   monthly_trend: "76493"
   page_latest: "229328886"
@@ -588,6 +756,8 @@ pages_084:
   total_pageviews: "81752"
   url: Dolla
 pages_085: 
+  daily_trend: "-108828"
+  featured: "0"
   id: "17782843"
   monthly_trend: "319841"
   page_latest: "276216693"
@@ -595,6 +765,8 @@ pages_085:
   total_pageviews: "686201"
   url: Lady_Gaga
 pages_086: 
+  daily_trend: "-1394.13"
+  featured: "0"
   id: "17817219"
   monthly_trend: "190986"
   page_latest: "276222598"
@@ -602,6 +774,8 @@ pages_086:
   total_pageviews: "583886"
   url: UFC_98
 pages_087: 
+  daily_trend: "116336"
+  featured: "0"
   id: "18225947"
   monthly_trend: "553618"
   page_latest: "262489880"
@@ -609,6 +783,8 @@ pages_087:
   total_pageviews: "554619"
   url: Lucy_Gordon_(actress)
 pages_088: 
+  daily_trend: "66890.6"
+  featured: "0"
   id: "18764957"
   monthly_trend: "164604"
   page_latest: "276150329"
@@ -616,6 +792,8 @@ pages_088:
   total_pageviews: "383145"
   url: "Night_at_the_Museum:_Battle_of_the_Smithsonian"
 pages_089: 
+  daily_trend: "5491.96"
+  featured: "0"
   id: "19024526"
   monthly_trend: "93989"
   page_latest: "270445764"
@@ -623,6 +801,8 @@ pages_089:
   total_pageviews: "134680"
   url: Antichrist_(film)
 pages_090: 
+  daily_trend: "-477821"
+  featured: "0"
   id: "20110751"
   monthly_trend: "114851"
   page_latest: "275887258"
@@ -630,6 +810,8 @@ pages_090:
   total_pageviews: "535380"
   url: Phil_Spector
 pages_091: 
+  daily_trend: "-206480"
+  featured: "0"
   id: "20469278"
   monthly_trend: "214527"
   page_latest: "273000457"
@@ -637,6 +819,8 @@ pages_091:
   total_pageviews: "514412"
   url: Drag_Me_to_Hell
 pages_092: 
+  daily_trend: "53182.3"
+  featured: "0"
   id: "20855455"
   monthly_trend: "82964"
   page_latest: "271338702"
@@ -644,6 +828,8 @@ pages_092:
   total_pageviews: "92922"
   url: 2009_French_Open
 pages_093: 
+  daily_trend: "-14795.1"
+  featured: "0"
   id: "21019602"
   monthly_trend: "97636"
   page_latest: "276210911"
@@ -651,6 +837,8 @@ pages_093:
   total_pageviews: "313704"
   url: Boys_Over_Flowers_(TV_series)
 pages_094: 
+  daily_trend: "874.09"
+  featured: "0"
   id: "21101068"
   monthly_trend: "107402"
   page_latest: "276108490"
@@ -658,6 +846,8 @@ pages_094:
   total_pageviews: "382416"
   url: UFC_99
 pages_095: 
+  daily_trend: "-5112.14"
+  featured: "0"
   id: "21374259"
   monthly_trend: "304149"
   page_latest: "275981292"
@@ -665,6 +855,8 @@ pages_095:
   total_pageviews: "626327"
   url: Kris_Allen
 pages_096: 
+  daily_trend: "-4373.14"
+  featured: "0"
   id: "21456938"
   monthly_trend: "224477"
   page_latest: "276098687"
@@ -672,6 +864,8 @@ pages_096:
   total_pageviews: "286787"
   url: Glee_(TV_series)
 pages_097: 
+  daily_trend: "-36648.2"
+  featured: "0"
   id: "21501511"
   monthly_trend: "317439"
   page_latest: "276217702"
@@ -679,6 +873,8 @@ pages_097:
   total_pageviews: "1126545"
   url: Adam_Lambert
 pages_098: 
+  daily_trend: "-612.201"
+  featured: "0"
   id: "21579170"
   monthly_trend: "96167"
   page_latest: "275013785"
@@ -686,6 +882,8 @@ pages_098:
   total_pageviews: "129714"
   url: Fairytale_(Alexander_Rybak_song)
 pages_099: 
+  daily_trend: "-7868.92"
+  featured: "0"
   id: "21861131"
   monthly_trend: "96790"
   page_latest: "275928468"
@@ -693,6 +891,8 @@ pages_099:
   total_pageviews: "276546"
   url: WWE_Extreme_Rules
 pages_100: 
+  daily_trend: "15117.9"
+  featured: "0"
   id: "21871182"
   monthly_trend: "79077"
   page_latest: "275785631"

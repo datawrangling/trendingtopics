@@ -52,6 +52,7 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    # set the default number of reducers using the following formula:
    # number of concurrent reducers per node * number of nodes * 1.75
    # for 10 c1.medium = 2 * 10 * 1.75 = 35
+   # TODO replace with a Hive custom mapper & COUNT query
    hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
      -input s3n://$MYBUCKET/wikistats/pagecounts-$NEXTDATE* \
      -output finaloutput \
@@ -65,58 +66,70 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    hadoop fs -rmr finaloutput/_logs   
    
    # Fetch wikipedia page id lookup table
-   s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/page_lookup_nonredirects.txt /mnt/page_lookup_nonredirects.txt
+   # s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/page_lookup_nonredirects.txt /mnt/page_lookup_nonredirects.txt
+   hadoop distcp s3n://$MYBUCKET/wikidump/page_lookup_nonredirects.txt wikidump/page_lookup_nonredirects.txt
+   hadoop fs -rmr wikidump/_distcp_logs*
+   
+   # we will send the latest version of these up to S3 again with another distcp later
+   hadoop distcp s3n://$MYBUCKET/archive/$LASTDATE/daily_timelines daily_timelines
+   hadoop fs -rmr daily_timelines/_distcp_logs*   
    
    # fetch the old page, timelines, & trends tables:
-   s3cmd --force --config=/root/.s3cfg get s3://$MYBUCKET/archive/$LASTDATE/trendsdb.tar.gz /mnt/trendsdb.tar.gz
+   # s3cmd --force --config=/root/.s3cfg get s3://$MYBUCKET/archive/$LASTDATE/trendsdb.tar.gz /mnt/trendsdb.tar.gz
    
-   # Quick hack to verify size of s3 download   
-   S3_DB_SIZE=`s3cmd ls s3://trendingtopics/archive/trendsdb.tar.gz | tail -1 | awk '{print $3}'`
-   LOCAL_DB_SIZE=`ls -l trendsdb.tar.gz | awk '{print $5}'`
-   if [ $S3_DB_SIZE != $LOCAL_DB_SIZE  ]; then {
-     echo ERROR the MD5 for downloaded trendsdb.tar.gz did not equal the MD5 on S3, aborting run
-     ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh FAILED $MYSERVER $MAILTO"      
-     exit 1
-   }
-   fi
-   
-   # unpack the old pages, timelines, trends table txt files:
-   cd /mnt
-   tar -xzvf trendsdb.tar.gz
+   # # Quick hack to verify size of s3 download   
+   # S3_DB_SIZE=`s3cmd ls s3://trendingtopics/archive/trendsdb.tar.gz | tail -1 | awk '{print $3}'`
+   # LOCAL_DB_SIZE=`ls -l trendsdb.tar.gz | awk '{print $5}'`
+   # if [ $S3_DB_SIZE != $LOCAL_DB_SIZE  ]; then {
+   #   echo ERROR the MD5 for downloaded trendsdb.tar.gz did not equal the MD5 on S3, aborting run
+   #   ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh FAILED $MYSERVER $MAILTO"      
+   #   exit 1
+   # }
+   # fi
+   # 
+   # # unpack the old pages, timelines, trends table txt files:
+   # cd /mnt
+   # tar -xzvf trendsdb.tar.gz
 
    # Kick off the HiveQL script 
    hive -f  /mnt/trendingtopics/lib/hive/hive_daily_merge.sql     
+   
+   # distcp new_daily_timelines and new_pages up to s3
+   
+   hadoop distcp /user/root/new_pages s3n://$MYBUCKET/archive/$NEXTDATE/pages
+   hadoop distcp /user/root/new_daily_timelines s3n://$MYBUCKET/archive/$NEXTDATE/daily_timelines
+   
 
-   # Spool the tab delimited data out of hive for bulk loading into MySQL
-   # This can be replaced with Sqoop later
-   hive -S -e 'SELECT * FROM new_pages' > /mnt/pages.txt
-   hive -S -e 'SELECT * FROM new_daily_timelines' > /mnt/daily_timelines.txt
-   hive -S -e 'SELECT * FROM new_daily_trends' > /mnt/daily_trends.txt   
+   # # Spool the tab delimited data out of hive for bulk loading into MySQL
+   # # This can be replaced with Sqoop later
+   # hive -S -e 'SELECT * FROM new_pages' > /mnt/pages.txt
+   # hive -S -e 'SELECT * FROM new_daily_timelines' > /mnt/daily_timelines.txt
+   # hive -S -e 'SELECT * FROM new_daily_trends' > /mnt/daily_trends.txt   
    
-   PAGES_SIZE=`ls -l pages.txt | awk {'print $5'}`
-   # Quick Hack to check the size of the pages.txt file
-   if [ $PAGES_SIZE -eq 0  ]; then {
-     echo ERROR the size of pages.txt was 0, aborting run
-     ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh FAILED $MYSERVER $MAILTO"      
-     exit 1
-   }
-   fi
-   
-   
-   # gzip the data and send to prod and S3
-   tar cvf - pages.txt daily_timelines.txt daily_trends.txt | gzip > /mnt/trendsdb.tar.gz
-   # real 8m7.590s
-   # user 7m31.984s
-   # sys  0m18.621s
-   
-   #remove the old trendsdb files if they exist
-   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && rm -f trendsdb.tar.gz'  
-   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && rm -f pages.txt'  
-   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && rm -f daily_trends.txt'  
-   ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && rm -f daily_timelines.txt'  
-   
-   # copy over new trendsdb
-   scp /mnt/trendsdb.tar.gz root@$MYSERVER:/mnt/
+   # PAGES_SIZE=`ls -l pages.txt | awk {'print $5'}`
+   # # Quick Hack to check the size of the pages.txt file
+   # if [ $PAGES_SIZE -eq 0  ]; then {
+   #   echo ERROR the size of pages.txt was 0, aborting run
+   #   ssh -o StrictHostKeyChecking=no root@$MYSERVER "python /mnt/app/current/lib/scripts/hadoop_mailer.py run_daily_merge.sh FAILED $MYSERVER $MAILTO"      
+   #   exit 1
+   # }
+   # fi
+   # 
+   # 
+   # # gzip the data and send to prod and S3
+   # tar cvf - pages.txt daily_timelines.txt daily_trends.txt | gzip > /mnt/trendsdb.tar.gz
+   # # real 8m7.590s
+   # # user 7m31.984s
+   # # sys  0m18.621s
+   # 
+   # #remove the old trendsdb files if they exist
+   # ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && rm -f trendsdb.tar.gz'  
+   # ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && rm -f pages.txt'  
+   # ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && rm -f daily_trends.txt'  
+   # ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && rm -f daily_timelines.txt'  
+   # 
+   # # copy over new trendsdb
+   # scp /mnt/trendsdb.tar.gz root@$MYSERVER:/mnt/
    
    # Remaining processing happens on the db server: loading tables, rebuilding indexes, swapping tables, flushing caches 
    ssh -o StrictHostKeyChecking=no root@$MYSERVER 'cd /mnt && nohup bash /mnt/app/current/lib/scripts/daily_load.sh > daily_load.log 2>&1' &

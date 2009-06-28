@@ -5,15 +5,22 @@
 
 MYBUCKET=trendingtopics
 DATEHOUR=`date --date "now +4 hours" +"%Y%m%d-%H"`
+HOSTIP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
+DATABASEIP=`host db.trendingtopics.org | awk '{ print $4}'`
 
-# fetch the latest wikistats files every hour
-sleep 25m
-cd tmp
-wget -r --quiet --no-directories --no-parent -L -A "pagecounts-$DATEHOUR*" http://dammit.lt/wikistats/
-# upload to s3 bucket
-FILENAME=`ls pagecounts-$DATEHOUR*`
-s3cmd --config=/root/.s3cfg put --force /mnt/app/current/tmp/$FILENAME s3://$MYBUCKET/wikistats/$FILENAME 1> /dev/null
-# wipe local copies of the pagecounts file
-rm $FILENAME
-rm robots.*
-cd ../
+if [ $HOSTIP -eq $DATABASEIP ]; then {
+  # fetch the latest wikistats files every hour
+  # this should only run on the db server...
+  sleep 30m
+  cd tmp
+  wget -r --quiet --no-directories --no-parent -L -A "pagecounts-$DATEHOUR*" http://dammit.lt/wikistats/
+  # upload to s3 bucket
+  FILENAME=`ls pagecounts-$DATEHOUR*`
+  s3cmd --config=/root/.s3cfg put --force /mnt/app/current/tmp/$FILENAME s3://$MYBUCKET/wikistats/$FILENAME 1> /dev/null
+  # wipe local copies of the pagecounts file
+  rm $FILENAME
+  rm robots.*
+  cd ../
+}
+fi
+

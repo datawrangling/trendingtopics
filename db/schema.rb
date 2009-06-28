@@ -9,13 +9,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090627045819) do
+ActiveRecord::Schema.define(:version => 20090627203556) do
 
   create_table "companies", :force => true do |t|
     t.integer  "page_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "companies", ["page_id"], :name => "companies_page_index"
 
   create_table "daily_timelines", :force => true do |t|
     t.integer  "page_id"
@@ -26,7 +28,7 @@ ActiveRecord::Schema.define(:version => 20090627045819) do
     t.datetime "updated_at"
   end
 
-  add_index "daily_timelines", ["total_pageviews"], :name => "timeline_totalviews_index"
+  add_index "daily_timelines", ["page_id"], :name => "daily_timelines_page_index"
 
   create_table "daily_trends", :force => true do |t|
     t.integer  "page_id"
@@ -36,13 +38,13 @@ ActiveRecord::Schema.define(:version => 20090627045819) do
     t.datetime "updated_at"
   end
 
-  add_index "daily_trends", ["page_id", "trend"], :name => "daily_trends_index"
-
   create_table "featured_pages", :force => true do |t|
     t.integer  "page_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "featured_pages", ["page_id"], :name => "featured_pages_page_index"
 
   create_table "new_daily_timelines", :force => true do |t|
     t.integer  "page_id"
@@ -52,6 +54,8 @@ ActiveRecord::Schema.define(:version => 20090627045819) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "new_daily_timelines", ["page_id"], :name => "daily_timelines_page_index"
 
   create_table "new_daily_trends", :force => true do |t|
     t.integer  "page_id"
@@ -67,6 +71,8 @@ ActiveRecord::Schema.define(:version => 20090627045819) do
     t.datetime "updated_at"
   end
 
+  add_index "new_featured_pages", ["page_id"], :name => "featured_pages_page_index"
+
   create_table "new_pages", :force => true do |t|
     t.string  "url"
     t.string  "title"
@@ -74,7 +80,14 @@ ActiveRecord::Schema.define(:version => 20090627045819) do
     t.integer "total_pageviews"
     t.float   "monthly_trend"
     t.boolean "featured",        :default => false
+    t.float   "daily_trend"
   end
+
+  add_index "new_pages", ["featured", "daily_trend"], :name => "pages_feature_daily_trend_index"
+  add_index "new_pages", ["featured", "monthly_trend"], :name => "pages_feature_monthly_trend_index"
+  add_index "new_pages", ["title", "featured", "daily_trend"], :name => "pages_title_daily_trend_index"
+  add_index "new_pages", ["title", "featured", "monthly_trend"], :name => "pages_title_monthly_trend_index"
+  add_index "new_pages", ["url"], :name => "pages_url_index"
 
   create_table "pages", :force => true do |t|
     t.string  "url"
@@ -83,9 +96,14 @@ ActiveRecord::Schema.define(:version => 20090627045819) do
     t.integer "total_pageviews"
     t.float   "monthly_trend"
     t.boolean "featured",        :default => false
+    t.float   "daily_trend"
   end
 
-  add_index "pages", ["title"], :name => "pages_title_index"
+  add_index "pages", ["featured", "daily_trend"], :name => "pages_feature_daily_trend_index"
+  add_index "pages", ["featured", "monthly_trend"], :name => "pages_feature_monthly_trend_index"
+  add_index "pages", ["title", "featured", "daily_trend"], :name => "pages_title_daily_trend_index"
+  add_index "pages", ["title", "featured", "monthly_trend"], :name => "pages_title_monthly_trend_index"
+  add_index "pages", ["url"], :name => "pages_url_index"
 
   create_table "people", :force => true do |t|
     t.integer  "page_id"
@@ -94,10 +112,6 @@ ActiveRecord::Schema.define(:version => 20090627045819) do
   end
 
   add_index "people", ["page_id"], :name => "people_page_index"
-
-  create_table "sample_people", :id => false, :force => true do |t|
-    t.integer "page_id"
-  end
 
   create_table "weekly_trends", :force => true do |t|
     t.integer  "page_id"

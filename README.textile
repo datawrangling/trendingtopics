@@ -702,7 +702,7 @@ Fetch the source code as shown above, then install the ec2onrails gem as describ
 Find AMI id of the latest 32 bit ec2onrails image (in our case this was ami-5394733a):
 <pre>	$ cap ec2onrails:ami_ids</pre>
 
-Launch an instance of the latest ec2onrails ami and note the returned instance address from ec2-describe-instances, it will be something like ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com 
+Launch an instance of the latest ec2onrails ami and note the returned instance address from ec2-describe-instances, it will be something like ec2-12-xx-xx-xx.z-1.compute-1.amazonaws.com. You can also launch and instance for each role (db, web, memcached, etc).  You probably want to assign a fixed "elastic-ip address":http://developer.amazonwebservices.com/connect/entry.jspa?externalID=1346 to each instance you use.
 
 <pre>
 	$ ec2-run-instances ami-5394733a -k gsg-keypair

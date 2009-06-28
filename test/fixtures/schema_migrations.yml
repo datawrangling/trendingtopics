@@ -15,3 +15,21 @@ schema_migrations_007:
   version: "20090605234518"
 schema_migrations_008: 
   version: "20090605234534"
+schema_migrations_009: 
+  version: "20090611190137"
+schema_migrations_010: 
+  version: "20090619210019"
+schema_migrations_011: 
+  version: "20090619212730"
+schema_migrations_012: 
+  version: "20090621034525"
+schema_migrations_013: 
+  version: "20090621055343"
+schema_migrations_014: 
+  version: "20090627045526"
+schema_migrations_015: 
+  version: "20090627045819"
+schema_migrations_016: 
+  version: "20090627191507"
+schema_migrations_017: 
+  version: "20090627191547"

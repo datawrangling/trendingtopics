@@ -132,7 +132,7 @@ def main(argv=None):
     # find urls recently featured on main page of wikipedia
     titles = titles_for_date(maxdate)
     # omit any titles featured in the last 2 weeks
-    for i in range(14):
+    for i in range(15):
       titles.extend(titles_for_date(maxdate - datetime.timedelta(i+1)))
     
     # generate blacklist of page_ids:
