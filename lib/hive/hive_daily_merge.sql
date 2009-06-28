@@ -77,8 +77,6 @@ FROM daily_timelines dt LEFT OUTER JOIN daily_pagecounts_table dp ON (dt.page_id
 -- Time taken: 896.042 seconds
 
 INSERT OVERWRITE DIRECTORY 'new_daily_timelines' SELECT * FROM daily_timelines;
--- Time taken: 161.114 seconds
-
 add FILE /mnt/trendingtopics/lib/python_streaming/hive_trend_mapper.py;
 
 CREATE TABLE new_pages_raw (
