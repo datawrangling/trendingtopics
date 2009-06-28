@@ -20,11 +20,11 @@ class PagesController < ApplicationController
     if params[:search]
       @pages = Page.title_like(params["search"]["query"]).paginate(:page => params[:page], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])  
     else   
-      @pages = Page.paginate(:page => params[:page], :conditions => ["pages.id NOT IN (?) and featured=0", APP_CONFIG['blacklist']], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
+      @pages = Page.paginate(:page => params[:page], :conditions => ["featured=0"], :order => 'monthly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
     end 
   
     # random rising, rotates
-    @page = Page.find(:all, :limit => APP_CONFIG['articles_per_page'] , :order => 'daily_trend DESC', :conditions => ["id NOT IN (?) and featured=0", APP_CONFIG['blacklist']] ).rand  
+    @page = Page.find(:all, :limit => APP_CONFIG['articles_per_page'] , :order => 'daily_trend DESC', :conditions => ["featured=0"] ).rand  
       
     unless params[:page]
       params[:page]='1'
