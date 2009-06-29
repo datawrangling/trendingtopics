@@ -61,5 +61,9 @@ class PagesController < ApplicationController
     :disposition => 'attachment'
     
   end  
+  
+  def expire_cache
+    #expire cache fragments, called after content is updated
+  end
 
 end

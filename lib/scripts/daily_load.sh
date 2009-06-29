@@ -47,6 +47,7 @@ do
   let COUNTER=COUNTER+1
 done
 # merge pages
+echo merging page files
 time cat pages/* | sort -n > pages.txt
 
 # Fetch "DailyTimelines" moved to S3 by distcp
@@ -61,6 +62,7 @@ do
   let COUNTER=COUNTER+1
 done
 
+echo merging timeline files
 # merge daily timelines
 time cat daily_timelines/* > daily_timelines.txt
 # real	3m55.572s

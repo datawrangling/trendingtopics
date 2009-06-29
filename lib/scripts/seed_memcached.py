@@ -26,14 +26,14 @@ def fetchpages():
   urls = [SITE, SITE+'finance', SITE+'people']
   
   # TODO: read queries and site from a file...
-  autocomplete_template = 'pages/auto_complete_for_search_query?search%5Bquery%5D'
-  prefetch = "abcdefghijklmnopqrstuvwxyz"
-  autocomplete_urls = [SITE + autocomplete_template + x for x in prefetch]  
-  urls.extend(autocomplete_urls)  
-
-  search_template = 'pages?search[query]='
-  search_urls = [SITE + search_template + x for x in prefetch] 
-  urls.extend(search_urls)
+  # autocomplete_template = 'pages/auto_complete_for_search_query?search%5Bquery%5D'
+  # prefetch = "abcdefghijklmnopqrstuvwxyz"
+  # autocomplete_urls = [SITE + autocomplete_template + x for x in prefetch]  
+  # urls.extend(autocomplete_urls)  
+  # 
+  # search_template = 'pages?search[query]='
+  # search_urls = [SITE + search_template + x for x in prefetch] 
+  # urls.extend(search_urls)
 
   for url in urls:
     print "fetching", url

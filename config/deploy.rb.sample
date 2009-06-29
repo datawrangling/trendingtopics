@@ -143,3 +143,4 @@ end
 after 'deploy:update_code', :copy_nonvconfig
 after 'deploy:symlink', :update_config
 after 'deploy', :seed_memcached
+after 'deploy', :set_blacklist_flags
