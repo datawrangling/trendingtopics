@@ -62,8 +62,5 @@ class PagesController < ApplicationController
     
   end  
   
-  def expire_cache
-    #expire cache fragments, called after content is updated
-  end
 
 end

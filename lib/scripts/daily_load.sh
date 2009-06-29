@@ -6,6 +6,7 @@
 # 
 MYBUCKET=trendingtopics
 MYSERVER=db.trendingtopics.org
+WEBSERVER=trendingtopics.org
 MAILTO=pete@datawrangling.com
 
 echo MYBUCKET is $MYBUCKET
@@ -99,6 +100,7 @@ time mysql -u root trendingtopics_production -e "UPDATE new_pages,new_featured_p
 # # Archive the data by date
 # time s3cmd --config=/root/.s3cfg put trendsdb.tar.gz s3://$MYBUCKET/archive/$MAXDATE/trendsdb.tar.gz
 
+echo swapping staging tables to live site
 # We swap the new tables to go live automatically
 time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/rename_new_to_live.sql
 
@@ -114,9 +116,11 @@ time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/rename_
 # EOF
 
 # wipe static page caches
-sudo rm -R /mnt/app/current/public/page
-sudo rm -R /mnt/app/current/public/pages
+# need to call rake task on the web server...
+echo purging cache
+ssh -o StrictHostKeyChecking=no root@$WEBSERVER 'cd /mnt/app/current && nohup bash RAILS_ENV=production rake purge_cache > /mnt/purge_cache.log 2>&1' &
 
+echo sending completion email
 # Send an email signalling staging tables are ready
 echo "$MYSERVER staging tables ready for QA" | mail -s "$MYSERVER staging complete" $MAILTO
 

@@ -1,5 +1,8 @@
 class InfoController < ApplicationController
   layout "pages", :except => [:frames]
+  
+  caches_page :about 
+  
   def about
   end
   
@@ -49,5 +52,6 @@ class InfoController < ApplicationController
     #this page will display the day's top ranked articles for each letter in the alphabet...
     # A,B,C etc
   end  
+  
 
 end

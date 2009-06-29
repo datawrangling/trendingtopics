@@ -41,7 +41,7 @@
             <% else %>
               <h3>Trending Topics (Last 30 Days)</h3>
               <% content_for :title, "Trending Topics: Search for Topics & News Trending Now" %> 
-              <% cache ({:page => params[:page] }) do %>
+              <% cache ({:page => params[:page], :part =>'monthly' }) do %>
                   <%= render :partial => "movers"  %> 
               <% end %> <! --#cache -->   
               <BR>
