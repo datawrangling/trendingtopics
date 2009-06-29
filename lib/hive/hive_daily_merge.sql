@@ -31,7 +31,7 @@ CREATE TABLE daily_timelines (
     pageviews STRING, 
     total_pageviews BIGINT) 
   ROW FORMAT DELIMITED 
-    FIELDS TERMINATED BY '\t' 
+    FIELDS TERMINATED BY '\001' 
   STORED AS TEXTFILE;
 
 -- later we will have the data in EBS snapshots with Cloudera Beta
@@ -62,7 +62,7 @@ CREATE TABLE new_daily_timelines (
     pageviews STRING, 
     total_pageviews BIGINT) 
   ROW FORMAT DELIMITED 
-    FIELDS TERMINATED BY '\t' 
+    FIELDS TERMINATED BY '\001' 
   STORED AS TEXTFILE;
 
 INSERT OVERWRITE TABLE new_daily_timelines
@@ -86,7 +86,7 @@ CREATE TABLE new_pages_raw (
     daily_trend DOUBLE, 
     error DOUBLE) 
   ROW FORMAT DELIMITED 
-    FIELDS TERMINATED BY '\t' 
+    FIELDS TERMINATED BY '\001' 
   STORED AS TEXTFILE;
 
 INSERT OVERWRITE TABLE new_pages_raw
