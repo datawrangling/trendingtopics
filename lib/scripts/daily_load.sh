@@ -36,32 +36,37 @@ s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/Living_peop
 # Fetch "Companies"
 s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/Companies_listed_on_the_New_York_Stock_Exchange.txt /mnt/Companies_listed_on_the_New_York_Stock_Exchange.txt
 
-# Fetch "Pages" moved to S3 by distcp
-mkdir -p /mnt/pages
-COUNTER=0
-PAGES=`s3cmd --config=/root/.s3cfg ls  s3://trendingtopics/archive/$NEXTDATE/pages/ | awk '{ print $4 }'`
-for filename in $PAGES
-do
-  echo "downloading $filename"
-  TARGET=`echo $filename | cut -d'/' -f7`
-  s3cmd --config=/root/.s3cfg --force get $filename  /mnt/pages/part-$COUNTER
-  let COUNTER=COUNTER+1
-done
+# mkdir -p /mnt/pages
+# COUNTER=0
+# PAGES=`s3cmd --config=/root/.s3cfg ls  s3://trendingtopics/archive/$NEXTDATE/pages/ | awk '{ print $4 }'`
+# for filename in $PAGES
+# do
+#   echo "downloading $filename"
+#   TARGET=`echo $filename | cut -d'/' -f7`
+#   s3cmd --config=/root/.s3cfg --force get $filename  /mnt/pages/part-$COUNTER
+#   let COUNTER=COUNTER+1
+# done
+
+# Fetch latest "pages" moved to S3 by distcp on Hadoop cluster
+bash /mnt/app/current/lib/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/pages/ /mnt/pages
 # merge pages
 echo merging page files
 time cat pages/* | sort -n > pages.txt
 
-# Fetch "DailyTimelines" moved to S3 by distcp
-mkdir -p /mnt/daily_timelines
-COUNTER=0
-PAGES=`s3cmd --config=/root/.s3cfg ls  s3://trendingtopics/archive/$NEXTDATE/daily_timelines/ | awk '{ print $4 }'`
-for filename in $PAGES
-do
-  echo "downloading $filename"
-  TARGET=`echo $filename | cut -d'/' -f7`
-  s3cmd --config=/root/.s3cfg --force get $filename  /mnt/daily_timelines/part-$COUNTER
-  let COUNTER=COUNTER+1
-done
+
+# mkdir -p /mnt/daily_timelines
+# COUNTER=0
+# PAGES=`s3cmd --config=/root/.s3cfg ls  s3://trendingtopics/archive/$NEXTDATE/daily_timelines/ | awk '{ print $4 }'`
+# for filename in $PAGES
+# do
+#   echo "downloading $filename"
+#   TARGET=`echo $filename | cut -d'/' -f7`
+#   s3cmd --config=/root/.s3cfg --force get $filename  /mnt/daily_timelines/part-$COUNTER
+#   let COUNTER=COUNTER+1
+# done
+
+# Fetch latest "daily_timelines" moved to S3 by distcp on Hadoop cluster
+bash /mnt/app/current/lib/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/daily_timelines/ /mnt/daily_timelines/
 
 echo merging timeline files
 # merge daily timelines
@@ -104,10 +109,11 @@ echo swapping staging tables to live site
 # We swap the new tables to go live automatically
 time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/rename_new_to_live.sql
 
+# Remove any flagged pages from the config.yml blacklist section
+cd /mnt/app/current && RAILS_ENV=production rake blacklist_articles --trace
 
-# wipe static page caches
-# need to call rake task on the web server...
 echo purging cache
+# need to call rake task on the web server...
 # make sure private keys to access the web server are on the db server in /root/.ssh
 ssh -o StrictHostKeyChecking=no root@$WEBSERVER 'cd /mnt/app/current && RAILS_ENV=production rake purge_cache > /mnt/purge_cache.log 2>&1' &
 
