@@ -48,7 +48,7 @@ s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/Companies_l
 # done
 
 # Fetch latest "pages" moved to S3 by distcp on Hadoop cluster
-bash /mnt/app/current/lib/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/pages/ /mnt/pages
+bash /mnt/app/current/lib/scripts/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/pages/ /mnt/pages
 # merge pages
 echo merging page files
 time cat pages/* | sort -n > pages.txt
@@ -66,7 +66,7 @@ time cat pages/* | sort -n > pages.txt
 # done
 
 # Fetch latest "daily_timelines" moved to S3 by distcp on Hadoop cluster
-bash /mnt/app/current/lib/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/daily_timelines/ /mnt/daily_timelines/
+bash /mnt/app/current/lib/scripts/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/daily_timelines/ /mnt/daily_timelines/
 
 echo merging timeline files
 # merge daily timelines
