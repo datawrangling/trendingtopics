@@ -105,20 +105,11 @@ echo swapping staging tables to live site
 time mysql -u root trendingtopics_production <  /mnt/app/current/lib/sql/rename_new_to_live.sql
 
 
-## TODO flush memcached
-# expect << EOF
-# set timeout 20
-# spawn telnet localhost 11211
-# expect "Escape character is '^]'."
-# send "flush_all"
-# send "quit"
-# exit
-# EOF
-
 # wipe static page caches
 # need to call rake task on the web server...
 echo purging cache
-ssh -o StrictHostKeyChecking=no root@$WEBSERVER 'cd /mnt/app/current && nohup bash RAILS_ENV=production rake purge_cache > /mnt/purge_cache.log 2>&1' &
+# make sure private keys to access the web server are on the db server in /root/.ssh
+ssh -o StrictHostKeyChecking=no root@$WEBSERVER 'cd /mnt/app/current && RAILS_ENV=production rake purge_cache > /mnt/purge_cache.log 2>&1' &
 
 echo sending completion email
 # Send an email signalling staging tables are ready
