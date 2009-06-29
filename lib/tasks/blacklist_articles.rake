@@ -2,6 +2,6 @@
 task :blacklist_articles => :environment do
   APP_CONFIG = YAML.load_file("config/config.yml")["#{RAILS_ENV}"]
   APP_CONFIG['blacklist'].each do |badpage|
-    run "cd /mnt && mysql -u root trendingtopics_#{RAILS_ENV} -e 'update pages set featured=1 where id = #{badpage};'"
+    exec "cd /mnt && mysql -u root trendingtopics_#{RAILS_ENV} -e 'update pages set featured=1 where id = #{badpage};'"
   end
 end  

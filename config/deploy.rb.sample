@@ -117,11 +117,6 @@ task :update_config, :roles => [:app, :db, :web, :memcache] do
   run "cp -Rf #{shared_path}/config/* #{current_path}/config"
 end
 
-desc "Preseed Memcached with Autocomplete Query prefixes "
-task :seed_memcached, :roles => [:app] do
-  run "python #{current_path}/lib/scripts/seed_memcached.py"
-end
-
 desc "Load staging data into new_* tables "
 task :load_staging_tables, :roles => [:db] do
   run "cd /mnt && mysql -u root trendingtopics_production < #{current_path}/lib/sql/load_history.sql"
@@ -139,8 +134,18 @@ task :set_blacklist_flags, :roles => [:db] do
   end  
 end
 
+desc "flush cache"
+task :flush_cache, :roles => [:app] do
+  run "cd /mnt/app/current && RAILS_ENV=production rake purge_cache"
+end
+
+desc "Preseed Memcached with Autocomplete Query prefixes "
+task :seed_memcached, :roles => [:app] do
+  run "python #{current_path}/lib/scripts/seed_memcached.py"
+end
 
 after 'deploy:update_code', :copy_nonvconfig
 after 'deploy:symlink', :update_config
-after 'deploy', :seed_memcached
 after 'deploy', :set_blacklist_flags
+after 'set_blacklist_flags', :flush_cache
+after 'flush_cache', :seed_memcached
