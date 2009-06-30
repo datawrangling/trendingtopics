@@ -13,8 +13,6 @@ class Page < ActiveRecord::Base
     "#{url}"
   end
   
-  
-    
   def normed_daily_pageviews( range=30)
     @pageviews = JSON.parse(self.daily_timeline.pageviews)
     @dates = JSON.parse(self.daily_timeline.dates)    

@@ -30,14 +30,6 @@ ActiveRecord::Schema.define(:version => 20090627203556) do
 
   add_index "daily_timelines", ["page_id"], :name => "daily_timelines_page_index"
 
-  create_table "daily_trends", :force => true do |t|
-    t.integer  "page_id"
-    t.float    "trend"
-    t.float    "error"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "featured_pages", :force => true do |t|
     t.integer  "page_id"
     t.datetime "created_at"
@@ -112,13 +104,5 @@ ActiveRecord::Schema.define(:version => 20090627203556) do
   end
 
   add_index "people", ["page_id"], :name => "people_page_index"
-
-  create_table "weekly_trends", :force => true do |t|
-    t.integer  "page_id"
-    t.float    "trend"
-    t.float    "error"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
 end
