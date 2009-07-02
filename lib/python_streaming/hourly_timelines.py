@@ -93,7 +93,7 @@ def mapper(args):
           if len(title) > 0 and title[0] != '#':
             key = title.replace("\t","").replace(' ','_')
             #we only keep the hour...
-            hour=time[0,2]
+            hour=time[0:2]
             datetime = date + hour  
             sys.stdout.write('%s\t%s %s\n' % (key, datetime, count) )
 
