@@ -1,0 +1,20 @@
+<h1>Listing hourly_timelines</h1>
+
+<table>
+  <tr>
+    <th>Page</th>
+    <th>Datetimes</th>
+    <th>Pageviews</th>
+  </tr>
+
+<% @hourly_timelines.each do |hourly_timeline| %>
+  <tr>
+    <td><%=h hourly_timeline.page_id %></td>
+    <td><%=h hourly_timeline.datetimes %></td>
+    <td><%=h hourly_timeline.pageviews %></td>
+    <td><%= link_to 'Show', hourly_timeline %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />

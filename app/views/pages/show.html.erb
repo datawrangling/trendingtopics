@@ -4,7 +4,7 @@
 
     <div id = "timeline_chart" class="left">
         <h3>Daily Pageviews for <span><%= truncate(@page.title, 35) %></span> <span style="text-align:right;"><%= link_to image_tag("csv_icon.png", :alt => 'Trend CSV file for ' + @page.title,  :size =>"16x18"), :controller => "pages", :action => "csv", :id => @page  %></span></h3>  
-        <%= render :partial => "timeline"  %>
+        <%= render :partial => "timeline"  %>        
     </div>
 
     <div id="news" class="right">
@@ -15,8 +15,29 @@
     </div> <!-- .clear -->
 
 </div> <!-- first-section -->
-
+<!--
 <div id="second-section" class="section">
+
+    <div id = "hourly_chart" class="left"> 
+    <p><%= image_tag(@page.linechart('76A4FB', @range, chart_title="Wikipedia Page Views for: " + truncate(@page.title, 35)).to_url, :border=>0 , :alt => "Wikipedia Trend for " + @page.title ) %></p>
+    
+      
+    </div>
+
+    <div id="embed-code" class="right">
+    
+    <input type='text' name='embed' value="<%=h  @page.daily_embed_code %>" size=40 >
+    
+    
+    </div>	<!-- #embed-code -->		
+
+    <div class="clear">
+    </div> <!-- .clear -->
+
+</div> <!-- second-section -->
+-->
+
+<div id="third-section" class="section">
 <h3><%= link_to @page.title, 'http://en.wikipedia.org/wiki/' + @page.url, :class => "wikilink" %> on Wikipedia</h3>
 <iframe 
     name="cwindow"

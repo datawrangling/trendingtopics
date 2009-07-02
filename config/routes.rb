@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :hourly_timelines
+
   map.root :controller => "pages"    
   map.resources :pages, :except => [:show], :member => {:csv => :get}, :collection => {:auto_complete_for_search_query => :get }
   map.page 'page/*url', :controller => 'pages', :action => 'show'
@@ -13,7 +15,7 @@ ActionController::Routing::Routes.draw do |map|
     info.auto_complete_for_search_query 'pages/auto_complete_for_search_query', :action => 'auto_complete_for_search_query'     
   end
   
-  map.connect '/widgets/:chart_widget/:id', :controller => 'widgets', :action => 'chart_widget'
+  map.connect '/widgets/daily_chart_widget/:id', :controller => 'widgets', :action => 'daily_chart_widget'
   map.connect "sitemap.xml", :controller => "sitemap", :action => "sitemap"
 
   # The priority is based upon order of creation: first created -> highest priority.

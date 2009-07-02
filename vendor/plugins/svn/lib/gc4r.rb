@@ -343,6 +343,7 @@ module GC4R
       TOP = 't'
       def initialize options={}
         add ChartAxis.new options[:axis]
+        add ChartAxisLabels.new options[:labels]
       end
     end
   end
