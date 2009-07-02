@@ -2,14 +2,17 @@
 # run_hourly_trends.sh
 #
 # Driver script for generating hourly timeline json data.
-# Assumes input data is on S3 in MYBUCKET
+# Assumes input data is on S3 in MYBUCKET grabs the last 10 days of data
 #
 # Usage:
 #
-# Replace the input paths with your bucket and the desired range
+# Replace the input paths with your bucket
+#
 # then:
 #
-# $ bash trendingtopics/lib/scripts/run_hourly_timelines.sh MYBUCKET
+# $ bash trendingtopics/lib/scripts/run_hourly_timelines.sh MYBUCKET MYSERVER
+#
+# where MYSERVER is the database server (i.e. db.trendingtopics.org)
 #
 # uploads daily_timelines tab delimited files to S3 archive folder via distcp
 # which are then bulk loaded into the Rails app hourly_timelines table.
@@ -17,37 +20,28 @@
 #
 
 MYBUCKET=$1
-DAYS=`s3cmd --config=/root/.s3cfg ls s3://$MYBUCKET/wikistats/* | awk '{print $4}' | tail -240 | cut -d'.' -f1 | cut -d'-' -f2 | sort -u`
+MYSERVER=$2
 
-# echo $DAYS
-# 20090603 20090604 20090605 20090606 20090607 20090608 20090609 20090610 20090611 20090612
+# we need to key dates off of max date in DB
 
-D0=`date --date "now -1 day" +"%Y%m%d"`
-D1=`date --date "now -2 day" +"%Y%m%d"`
-D2=`date --date "now -3 day" +"%Y%m%d"`
-D3=`date --date "now -4 day" +"%Y%m%d"`
-D4=`date --date "now -5 day" +"%Y%m%d"`
-D5=`date --date "now -6 day" +"%Y%m%d"`
-D6=`date --date "now -7 day" +"%Y%m%d"`
-D7=`date --date "now -8 day" +"%Y%m%d"`
-D8=`date --date "now -9 day" +"%Y%m%d"`
-D9=`date --date "now -10 day" +"%Y%m%d"`
+RESULTSET=`ssh -o StrictHostKeyChecking=no root@$MYSERVER 'mysql -u root trendingtopics_production -e "select LEFT(RIGHT(dates,9),8) from daily_timelines where page_id=29812;"'`
+
+LASTDATE=`echo $RESULTSET | awk '{print $2}'`
+# echo $LASTDATE
+# 20090612
+
+# use unix 'date' to find next date...
+NEXTDATE=`date --date "-d $LASTDATE +1 day" +"%Y%m%d"`
+PREVDATE=`date --date "-d $LASTDATE +1 day" +"%Y%m%d"`
 
 # Run the streaming job on 10 nodes
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D0* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D1* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D2* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D3* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D4* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D5* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D6* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D7* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D8* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D9* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$PREVDATE* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$LASTDATE* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$NEXTDATE* \
   -output finaltimelineoutput \
   -mapper "hourly_timelines.py mapper" \
-  -reducer "hourly_timelines.py reducer 10" \
+  -reducer "hourly_timelines.py reducer 72" \
   -file '/mnt/trendingtopics/lib/python_streaming/hourly_timelines.py' \
   -jobconf mapred.reduce.tasks=20 \
   -jobconf mapred.job.name=hourly_timeines
