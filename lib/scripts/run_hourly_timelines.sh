@@ -32,7 +32,7 @@ LASTDATE=`echo $RESULTSET | awk '{print $2}'`
 
 # use unix 'date' to find next date...
 NEXTDATE=`date --date "-d $LASTDATE +1 day" +"%Y%m%d"`
-PREVDATE=`date --date "-d $LASTDATE +1 day" +"%Y%m%d"`
+PREVDATE=`date --date "-d $LASTDATE -1 day" +"%Y%m%d"`
 
 # Run the streaming job on 10 nodes
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
