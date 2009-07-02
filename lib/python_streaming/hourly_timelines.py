@@ -6,6 +6,23 @@ hourly_timelines.py
 Python Hadoop Streaming script to to clean article names,
 and emit hourly wikipedia traffic data in json format
 
+Example command line usage for 2 hourly files:
+
+cat pagecounts-2009052* | /mnt/app/current/lib/python_streaming/hourly_timelines.py mapper | LC_ALL=C sort | /mnt/app/current/lib/python_streaming/hourly_timelines.py reducer 2 >foo_out.txt
+
+# grep Barack foo_out.txt | head
+2008_Barack_Obama_assassination_scare_in_Denver	[2009041902,2009041902]	[1,2]
+Barack_H_Obama	[2009041902,2009041902]	[1,3]
+Barack_H_Obama_Jr.	[2009041902,2009041902]	[1,2]
+Barack_Hussein_Obama,_Junior	[2009041902,2009041902]	[1,2]
+Barack_Obama	[2009041902,2009041902,2009041902]	[1,630,701]
+Barack_Obama's_first_100_days	[2009041902,2009041902]	[2,2]
+Barack_Obama,_Sr.	[2009041902,2009041902]	[10,20]
+Barack_Obama_"HOPE"_poster	[2009041902,2009041902]	[2,3]
+Barack_Obama_"Hope"_poster	[2009041902,2009041902]	[13,3]
+Barack_Obama_(comic_character)	[2009041902,2009041902]	[1,1]
+
+
 Created by Peter Skomoroch on 2009-06-10.
 Copyright (c) 2009 Data Wrangling LLC. All rights reserved.
 """
