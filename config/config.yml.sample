@@ -7,6 +7,7 @@ development:
   sidebar_articles: 19
   tracker_id: "UA-REPLACEME"
   yahoo_boss_id: "REPLACEME"
+  share_this_id: "72b7sdfdsdsfsdfsdfsdfsdfsdf" 
   verify_v1: "MK/gfdgdfgdfgfdgfdgfdgfdgfd"   
   protocol: http 
   blacklist: 
@@ -21,6 +22,7 @@ test:
   sidebar_articles: 19
   tracker_id: "UA-REPLACEME"
   yahoo_boss_id: "REPLACEME"
+  share_this_id: "72b7sdfdsdsfsdfsdfsdfsdfsdf" 
   verify_v1: "MK/gfdgdfgdfgfdgfdgfdgfdgfd"   
   protocol: http 
   blacklist: 
@@ -35,6 +37,7 @@ production:
   sidebar_articles: 19
   tracker_id: "UA-REPLACEME"
   yahoo_boss_id: "REPLACEME"
+  share_this_id: "72b7sdfdsdsfsdfsdfsdfsdfsdf" 
   verify_v1: "MK/gfdgdfgdfgfdgfdgfdgfdgfd"   
   protocol: http
   blacklist: 

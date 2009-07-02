@@ -5,6 +5,8 @@
     <div id = "timeline_chart" class="left">
         <h3>Daily Pageviews for <span><%= truncate(@page.title, 35) %></span> <span style="text-align:right;"><%= link_to image_tag("csv_icon.png", :alt => 'Trend CSV file for ' + @page.title,  :size =>"16x18"), :controller => "pages", :action => "csv", :id => @page  %></span></h3>  
         <%= render :partial => "timeline"  %>        
+        <BR>
+        <div id="share" style="text-align:right;"><span ><script type="text/javascript" src="http://w.sharethis.com/button/sharethis.js#publisher=<%= APP_CONFIG['share_this_id'] %>&amp;type=website"></script></span></div>
     </div>
 
     <div id="news" class="right">

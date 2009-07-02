@@ -4,9 +4,6 @@ class CreateHourlyTimelines < ActiveRecord::Migration
       t.references :page
       t.text :datetimes
       t.text :pageviews
-      t.integer :total_pageviews
-
-      t.timestamps
     end
   end
 

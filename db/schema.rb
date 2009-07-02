@@ -39,12 +39,9 @@ ActiveRecord::Schema.define(:version => 20090702042014) do
   add_index "featured_pages", ["page_id"], :name => "featured_pages_page_index"
 
   create_table "hourly_timelines", :force => true do |t|
-    t.integer  "page_id"
-    t.text     "datetimes"
-    t.text     "pageviews"
-    t.integer  "total_pageviews"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer "page_id"
+    t.text    "datetimes"
+    t.text    "pageviews"
   end
 
   add_index "hourly_timelines", ["page_id"], :name => "hourly_timelines_page_index"
