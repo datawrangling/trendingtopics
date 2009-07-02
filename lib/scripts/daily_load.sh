@@ -73,6 +73,14 @@ echo merging timeline files
 time cat daily_timelines/* > daily_timelines.txt
 # real	3m55.572s
 
+# Fetch latest "hourly_timelines" moved to S3 by distcp on Hadoop cluster
+bash /mnt/app/current/lib/scripts/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/hourly_timelines/ /mnt/hourly_timelines/
+
+echo merging hourly timeline files
+# merge daily timelines
+time cat hourly_timelines/* > hourly_timelines.txt
+# real	3m55.572s
+
 
 # mysql load of "new tables"
 echo loading history tables

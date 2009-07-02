@@ -42,6 +42,7 @@ set unique_checks=1;
 -- load data tables
 TRUNCATE TABLE new_pages;
 TRUNCATE TABLE new_daily_timelines;
+TRUNCATE TABLE new_hourly_timelines;
 
 set foreign_key_checks=0; 
 set sql_log_bin=0; 
@@ -49,6 +50,9 @@ set unique_checks=0;
 
 ALTER TABLE new_pages DISABLE KEYS;
 ALTER TABLE new_daily_timelines DISABLE KEYS;
+ALTER TABLE new_hourly_timelines DISABLE KEYS;
+
+
 
 LOAD DATA LOCAL INFILE '/mnt/pages.txt'
 INTO TABLE new_pages
@@ -68,11 +72,20 @@ LINES TERMINATED BY '\n'
 -- Query OK, 2783939 rows affected (3 min 56.88 sec)
 -- Records: 2783939  Deleted: 0  Skipped: 0  Warnings: 0
 
+LOAD DATA LOCAL INFILE '/mnt/hourly_timelines.txt'
+INTO TABLE new_hourly_timelines
+FIELDS TERMINATED BY 0x01
+LINES TERMINATED BY '\n'
+(page_id, datetimes, pageviews);
+
+
 ALTER TABLE new_pages ENABLE KEYS;
 ALTER TABLE new_daily_timelines ENABLE KEYS;
+ALTER TABLE new_hourly_timelines ENABLE KEYS;
 
 set foreign_key_checks=1; 
 set unique_checks=1;
 
 analyze TABLE new_pages;
 analyze TABLE new_daily_timelines;
+analyze TABLE new_hourly_timelines;

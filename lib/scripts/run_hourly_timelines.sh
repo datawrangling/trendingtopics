@@ -43,7 +43,7 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
   -mapper "hourly_timelines.py mapper" \
   -reducer "hourly_timelines.py reducer 72" \
   -file '/mnt/trendingtopics/lib/python_streaming/hourly_timelines.py' \
-  -jobconf mapred.reduce.tasks=20 \
+  -jobconf mapred.reduce.tasks=35 \
   -jobconf mapred.job.name=hourly_timeines
 
 # Clear the logs so Hive can load the raw timeline data  

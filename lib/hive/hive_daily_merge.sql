@@ -23,6 +23,33 @@ CREATE TABLE raw_daily_pagecounts_table (
   
 LOAD DATA INPATH 'finaloutput' INTO TABLE raw_daily_pagecounts_table;
 
+-- 2.5 import raw_hourly_timelines from streaming hourly job hdfs dir
+
+CREATE TABLE raw_hourly_timelines_table (
+    redirect_title STRING,
+    dates STRING,
+  pageviews STRING) 
+  ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY '\t'
+  STORED AS TEXTFILE;
+  
+LOAD DATA INPATH 'finaltimelineoutput' INTO TABLE raw_hourly_timelines_table;
+
+-- 2.6 normalize hourly pagecounts and ready for export
+
+CREATE TABLE new_hourly_timelines (
+    page_id BIGINT, 
+    dates STRING, 
+    pageviews STRING) 
+  ROW FORMAT DELIMITED 
+    FIELDS TERMINATED BY '\001' 
+  STORED AS TEXTFILE;
+
+INSERT OVERWRITE TABLE new_hourly_timelines
+SELECT redirect_table.page_id, raw_hourly_timelines_table.dates, raw_hourly_timelines_table.pageviews FROM redirect_table JOIN raw_hourly_timelines_table ON (redirect_table.redirect_title = raw_hourly_timelines_table.redirect_title);
+
+INSERT OVERWRITE DIRECTORY 'new_hourly_timelines' SELECT * FROM new_hourly_timelines;
+
 -- 3. Pull old daily timelines table from S3 with distcp then load to Hive
 
 CREATE TABLE daily_timelines (

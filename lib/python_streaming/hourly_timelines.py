@@ -29,7 +29,6 @@ Copyright (c) 2009 Data Wrangling LLC. All rights reserved.
 
 import sys, os, re
 import urllib
-from datetime import date, datetime
 
 # Exclude pages outside of english wikipedia
 wikistats_regex = re.compile('en (.*) ([0-9].*) ([0-9].*)')
@@ -111,8 +110,8 @@ def mapper(args):
             key = title.replace("\t","").replace(' ','_')
             #we only keep the hour...
             hour=time[0:2]
-            datetime = date + hour  
-            sys.stdout.write('%s\t%s %s\n' % (key, datetime, count) )
+            datehour = date + hour  
+            sys.stdout.write('%s\t%s %s\n' % (key, datehour, count) )
 
 def group_data(dates, pageviews):
   dts,counts = zip( *sorted( zip (dates,pageviews)))

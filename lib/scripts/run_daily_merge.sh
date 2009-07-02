@@ -63,7 +63,11 @@ if [ $HOURLYCOUNT -eq 24  ]; then
      -jobconf mapred.job.name=daily_merge   
    
    # Clear the logs so Hive can load the daily pagecount data 
-   hadoop fs -rmr finaloutput/_logs   
+   hadoop fs -rmr finaloutput/_logs 
+   
+   # Collect the hourly timeline data and prepare for Hive import
+   # resulting data will be in finaltimelineoutput in hdfs
+   bash trendingtopics/lib/scripts/run_hourly_timelines.sh $MYBUCKET $MYSERVER  
    
    # Fetch wikipedia page id lookup table
    # s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/page_lookup_nonredirects.txt /mnt/page_lookup_nonredirects.txt
@@ -98,6 +102,7 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    
    hadoop distcp /user/root/new_pages s3n://$MYBUCKET/archive/$NEXTDATE/pages
    hadoop distcp /user/root/new_daily_timelines s3n://$MYBUCKET/archive/$NEXTDATE/daily_timelines
+   hadoop distcp /user/root/new_hourly_timelines s3n://$MYBUCKET/archive/$NEXTDATE/hourly_timelines
    
 
    # # Spool the tab delimited data out of hive for bulk loading into MySQL
