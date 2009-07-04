@@ -29,6 +29,7 @@ Copyright (c) 2009 Data Wrangling LLC. All rights reserved.
 
 import sys, os, re
 import urllib
+from collections import defaultdict
 
 # Exclude pages outside of english wikipedia
 wikistats_regex = re.compile('en (.*) ([0-9].*) ([0-9].*)')
@@ -113,8 +114,11 @@ def mapper(args):
             datehour = date + hour  
             sys.stdout.write('%s\t%s %s\n' % (key, datehour, count) )
 
-def group_data(dates, pageviews):
-  dts,counts = zip( *sorted( zip (dates,pageviews)))
+def group_data(pageviews):
+  #TODO: zeros for missing datetimes
+  dts = pageviews.keys()
+  dts.sort()
+  counts = [pageviews[x] for x in dts]
   date_str = '[%s]' % ','.join(dts)
   pageview_str = '[%s]' % ','.join(map(str,counts))
   return date_str, pageview_str
@@ -127,26 +131,40 @@ def reducer(min_days, args):
   line = 'Barack_Obama\t[2009041901,2009042002,' +
    '2009042123,2009042221]\t[143,152,163,129]\n'
   
+  use defaultdict:
+    
+  >>> from collections import defaultdict
+  >>> pageviews=defaultdict(int)
+  >>> pageviews['foo'] += 1
+  >>> pageviews['foo']
+  1
+  
+  In the case where multiple records map to same url we need to
+  sum counts using a defaultdict
+  
+  en 2nd_Infantry_Division_(United_States) 10 295759
+  en 2nd_Infantry_Division_%28United_States%29 2 33234
+
   '''
-  last_article, dates, pageviews = None, [], []
+  last_article = None
+  pageviews=defaultdict(int)
   for line in sys.stdin:
     try:
       (article, date_pageview) = line.strip().split("\t")
       date, pageview = date_pageview.split()
       if last_article != article and last_article is not None:
-        if len(dates) >= int(min_days): 
-          date_str, pageview_str = group_data(dates, pageviews)  
+        if len(pageviews) >= int(min_days): 
+          date_str, pageview_str = group_data(pageviews)  
           sys.stdout.write( "%s\t%s\t%s\n" % (last_article, date_str, pageview_str))
-        dates, pageviews = [], []
+        pageviews=defaultdict(int)
       last_article = article
-      dates.append(date)
-      pageviews.append(pageview)
+      pageviews[date] += int(pageview)
     except:
       # skip bad rows
       pass  
   # Handle edge case, last row...  
-  if len(dates) >= int(min_days):
-    date_str, pageview_str = group_data(dates, pageviews)     
+  if len(pageviews) >= int(min_days):
+    date_str, pageview_str = group_data(pageviews)     
     sys.stdout.write( "%s\t%s\t%s\n" % (last_article, date_str, pageview_str))        
 
 
