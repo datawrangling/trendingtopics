@@ -26,22 +26,32 @@ MYSERVER=$2
 
 RESULTSET=`ssh -o StrictHostKeyChecking=no root@$MYSERVER 'mysql -u root trendingtopics_production -e "select LEFT(RIGHT(dates,9),8) from daily_timelines where page_id=29812;"'`
 
-LASTDATE=`echo $RESULTSET | awk '{print $2}'`
+D1=`echo $RESULTSET | awk '{print $2}'`
 # echo $LASTDATE
 # 20090612
 
 # use unix 'date' to find next date...
-NEXTDATE=`date --date "-d $LASTDATE +1 day" +"%Y%m%d"`
-PREVDATE=`date --date "-d $LASTDATE -1 day" +"%Y%m%d"`
+D0=`date --date "-d $D1 +1 day" +"%Y%m%d"`
+D2=`date --date "-d $D1 -1 day" +"%Y%m%d"`
+D3=`date --date "-d $D1 -2 day" +"%Y%m%d"`
+D4=`date --date "-d $D1 -3 day" +"%Y%m%d"`
+D5=`date --date "-d $D1 -4 day" +"%Y%m%d"`
+D6=`date --date "-d $D1 -5 day" +"%Y%m%d"`
+D7=`date --date "-d $D1 -6 day" +"%Y%m%d"`
 
 # Run the streaming job on 10 nodes
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$PREVDATE* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$LASTDATE* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$NEXTDATE* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D0* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D1* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D2* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D3* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D4* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D5* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D6* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D7* \
   -output finaltimelineoutput \
   -mapper "hourly_timelines.py mapper" \
-  -reducer "hourly_timelines.py reducer 72" \
+  -reducer "hourly_timelines.py reducer 192" \
   -file '/mnt/trendingtopics/lib/python_streaming/hourly_timelines.py' \
   -jobconf mapred.reduce.tasks=35 \
   -jobconf mapred.job.name=hourly_timeines
