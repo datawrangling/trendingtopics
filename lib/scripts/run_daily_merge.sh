@@ -3,7 +3,7 @@
 
 # Usage:
 #
-# run_daily_merge.sh MYBUCKET MYSERVER MAILTO
+# run_daily_merge.sh MYBUCKET MYSERVER MAILTO NUMREDUCERS
 
 # After the initial import of historical data, this script is run daily at 7:30 PM EST
 # to calculate daily trends with the day's latest S3 data
@@ -13,6 +13,7 @@
 MYBUCKET=$1
 MYSERVER=$2
 MAILTO=$3
+NUMREDUCERS=$4
 
 # run this query remotely against prod from the Hadoop cluster....
 # Use "The Beatles", page id = 29812, since it is the highest volume wikipedia article
@@ -59,7 +60,7 @@ if [ $HOURLYCOUNT -eq 24  ]; then
      -mapper "daily_merge.py mapper" \
      -reducer "daily_merge.py reducer" \
      -file '/mnt/trendingtopics/lib/python_streaming/daily_merge.py' \
-     -jobconf mapred.reduce.tasks=35 \
+     -jobconf mapred.reduce.tasks=$NUMREDUCERS \
      -jobconf mapred.job.name=daily_merge   
    
    # Clear the logs so Hive can load the daily pagecount data 
@@ -67,7 +68,7 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    
    # Collect the hourly timeline data and prepare for Hive import
    # resulting data will be in finaltimelineoutput in hdfs
-   bash trendingtopics/lib/scripts/run_hourly_timelines.sh $MYBUCKET $MYSERVER  
+   bash trendingtopics/lib/scripts/run_hourly_timelines.sh $MYBUCKET $MYSERVER $NUMREDUCERS  
    
    # Fetch wikipedia page id lookup table
    # s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/page_lookup_nonredirects.txt /mnt/page_lookup_nonredirects.txt

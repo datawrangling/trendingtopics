@@ -10,7 +10,7 @@
 #
 # then:
 #
-# $ bash trendingtopics/lib/scripts/run_hourly_timelines.sh MYBUCKET MYSERVER
+# $ bash trendingtopics/lib/scripts/run_hourly_timelines.sh MYBUCKET MYSERVER NUMREDUCERS
 #
 # where MYSERVER is the database server (i.e. db.trendingtopics.org)
 #
@@ -21,6 +21,7 @@
 
 MYBUCKET=$1
 MYSERVER=$2
+NUMREDUCERS=$3
 
 # we need to key dates off of max date in DB
 
@@ -38,6 +39,8 @@ D4=`date --date "-d $D1 -3 day" +"%Y%m%d"`
 D5=`date --date "-d $D1 -4 day" +"%Y%m%d"`
 D6=`date --date "-d $D1 -5 day" +"%Y%m%d"`
 D7=`date --date "-d $D1 -6 day" +"%Y%m%d"`
+D8=`date --date "-d $D1 -7 day" +"%Y%m%d"`
+D9=`date --date "-d $D1 -8 day" +"%Y%m%d"`
 
 # Run the streaming job on 10 nodes
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
@@ -49,11 +52,13 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
   -input s3n://$MYBUCKET/wikistats/pagecounts-$D5* \
   -input s3n://$MYBUCKET/wikistats/pagecounts-$D6* \
   -input s3n://$MYBUCKET/wikistats/pagecounts-$D7* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D8* \
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D9* \  
   -output finaltimelineoutput \
   -mapper "hourly_timelines.py mapper" \
   -reducer "hourly_timelines.py reducer 192" \
   -file '/mnt/trendingtopics/lib/python_streaming/hourly_timelines.py' \
-  -jobconf mapred.reduce.tasks=35 \
+  -jobconf mapred.reduce.tasks=$NUMREDUCERS \
   -jobconf mapred.job.name=hourly_timeines
 
 # Clear the logs so Hive can load the raw timeline data  
