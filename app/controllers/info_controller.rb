@@ -19,7 +19,7 @@ class InfoController < ApplicationController
       params[:page]='1'
     end    
     unless read_fragment({:page => params[:page]}) 
-      @pages = Page.paginate(:page => params[:page], :joins => [ :person ], :order => 'daily_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
+      @pages = Page.paginate(:page => params[:page], :joins => [ :person ], :conditions => ["featured=0"], :order => 'daily_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
       @page = Page.find(:first, :joins => [ :person ], :order => 'daily_trend DESC' )
       if @page.nil?
         @page = Page.find(:first)
@@ -36,7 +36,7 @@ class InfoController < ApplicationController
       params[:page]='1'
     end    
     unless read_fragment({:page => params[:page]}) 
-      @pages = Page.paginate(:page => params[:page], :joins => [ :company ], :order => 'daily_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
+      @pages = Page.paginate(:page => params[:page], :joins => [ :company ],:conditions => ["featured=0"], :order => 'daily_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
       @page = Page.find(:first, :joins => [ :company ], :order => 'daily_trend DESC' )
       if @page.nil?
         @page = Page.find(:first)

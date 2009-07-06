@@ -66,7 +66,7 @@ time cat pages/* | sort -n > pages.txt
 # done
 
 # Fetch latest "daily_timelines" moved to S3 by distcp on Hadoop cluster
-bash /mnt/app/current/lib/scripts/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/daily_timelines/ /mnt/daily_timelines/
+bash /mnt/app/current/lib/scripts/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/daily_timelines/ /mnt/daily_timelines
 
 echo merging timeline files
 # merge daily timelines
@@ -74,7 +74,7 @@ time cat daily_timelines/* > daily_timelines.txt
 # real	3m55.572s
 
 # Fetch latest "hourly_timelines" moved to S3 by distcp on Hadoop cluster
-bash /mnt/app/current/lib/scripts/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/hourly_timelines/ /mnt/hourly_timelines/
+bash /mnt/app/current/lib/scripts/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/hourly_timelines/ /mnt/hourly_timelines
 
 echo merging hourly timeline files
 # merge daily timelines
