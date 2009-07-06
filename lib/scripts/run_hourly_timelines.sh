@@ -53,7 +53,7 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
   -input s3n://$MYBUCKET/wikistats/pagecounts-$D6* \
   -input s3n://$MYBUCKET/wikistats/pagecounts-$D7* \
   -input s3n://$MYBUCKET/wikistats/pagecounts-$D8* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D9* \  
+  -input s3n://$MYBUCKET/wikistats/pagecounts-$D9* \
   -output finaltimelineoutput \
   -mapper "hourly_timelines.py mapper" \
   -reducer "hourly_timelines.py reducer 192" \
