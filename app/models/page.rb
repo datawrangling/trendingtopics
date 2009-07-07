@@ -1,5 +1,6 @@
 class Page < ActiveRecord::Base
   has_one :daily_timeline
+  has_one :hourly_timeline  
   has_one :person
   has_one :company  
   named_scope :title_like, lambda { |query| { :conditions => ['title like ? and featured=0', "#{query}%"], :order => '`monthly_trend` DESC', :limit => 12 } }
@@ -158,12 +159,33 @@ class Page < ActiveRecord::Base
     @data.sort
   end  
   
+  def sorted_datetimes
+    rawdates = JSON.parse(self.hourly_timeline.datetimes)
+    @data = []
+    rawdates.each do |date|
+      @data << DateTime.strptime( date.to_s, "%Y%m%d%H")
+    end
+    @data.sort
+  end  
+  
+  
   def date_pageview_array
     rawdates = JSON.parse(self.daily_timeline.dates)
     pageviews = JSON.parse(self.daily_timeline.pageviews)    
     @data = []
     rawdates.each_with_index do |date, index|
       @data << [DateTime.strptime( date.to_s, "%Y%m%d").strftime('%D'), pageviews[index]]
+    end
+    return @data
+  end
+  
+  
+  def datetime_pageview_array
+    rawdates = JSON.parse(self.hourly_timeline.datetimes)
+    pageviews = JSON.parse(self.hourly_timeline.pageviews)    
+    @data = []
+    rawdates.each_with_index do |date, index|
+      @data << [DateTime.strptime( date.to_s, "%Y%m%d%H").strftime('%D %H:%M'), pageviews[index]]
     end
     return @data
   end
@@ -179,5 +201,17 @@ class Page < ActiveRecord::Base
     end
     return @data
   end
+  
+  def timeline_hours
+    rawdates = JSON.parse(self.hourly_timeline.datetimes)
+    pageviews = JSON.parse(self.hourly_timeline.pageviews)    
+
+    @data = {}
+    rawdates.each_with_index do |date, index|
+      @data[DateTime.strptime( date.to_s, "%Y%m%d%H").strftime('%D %H:%M')] = {:wikipedia_page_views => pageviews[index]}
+    end
+    return @data
+  end  
+  
   
 end
