@@ -185,7 +185,8 @@ class Page < ActiveRecord::Base
     pageviews = JSON.parse(self.hourly_timeline.pageviews)    
     @data = []
     rawdates.each_with_index do |date, index|
-      @data << [DateTime.strptime( date.to_s, "%Y%m%d%H").strftime('%D %H:%M'), pageviews[index]]
+      # convert from UTC to EDT
+      @data << [(DateTime.strptime( date.to_s, "%Y%m%d%H") - (4/24.0)).strftime('%D %H:%M'), pageviews[index]]
     end
     return @data
   end
