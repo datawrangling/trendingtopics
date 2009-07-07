@@ -49,19 +49,5 @@ class PagesController < ApplicationController
   end
   
 #### Custom REST actions #######  
-  
-  # GET /pages/Sam_Worthington/csv
-  def csv
-    @page = Page.find_by_url(params[:id])
-    puts params[:url] 
-    csv_array = ["Date,Pageviews"]
-    @page.date_pageview_array.each do |pair|
-      csv_array << "#{pair[0]},#{pair[1]}"
-    end
-    send_data csv_array.join("\n"), :type => 'text/csv; charset=utf-8', :filename=>"#{@page.url}.csv",
-    :disposition => 'attachment'
-    
-  end  
-  
 
 end
