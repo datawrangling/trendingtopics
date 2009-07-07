@@ -47,11 +47,9 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
   -input s3n://$MYBUCKET/wikistats/pagecounts-$D0* \
   -input s3n://$MYBUCKET/wikistats/pagecounts-$D1* \
   -input s3n://$MYBUCKET/wikistats/pagecounts-$D2* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D3* \
-  -input s3n://$MYBUCKET/wikistats/pagecounts-$D4* \
   -output finaltimelineoutput \
   -mapper "hourly_timelines.py mapper" \
-  -reducer "hourly_timelines.py reducer 96" \
+  -reducer "hourly_timelines.py reducer 72" \
   -file '/mnt/trendingtopics/lib/python_streaming/hourly_timelines.py' \
   -jobconf mapred.reduce.tasks=$NUMREDUCERS \
   -jobconf mapred.job.name=hourly_timeines
