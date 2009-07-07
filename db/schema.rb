@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090702042014) do
+ActiveRecord::Schema.define(:version => 20090707222407) do
 
   create_table "companies", :force => true do |t|
     t.integer  "page_id"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(:version => 20090702042014) do
   add_index "new_pages", ["featured", "monthly_trend"], :name => "pages_feature_monthly_trend_index"
   add_index "new_pages", ["title", "featured", "daily_trend"], :name => "pages_title_daily_trend_index"
   add_index "new_pages", ["title", "featured", "monthly_trend"], :name => "pages_title_monthly_trend_index"
+  add_index "new_pages", ["title", "featured", "total_pageviews"], :name => "pages_title_pageviews_index"
   add_index "new_pages", ["url"], :name => "pages_url_index"
 
   create_table "pages", :force => true do |t|
@@ -111,6 +112,7 @@ ActiveRecord::Schema.define(:version => 20090702042014) do
   add_index "pages", ["featured", "monthly_trend"], :name => "pages_feature_monthly_trend_index"
   add_index "pages", ["title", "featured", "daily_trend"], :name => "pages_title_daily_trend_index"
   add_index "pages", ["title", "featured", "monthly_trend"], :name => "pages_title_monthly_trend_index"
+  add_index "pages", ["title", "featured", "total_pageviews"], :name => "pages_title_pageviews_index"
   add_index "pages", ["url"], :name => "pages_url_index"
 
   create_table "people", :force => true do |t|
