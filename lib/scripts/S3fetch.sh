@@ -22,7 +22,7 @@ do
   while [ $RETVAL -ne 0 ]
   do
     # wait 20 seconds for each download to complete, else abort & retry
-    bash /mnt/app/current/lib/scripts/cmdtimeout "s3cmd --force get $filename  $DESTINATION/part-$COUNTER" 20 
+    bash /mnt/app/current/lib/scripts/cmdtimeout -t 60 s3cmd --force get $filename  $DESTINATION/part-$COUNTER 
     RETVAL=$?
     if [ $RETVAL -eq 1  ]; then
       echo download attempt failed, pausing
