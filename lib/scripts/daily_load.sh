@@ -13,6 +13,8 @@ echo MYBUCKET is $MYBUCKET
 echo MYSERVER is $MYSERVER
 echo MAILTO is $MAILTO
 
+echo starting daily_load
+echo `date`
 # cd /mnt && tar -xzvf trendsdb.tar.gz
 
 RESULTSET=`mysql -u root trendingtopics_production -e "select count(*) from information_schema.TABLES where Table_Name='new_pages' and TABLE_SCHEMA='trendingtopics_production';"`
@@ -46,6 +48,14 @@ s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/Companies_l
 #   s3cmd --config=/root/.s3cfg --force get $filename  /mnt/pages/part-$COUNTER
 #   let COUNTER=COUNTER+1
 # done
+
+
+rm -rf /mnt/pages
+rm -rf /mnt/daily_timelines
+rm -rf /mnt/hourly_timelines
+mkdir -p /mnt/pages
+mkdir -p /mnt/daily_timelines
+mkdir -p /mnt/hourly_timelines
 
 # Fetch latest "pages" moved to S3 by distcp on Hadoop cluster
 bash /mnt/app/current/lib/scripts/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/pages/ /mnt/pages
@@ -129,7 +139,8 @@ echo sending completion email
 # Send an email signalling staging tables are ready
 echo "$MYSERVER staging tables ready for QA" | mail -s "$MYSERVER staging complete" $MAILTO
 
-echo load finished
+echo daily_load finished
+echo `date`
 
 
 
