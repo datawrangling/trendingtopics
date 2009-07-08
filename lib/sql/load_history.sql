@@ -11,30 +11,33 @@
 
 -- load entity metadata tables...
 
+-- TODO: this will lock the site for users until the metadata 
+-- tables are loaded, should use staging tables.
+
 set foreign_key_checks=0; 
 set sql_log_bin=0; 
 set unique_checks=0;
 
-TRUNCATE TABLE people;
-TRUNCATE TABLE companies;
+TRUNCATE TABLE new_people;
+TRUNCATE TABLE new_companies;
 
-ALTER TABLE people DISABLE KEYS;
-ALTER TABLE companies DISABLE KEYS;
+ALTER TABLE new_people DISABLE KEYS;
+ALTER TABLE new_companies DISABLE KEYS;
 
 LOAD DATA LOCAL INFILE '/mnt/Living_people.txt'
-INTO TABLE people
+INTO TABLE new_people
 FIELDS TERMINATED BY '\t'
 LINES TERMINATED BY '\n'
 (page_id);
   
 LOAD DATA LOCAL INFILE '/mnt/Companies_listed_on_the_New_York_Stock_Exchange.txt'
-INTO TABLE companies
+INTO TABLE new_companies
 FIELDS TERMINATED BY '\t'
 LINES TERMINATED BY '\n'
 (page_id);
 
-ALTER TABLE people ENABLE KEYS;
-ALTER TABLE companies ENABLE KEYS;  
+ALTER TABLE new_people ENABLE KEYS;
+ALTER TABLE new_companies ENABLE KEYS;  
 
 set foreign_key_checks=1; 
 set unique_checks=1;  
@@ -89,3 +92,5 @@ set unique_checks=1;
 analyze TABLE new_pages;
 analyze TABLE new_daily_timelines;
 analyze TABLE new_hourly_timelines;
+analyze TABLE new_companies;
+analyze TABLE new_people;

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090707222407) do
+ActiveRecord::Schema.define(:version => 20090708045550) do
 
   create_table "companies", :force => true do |t|
     t.integer  "page_id"
@@ -45,6 +45,14 @@ ActiveRecord::Schema.define(:version => 20090707222407) do
   end
 
   add_index "hourly_timelines", ["page_id"], :name => "hourly_timelines_page_index"
+
+  create_table "new_companies", :force => true do |t|
+    t.integer  "page_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "new_companies", ["page_id"], :name => "companies_page_index"
 
   create_table "new_daily_timelines", :force => true do |t|
     t.integer  "page_id"
@@ -97,6 +105,14 @@ ActiveRecord::Schema.define(:version => 20090707222407) do
   add_index "new_pages", ["title", "featured", "monthly_trend"], :name => "pages_title_monthly_trend_index"
   add_index "new_pages", ["title", "featured", "total_pageviews"], :name => "pages_title_pageviews_index"
   add_index "new_pages", ["url"], :name => "pages_url_index"
+
+  create_table "new_people", :force => true do |t|
+    t.integer  "page_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "new_people", ["page_id"], :name => "people_page_index"
 
   create_table "pages", :force => true do |t|
     t.string  "url"
