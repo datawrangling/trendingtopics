@@ -4,7 +4,7 @@
 #
 # example usage:
 # bash /mnt/app/current/lib/scripts/S3fetch.sh s3://trendingtopics/archive/20090628/pages/ /mnt/pages
-
+# TODO timeout s3cmd fetch if download takes longer than TIMEOUT seconds. 
 
 SOURCE=$1
 DESTINATION=$2
