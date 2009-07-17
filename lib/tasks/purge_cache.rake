@@ -1,3 +1,4 @@
+
 desc 'Purge fragment and page caches after daily load'
  
 task :purge_cache => :environment do
@@ -9,8 +10,10 @@ task :purge_cache => :environment do
    
   # ActiveSupport::Cache::MemCacheStore.new.clear  
   
-  # to expire filesystem page caches, we remove the directories in /public on web server
-  exec "rm -rf public/pages"
-  exec "rm -rf public/page"
-  exec "rm -rf public/info"    
+  
+  # to expire filesystem page caches, we remove the directories in /public on web server    
+  sh %{ rm -rf public/pages }
+  sh %{ rm -rf public/page }
+  sh %{ rm -rf public/info }    
+  
 end
