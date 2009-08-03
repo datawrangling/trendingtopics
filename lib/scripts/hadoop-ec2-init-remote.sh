@@ -539,6 +539,15 @@ function start_hadoop_slave() {
   service hadoop-tasktracker start
 }
 
+# We want our cluster nodes to self terminate 
+# if job takes longer than 108 minutes
+shutdown -h +108 >/dev/null &
+
+# # If at any point you wish to cancel the automatic shutdown and keep
+# the cluster up, the following command needs to be issued on all nodes.
+# 
+#   sudo shutdown -c
+
 install_user_packages
 install_hadoop
 configure_hadoop
@@ -546,6 +555,7 @@ configure_hadoop
 if $IS_MASTER ; then
   setup_web
   start_hadoop_master
+  #run_trendingtopics_batch
 else
   start_hadoop_slave
 fi

@@ -90,7 +90,8 @@ def featured_pictures(date):
   return titles
   
 def date_pages(date):
-  return [date.strftime("%B %d")]
+  # "August 02" -> "August 2"
+  return [date.strftime("%B") + " " + date.strftime("%d").lstrip('0')]
   
 def anniversaries(date):
   base = 'http://en.wikipedia.org/wiki/Wikipedia:Selected_anniversaries/'
