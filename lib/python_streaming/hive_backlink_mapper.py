@@ -13,5 +13,9 @@ Copyright (c) 2009 Data Wrangling LLC. All rights reserved.
 import sys, os
 
 for line in sys.stdin:
-  page_id, bl_title, daily_trend = line.strip().split("\t")
-  sys.stdout.write('%s\t%s\t%s\n' % (page_id, bl_title, daily_trend))
+  try:
+    page_id, bl_title, score = line.strip().split("\t")
+    sys.stdout.write('%s\t%s\t%s\n' % (page_id, bl_title, score))
+  except:
+    # just skip possible bad rows
+    pass    

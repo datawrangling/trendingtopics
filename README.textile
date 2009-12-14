@@ -756,6 +756,12 @@ To manually restart the apache service or mongrels:
 
 No data will be populated in the production deployed app until you run the included Hadoop Jobs and import the resulting data to MySQL. To test the deployment, you can use Capistrano to run the db:develop task on the EC2 server, just wipe the dev data before loading real production data.
 
+<pre>
+ssh root@ec2-75-101-197-151.compute-1.amazonaws.com
+cd mnt/app/current
+RAILS_ENV=production rake db:develop
+</pre>
+
 To put the site in "maintenance mode":http://clarkware.com/cgi/blosxom/2007/01/05, we use the standard cap tasks:
 
 <pre>

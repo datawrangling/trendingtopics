@@ -6,9 +6,9 @@ parse_links.py
 convert mediawiki sql insert format from wikipedia link dump into
 a tab delimited text file ready for distributed hadoop processing
 
-to run on a single machine:
+to test on a single machine:
 
-# cat enwiki-20090618-pagelinks.sql | ./parse_links.py > links.txt
+# head -35 enwiki-20090618-pagelinks.sql | ./parse_links.py > links.txt
 
 sample output: 
 
