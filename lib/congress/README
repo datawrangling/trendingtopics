@@ -1,0 +1,14 @@
+This directory will contain the text processing code for mining
+Statistically Improbable Phrases from the Congressional record
+
+This is a quick prototype web UI and REST web service, 
+which will be included as a sub-section of trendingtopics.org:
+
+trendingtopics.org/congress/
+
+Will be a subsection of the that mines louis data...
+
+Later I'd like to add tweets as well:
+
+http://twitter.com/#/list/huffingtonpost/republican-reps
+http://twitter.com/#/list/huffingtonpost/democratic-reps
