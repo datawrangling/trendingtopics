@@ -56,9 +56,10 @@ CREATE TABLE daily_timelines (
     page_id BIGINT, 
     dates STRING, 
     pageviews STRING, 
-    total_pageviews BIGINT) 
+    total_pageviews STRING) 
   ROW FORMAT DELIMITED 
-    FIELDS TERMINATED BY '\001' 
+    FIELDS TERMINATED BY '\001'
+    LINES TERMINATED BY '\n' 
   STORED AS TEXTFILE;
 
 -- later we will have the data in EBS snapshots with Cloudera Beta
@@ -87,7 +88,7 @@ CREATE TABLE new_daily_timelines (
     page_id BIGINT, 
     dates STRING, 
     pageviews STRING, 
-    total_pageviews BIGINT) 
+    total_pageviews STRING) 
   ROW FORMAT DELIMITED 
     FIELDS TERMINATED BY '\001' 
   STORED AS TEXTFILE;
@@ -95,7 +96,7 @@ CREATE TABLE new_daily_timelines (
 INSERT OVERWRITE TABLE new_daily_timelines
 SELECT DISTINCT u.page_id, u.dates, u.pageviews, u.total_pageviews 
 FROM (
-select dt.page_id, regexp_replace(dt.dates, ']', concat(',', concat(dp.dates, ']')) ) AS dates, regexp_replace(dt.pageviews, ']', concat(',', concat(dp.pageviews, ']')) ) AS pageviews,  cast(dt.total_pageviews as BIGINT) + cast(dp.pageviews as BIGINT) AS total_pageviews
+select dt.page_id, regexp_replace(dt.dates, ']', concat(',', concat(dp.dates, ']')) ) AS dates, regexp_replace(dt.pageviews, ']', concat(',', concat(dp.pageviews, ']')) ) AS pageviews,  cast(cast(dt.total_pageviews as BIGINT) + cast(dp.pageviews as BIGINT) as STRING) AS total_pageviews
 FROM daily_timelines dt JOIN daily_pagecounts_table dp ON (dt.page_id = dp.page_id)
 UNION ALL 
 select dt.page_id, dt.dates, dt.pageviews, dt.total_pageviews
