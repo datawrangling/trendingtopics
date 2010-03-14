@@ -10,6 +10,13 @@
 
 # This date can be fetched by a SQL query against prod to see the latest date in timelines:
 
+# MYBUCKET=trendingtopics
+# MYSERVER=db.trendingtopics.org
+# MAILTO=pete@datawrangling.com
+# NUMREDUCERS=35
+# for 10 c1.medium = 2 * 10 * 1.75 = 35
+
+
 MYBUCKET=$1
 MYSERVER=$2
 MAILTO=$3
@@ -64,7 +71,7 @@ if [ $HOURLYCOUNT -eq 24  ]; then
      -jobconf mapred.job.name=daily_merge   
    
    # Clear the logs so Hive can load the daily pagecount data 
-   hadoop fs -rmr finaloutput/_logs 
+   # hadoop fs -rmr finaloutput/_logs 
    
    # Collect the hourly timeline data and prepare for Hive import
    # resulting data will be in finaltimelineoutput in hdfs
@@ -73,11 +80,11 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    # Fetch wikipedia page id lookup table
    # s3cmd --force --config=/root/.s3cfg get s3://trendingtopics/wikidump/page_lookup_nonredirects.txt /mnt/page_lookup_nonredirects.txt
    hadoop distcp s3n://$MYBUCKET/wikidump/page_lookup_nonredirects.txt wikidump/page_lookup_nonredirects.txt
-   hadoop fs -rmr wikidump/_distcp_logs*
+   # hadoop fs -rmr wikidump/_distcp_logs*
    
    # we will send the latest version of these up to S3 again with another distcp later
    hadoop distcp s3n://$MYBUCKET/archive/$LASTDATE/daily_timelines daily_timelines
-   hadoop fs -rmr daily_timelines/_distcp_logs*   
+   # hadoop fs -rmr daily_timelines/_distcp_logs*   
    
    # fetch the old page, timelines, & trends tables:
    # s3cmd --force --config=/root/.s3cfg get s3://$MYBUCKET/archive/$LASTDATE/trendsdb.tar.gz /mnt/trendsdb.tar.gz
@@ -97,7 +104,11 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    # tar -xzvf trendsdb.tar.gz
 
    # Kick off the HiveQL script 
-   hive -f  /mnt/trendingtopics/lib/hive/hive_daily_merge.sql     
+   # hive -f  /mnt/trendingtopics/lib/hive/hive_daily_merge.sql     
+   
+   PIG_OPTS="-Dudf.import.list=org.apache.pig.piggybank"
+   pig -f /mnt/trendingtopics/lib/pig/daily_merge.pig 
+   
    
    # distcp new_daily_timelines and new_pages up to s3
    

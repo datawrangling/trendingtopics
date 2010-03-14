@@ -55,7 +55,7 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-*-streaming.jar \
   -jobconf mapred.job.name=hourly_timeines
 
 # Clear the logs so Hive can load the raw timeline data  
-hadoop fs -rmr finaltimelineoutput/_logs
+# hadoop fs -rmr finaltimelineoutput/_logs
 
 
 
