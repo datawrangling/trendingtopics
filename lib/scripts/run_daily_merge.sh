@@ -107,6 +107,7 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    # hive -f  /mnt/trendingtopics/lib/hive/hive_daily_merge.sql     
    
    PIG_OPTS="-Dudf.import.list=org.apache.pig.piggybank"
+   JAVA_HOME=/usr/lib/jvm/java-6-sun
    pig -f /mnt/trendingtopics/lib/pig/daily_merge.pig 
    
    
