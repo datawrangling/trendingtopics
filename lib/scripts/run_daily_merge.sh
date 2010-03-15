@@ -108,13 +108,24 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    
    PIG_OPTS="-Dudf.import.list=org.apache.pig.piggybank"
    JAVA_HOME=/usr/lib/jvm/java-6-sun
+   echo `whoami`
+   #root
+   echo `pwd`
+   #/mnt/
+   echo $JAVA_HOME
+   #/usr/lib/jvm/java-6-sun
+   echo `pig -version`
+   #Apache Pig version 0.5.0+11.1 (rexported) compiled Feb 08 2010, 20:31:30
+   
    pig -f /mnt/trendingtopics/lib/pig/daily_merge.pig 
    
    
    # distcp new_daily_timelines and new_pages up to s3
-   
+   echo running: hadoop distcp /user/root/new_pages s3n://$MYBUCKET/archive/$NEXTDATE/pages
    hadoop distcp /user/root/new_pages s3n://$MYBUCKET/archive/$NEXTDATE/pages
+   echo running: hadoop distcp /user/root/new_daily_timelines s3n://$MYBUCKET/archive/$NEXTDATE/daily_timelines
    hadoop distcp /user/root/new_daily_timelines s3n://$MYBUCKET/archive/$NEXTDATE/daily_timelines
+   echo running: hadoop distcp /user/root/new_hourly_timelines s3n://$MYBUCKET/archive/$NEXTDATE/hourly_timelines
    hadoop distcp /user/root/new_hourly_timelines s3n://$MYBUCKET/archive/$NEXTDATE/hourly_timelines
    
 
