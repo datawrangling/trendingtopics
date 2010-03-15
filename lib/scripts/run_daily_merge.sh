@@ -106,18 +106,9 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    # Kick off the HiveQL script 
    # hive -f  /mnt/trendingtopics/lib/hive/hive_daily_merge.sql     
    
-   export PIG_OPTS="-Dudf.import.list=org.apache.pig.piggybank"
-   export JAVA_HOME=/usr/lib/jvm/java-6-sun
-   echo `whoami`
-   #root
-   echo `pwd`
-   #/mnt/
-   echo $JAVA_HOME
-   #/usr/lib/jvm/java-6-sun
-   echo `pig -version`
+   echo `JAVA_HOME=/usr/lib/jvm/java-6-sun HADOOP_HOME=/usr/lib/hadoop-0.20 PIG_HOME=/usr/lib/pig pig -version`
    #Apache Pig version 0.5.0+11.1 (rexported) compiled Feb 08 2010, 20:31:30
-   
-   pig -f /mnt/trendingtopics/lib/pig/daily_merge.pig 
+   JAVA_HOME=/usr/lib/jvm/java-6-sun HADOOP_HOME=/usr/lib/hadoop-0.20 PIG_HOME=/usr/lib/pig PIG_OPTS="-Dudf.import.list=org.apache.pig.piggybank" pig -f /mnt/trendingtopics/lib/pig/daily_merge.pig
    
    
    # distcp new_daily_timelines and new_pages up to s3
