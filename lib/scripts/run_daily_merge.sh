@@ -106,8 +106,8 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    # Kick off the HiveQL script 
    # hive -f  /mnt/trendingtopics/lib/hive/hive_daily_merge.sql     
    
-   PIG_OPTS="-Dudf.import.list=org.apache.pig.piggybank"
-   JAVA_HOME=/usr/lib/jvm/java-6-sun
+   export PIG_OPTS="-Dudf.import.list=org.apache.pig.piggybank"
+   export JAVA_HOME=/usr/lib/jvm/java-6-sun
    echo `whoami`
    #root
    echo `pwd`
