@@ -1,0 +1,73 @@
+<% cache ({:page => params[:page]}) do %>
+<div id="first-section" class="section">
+  <% if params[:search] %>
+    <!-- do nothing -->
+ <% else %>    
+    <div id="timeline_chart" class="left">
+      <h3>Hot Right Now: <%= link_to truncate(@page.title,35), @page %> </h3>            
+      <%= render :partial => "pages/timeline" %>
+     
+
+  	</div> <!-- #timeline_chart -->	
+
+    <div id="news" class="right">
+        <%= render :partial => "pages/news_results"  %> 
+    </div>	<!-- #news -->		
+<% end %>  	
+
+    <div class="clear">
+    </div> <!-- .clear -->
+
+</div> <!-- first-section -->
+
+<div id="second-section" class="section">
+    
+    <div id="main-column" class="left">
+        <div id="biggest-movers" class="left">
+            <% if params[:search] %>
+              <h3>Search Results for <span><%= params[:search][:query] %></span></h3> 
+              <% content_for :title, 'Trending Topics: Search Results for "' + params[:search][:query] +'"' %>
+              
+            <% else %>
+              <h3>Trends Over the Last Hour</h3>
+              <% content_for :title, "Trending Topics: Trending Right Now" %>
+              
+            <% end %>  	
+
+                <table id="movers">
+        
+                <% @pages.each_with_index do |page, index| %>
+
+                  <tr class="peoplerow">
+
+                    <td class="people"><p><%= link_to (index + 1 + APP_CONFIG['articles_per_page']*(params[:page].to_i - 1)).to_s + ". " + truncate(page.title,35), page, :class => "articlelink"  %></p><%= link_to image_tag(page.sparkline('999999', 30).to_url, :alt => 'Recent Trend for ' + page.title ) , page %><BR>
+                    Pageviews: <%= number_with_delimiter(page.total_pageviews, ',') %></td> 
+                    <% unless APP_CONFIG['yahoo_boss_id'] == "REPLACEME" %>
+                      <td ><%= link_to image_tag(page.picture, :alt => page.title, :size =>page.picture_size(120)), page %></td>           
+                    <% end %>
+
+
+
+                  </tr>
+                <% end %>
+                </table>
+                <BR>
+                <center>
+                    <span class="grey"><%= will_paginate @pages, :page_links=> false %></span>
+                </center>  
+                <BR>        
+        </div>
+
+    </div>
+    
+
+    <div id="side-column" class="right">
+
+    </div>
+
+
+    <div class="clear">
+    </div>
+    
+</div> <!-- second-section -->
+<% end %>

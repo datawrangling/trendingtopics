@@ -3,6 +3,7 @@ class Page < ActiveRecord::Base
   has_one :hourly_timeline  
   has_one :person
   has_one :company  
+  has_one :hourly_trend
   named_scope :title_like, lambda { |query| { :conditions => ['title like ? and featured=0', "#{query}%"], :order => '`monthly_trend` DESC', :limit => 12 } }
   named_scope :title_search, lambda { |query| { :conditions => ['title like ?', "#{query}%"], :order => 'monthly_trend DESC', :limit => 14 } }  
   named_scope :full_title_like, lambda { |query| { :conditions => ['title like ? and id NOT IN (?) and featured=0', "%#{query}%", APP_CONFIG['blacklist']], :order => '`monthly_trend` DESC', :limit => 14 } }  

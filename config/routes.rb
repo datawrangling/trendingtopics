@@ -11,7 +11,8 @@ ActionController::Routing::Routes.draw do |map|
     info.contact 'contact', :action => 'contact'
     info.frames 'frames', :action => 'frames' 
     info.finance 'finance', :action => 'finance'   
-    info.people 'people', :action => 'people'      
+    info.people 'people', :action => 'people'
+    info.hourly_trends 'hourly_trends', :action => 'hourly_trends'           
     info.auto_complete_for_search_query 'pages/auto_complete_for_search_query', :action => 'auto_complete_for_search_query'     
   end
   

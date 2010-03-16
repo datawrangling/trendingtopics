@@ -13,6 +13,24 @@ class InfoController < ApplicationController
     @page = Page.find_by_url(params[:url])
   end
   
+  def hourly_trends
+    unless params[:page]
+      params[:page]='1'
+    end    
+    unless read_fragment({:page => params[:page]}) 
+      @pages = Page.paginate(:page => params[:page], :joins => [ :hourly_trend ], :conditions => ["featured=0"], :order => 'hourly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
+      @page = Page.find(:first, :joins => [ :hourly_trend ], :order => 'hourly_trend DESC' )
+      if @page.nil?
+        @page = Page.find(:first)
+      end
+    end
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @pages }
+    end    
+  end  
+  
+  
   
   def people
     unless params[:page]

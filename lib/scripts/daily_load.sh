@@ -60,7 +60,10 @@ mkdir -p /mnt/hourly_timelines
 # Fetch latest "pages" moved to S3 by distcp on Hadoop cluster
 # bash /mnt/app/current/lib/scripts/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/pages/ /mnt/pages
 s3cmd get --config=/root/.s3cfg -r s3://trendingtopics/archive/$NEXTDATE/pages/ /mnt/pages
-
+ACTUALCOUNT=`ls /mnt/pages | wc -l`  
+if [ $ACTUALCOUNT -lt 10  ]; then
+  s3cmd get --config=/root/.s3cfg -r s3://trendingtopics/archive/$NEXTDATE/pages/ /mnt/pages
+fi
 # merge pages
 echo merging page files
 time cat pages/* | sort -n > pages.txt
@@ -89,7 +92,10 @@ else
   # Fetch latest "daily_timelines" moved to S3 by distcp on Hadoop cluster
   # bash /mnt/app/current/lib/scripts/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/daily_timelines/ /mnt/daily_timelines
   s3cmd get --config=/root/.s3cfg -r s3://trendingtopics/archive/$NEXTDATE/daily_timelines/ /mnt/daily_timelines
-  
+  ACTUALCOUNT=`ls /mnt/daily_timelines | wc -l`  
+  if [ $ACTUALCOUNT -lt 10  ]; then
+    s3cmd get --config=/root/.s3cfg -r s3://trendingtopics/archive/$NEXTDATE/daily_timelines/ /mnt/daily_timelines
+  fi
 
   echo merging timeline files
   # merge daily timelines
@@ -99,7 +105,13 @@ else
   # Fetch latest "hourly_timelines" moved to S3 by distcp on Hadoop cluster
   # bash /mnt/app/current/lib/scripts/S3fetch.sh s3://trendingtopics/archive/$NEXTDATE/hourly_timelines/ /mnt/hourly_timelines
   s3cmd get --config=/root/.s3cfg -r s3://trendingtopics/archive/$NEXTDATE/hourly_timelines/ /mnt/hourly_timelines
-  
+  # check all files were downloaded...
+  # DOWNLOADCOUNT=`s3cmd ls s3://trendingtopics/archive/$NEXTDATE/hourly_timelines/ | wc -l`
+  ACTUALCOUNT=`ls /mnt/hourly_timelines | wc -l`
+  if [ $ACTUALCOUNT -lt 10  ]; then
+    s3cmd get --config=/root/.s3cfg -r s3://trendingtopics/archive/$NEXTDATE/hourly_timelines/ /mnt/hourly_timelines
+  fi
+
 
   echo merging hourly timeline files
   # merge daily timelines
