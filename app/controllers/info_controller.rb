@@ -26,8 +26,8 @@ class InfoController < ApplicationController
     end
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @pages }
-      format.json  { render :json => @pages }      
+      format.xml  { render :xml => @pages, :layout=>false }
+      format.json  { render :json => @pages, :layout=>false }      
     end    
   end  
   
