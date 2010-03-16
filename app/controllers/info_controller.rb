@@ -11,7 +11,7 @@ class InfoController < ApplicationController
   
   def frames
     @page = Page.find_by_url(params[:url])
-  end
+  end 
   
   def hourly_trends
     unless params[:page]
@@ -27,6 +27,7 @@ class InfoController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @pages }
+      format.json  { render :json => @pages }      
     end    
   end  
   

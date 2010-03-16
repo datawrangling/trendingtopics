@@ -19,6 +19,11 @@ xml.urlset "xmlns" => "http://www.sitemaps.org/schemas/sitemap/0.9" do
     xml.changefreq  "hourly"
   end    
   
+  xml.url do
+    xml.loc         "http://"+ APP_CONFIG['domain']+"/hourly_trends"
+    xml.lastmod     w3c_date(Time.now)
+    xml.changefreq  "hourly"
+  end  
   
   xml.url do
     xml.loc         "http://"+ APP_CONFIG['domain']+"/about"
