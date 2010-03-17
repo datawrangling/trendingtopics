@@ -21,6 +21,73 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   # wipe local copies of the pagecounts file
   rm $FILENAME
   rm robots.*
+  # now do the hourly load...
+  
+  # s3cmd ls to get date-time of latest hourly file
+  MYBUCKET=trendingtopics
+  MYSERVER=db.trendingtopics.org
+  RESULTSET=`ssh -o StrictHostKeyChecking=no root@$MYSERVER 'mysql -u root trendingtopics_production -e "select LEFT(RIGHT(dates,9),8) from daily_timelines where page_id=29812;"'`
+  LASTDATE=`echo $RESULTSET | awk '{print $2}'`
+  NEXTDATE=`date --date "-d $LASTDATE +1 day" +"%Y%m"`
+  LATESTFILE=`s3cmd --config=/root/.s3cfg ls s3://$MYBUCKET/wikistats/pagecounts-$NEXTDATE* | tail -1 | cut -f 7 -d " "`
+
+  # s3cmd fetch to get latest hourly file from wikistats folder
+  s3cmd get --config=/root/.s3cfg -r $LATESTFILE
+  LATESTFILE=`echo $LATESTFILE | cut -d '/' -f 5`
+  gunzip $LATESTFILE
+
+  CURRENTDATE=`echo $LATESTFILE | cut -d "-" -f 2`
+  YESTERDAY=`date --date "-d $CURRENTDATE -1 day" +"%Y%m%d"`
+  CURRENTHOUR=`echo $LATESTFILE | cut -d "-" -f 3 | cut -c 1,2`
+  LASTWEEKDATE=`date --date "-d $CURRENTDATE -7 day" +"%Y%m%d"`
+  LASTWEEKSTR=s3://trendingtopics/wikistats/pagecounts-$LASTWEEKDATE-$CURRENTHOUR*
+  LASTWEEKFILE=`s3cmd ls --config=/root/.s3cfg -r $LASTWEEKSTR | cut -d " " -f 7`
+
+  # s3cmd fetch to get hourly file from 7 days prior
+  s3cmd get --config=/root/.s3cfg -r $LASTWEEKFILE
+  LASTWEEKFILE=`echo $LASTWEEKFILE | cut -d '/' -f 5`
+  gunzip $LASTWEEKFILE
+
+  # run featured.py script to find latest page_ids featured on wikipedia home page
+  python /mnt/app/current/lib/scripts/generate_featured_pages.py -d $CURRENTDATE > featured_pages_today.txt
+  python /mnt/app/current/lib/scripts/generate_featured_pages.py -d $YESTERDAY > featured_pages_yesterday.txt
+  cat featured_pages_today.txt featured_pages_yesterday.txt | sort | uniq > featured_pages.txt
+
+  # load flat file of these ids into clean_titles and exclude those ids...
+
+  THISWEEK=`echo $LATESTFILE | cut -d '.' -f 1`
+  LASTWEEK=`echo $LASTWEEKFILE | cut -d '.' -f 1`
+  grep '^en ' $THISWEEK | ./clean_titles.py $THISWEEK > en_$THISWEEK
+  grep '^en ' $LASTWEEK | ./clean_titles.py $LASTWEEK > en_$LASTWEEK
+  cat en_$THISWEEK en_$LASTWEEK | sort | ./hourly_trend.py | sort -nr -k 2 > hourly_trends.txt
+  
+  mysql -u root trendingtopics_production -e "RENAME TABLE backup_hourly_trends TO new_hourly_trends;"
+  mysql -u root trendingtopics_production -e "TRUNCATE TABLE new_hourly_trends;"
+  mysql -u root trendingtopics_production -e "ALTER TABLE new_hourly_trends DISABLE KEYS;"
+  mysql -u root trendingtopics_production -e "LOAD DATA LOCAL INFILE 'hourly_trends.txt'
+  INTO TABLE new_hourly_trends
+  FIELDS TERMINATED BY '\t'
+  LINES TERMINATED BY '\n'
+  (page_id, hourly_trend);"
+  mysql -u root trendingtopics_production -e "ALTER TABLE new_hourly_trends ENABLE KEYS;"  
+  mysql -u root trendingtopics_production -e "RENAME TABLE hourly_trends TO backup_hourly_trends, new_hourly_trends TO hourly_trends;"
+
+  # purge cache  
+  cd /mnt/app/current && RAILS_ENV=production rake purge_cache
+
+  echo sending completion email
+  FOO=`mysql -u root trendingtopics_production -e "select CONCAT('http://www.trendingtopics.org/page/',p.url) from hourly_trends h, pages p where p.id=h.page_id order by hourly_trend desc LIMIT 1;"`
+  TRENDING_PAGE=`echo $FOO| awk '{print $2}'`
+  # Send an email signalling staging tables are ready
+  MAILTO=pete@datawrangling.com
+  echo "$MYSERVER hourly load complete.  Top trend: $TRENDING_PAGE" | mail -s "$MYSERVER hourly trends complete" $MAILTO
+  
+  #remove old files  
+  rm en_$THISWEEK 
+  rm en_$LASTWEEK
+  rm $THISWEEK
+  rm $LASTWEEK
+  
   cd ../
 }
 fi
