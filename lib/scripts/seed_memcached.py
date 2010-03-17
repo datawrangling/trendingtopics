@@ -23,7 +23,7 @@ def fetch_url(url):
 
 def fetchpages():
   
-  urls = [SITE, SITE+'finance', SITE+'people']
+  urls = [SITE, SITE+'finance', SITE+'people', SITE+'hourly_trends']
   
   # TODO: read queries and site from a file...
   # autocomplete_template = 'pages/auto_complete_for_search_query?search%5Bquery%5D'

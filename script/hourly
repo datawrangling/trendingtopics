@@ -23,6 +23,12 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   rm robots.*
   # now do the hourly load...
   
+  s3cmd get s3://$MYBUCKET/hourly_trend.py
+  s3cmd get s3://$MYBUCKET/clean_titles.py
+  s3cmd get s3://$MYBUCKET/pageids.pkl  
+  chmod +x hourly_trend.py
+  chmod +x clean_titles.py
+  
   # s3cmd ls to get date-time of latest hourly file
   MYBUCKET=trendingtopics
   MYSERVER=db.trendingtopics.org
