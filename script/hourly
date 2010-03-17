@@ -12,7 +12,7 @@ DATABASEIP=`host db.trendingtopics.org | awk '{ print $4}'`
 if [ $HOSTIP=$DATABASEIP ]; then {
   # fetch the latest wikistats files every hour
   # this should only run on the db server...
-  sleep 30m
+  sleep 10m
   cd tmp
   wget -r --quiet --no-directories --no-parent -L -A "pagecounts-$DATEHOUR*" http://dammit.lt/wikistats/
   # upload to s3 bucket
@@ -78,6 +78,12 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   mysql -u root trendingtopics_production -e "ALTER TABLE new_hourly_trends ENABLE KEYS;"  
   mysql -u root trendingtopics_production -e "RENAME TABLE hourly_trends TO backup_hourly_trends, new_hourly_trends TO hourly_trends;"
 
+  #remove old files  
+  rm en_$THISWEEK 
+  rm en_$LASTWEEK
+  rm $THISWEEK
+  rm $LASTWEEK
+
   # purge cache  
   cd /mnt/app/current && RAILS_ENV=production rake purge_cache
 
@@ -87,14 +93,7 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   # Send an email signalling staging tables are ready
   MAILTO=pete@datawrangling.com
   echo "$MYSERVER hourly load complete.  Top trend: $TRENDING_PAGE" | mail -s "$MYSERVER hourly trends complete" $MAILTO
-  
-  #remove old files  
-  rm en_$THISWEEK 
-  rm en_$LASTWEEK
-  rm $THISWEEK
-  rm $LASTWEEK
-  
-  cd ../
+
 }
 fi
 
