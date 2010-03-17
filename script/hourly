@@ -90,7 +90,12 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   echo sending completion email
   FOO=`mysql -u root trendingtopics_production -e "select CONCAT('http://www.trendingtopics.org/page/',p.url) from hourly_trends h, pages p where p.id=h.page_id order by hourly_trend desc LIMIT 1;"`
   TRENDING_PAGE=`echo $FOO| awk '{print $2}'`
+  BAR=`mysql -u root trendingtopics_production -e "select p.url from hourly_trends h, pages p where p.id=h.page_id order by hourly_trend desc LIMIT 1;"`
+  TRENDING_TOPIC=`echo $BAR| awk '{print $2}'| sed s/_/' '/g`  
   echo $TRENDING_PAGE
+  echo $TRENDING_TOPIC
+  python /mnt/send_tweet.py -t "`echo Trending: $TRENDING_TOPIC $TRENDING_PAGE`"
+  
   # Send an email signalling staging tables are ready
   MAILTO=pete@datawrangling.com
   echo "$MYSERVER hourly load complete.  Top trend: $TRENDING_PAGE" | mail -s "$MYSERVER hourly trends complete" $MAILTO
