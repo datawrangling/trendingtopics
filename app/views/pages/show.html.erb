@@ -9,7 +9,7 @@
     </div>
 
     <div id="news" class="right">
-        <%= render :partial => "news_results"  %> 
+        <%= render :partial => "twitter_results"  %> 
         <% if @page.hourly_timeline %>
           <div id="hourly" style="text-align:right;">
           <span>Hourly Data <%= link_to image_tag("csv_icon.png", :alt => 'Hourly Trend CSV file for ' + @page.title,  :size =>"16x18"), :controller => "hourly_timelines", :action => "show", :id => @page.hourly_timeline, :format => 'csv'  %>     </span> </div> 
