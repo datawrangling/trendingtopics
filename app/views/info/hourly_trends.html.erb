@@ -11,7 +11,39 @@
   	</div> <!-- #timeline_chart -->	
 
     <div id="news" class="right">
-        <%= render :partial => "pages/news_results"  %> 
+    <h3>Twittersphere:</h3>
+        <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+            <script>
+            new TWTR.Widget({
+              version: 2,
+              type: 'search',
+              search: '"<%= @page.title %>"',
+              interval: 6000,
+              subject: '&quot;<%= @page.title %>&quot; on Twitter',
+              width: 300,
+              height: 300,
+              theme: {
+                shell: {
+                  background: '#8ec1da',
+                  color: '#ffffff'
+                },
+                tweets: {
+                  background: '#ffffff',
+                  color: '#444444',
+                  links: '#1985b5'
+                }
+              },
+              features: {
+                scrollbar: false,
+                loop: false,
+                live: true,
+                hashtags: true,
+                timestamp: true,
+                avatars: true,
+                behavior: 'all'
+              }
+            }).render().start();
+            </script>        
     </div>	<!-- #news -->		
 <% end %>  	
 
