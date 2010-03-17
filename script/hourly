@@ -32,7 +32,7 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   # s3cmd ls to get date-time of latest hourly file
   MYBUCKET=trendingtopics
   MYSERVER=db.trendingtopics.org
-  RESULTSET=`ssh -o StrictHostKeyChecking=no root@$MYSERVER 'mysql -u root trendingtopics_production -e "select LEFT(RIGHT(dates,9),8) from daily_timelines where page_id=29812;"'`
+  RESULTSET=`mysql -u root trendingtopics_production -e "select LEFT(RIGHT(dates,9),8) from daily_timelines where page_id=29812;"`
   LASTDATE=`echo $RESULTSET | awk '{print $2}'`
   NEXTDATE=`date --date "-d $LASTDATE +1 day" +"%Y%m"`
   LATESTFILE=`s3cmd --config=/root/.s3cfg ls s3://$MYBUCKET/wikistats/pagecounts-$NEXTDATE* | tail -1 | cut -f 7 -d " "`
