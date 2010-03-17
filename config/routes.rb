@@ -12,12 +12,11 @@ ActionController::Routing::Routes.draw do |map|
     info.frames 'frames', :action => 'frames' 
     info.finance 'finance', :action => 'finance'   
     info.people 'people', :action => 'people'
-    info.hourly_trends 'hourly_trends', :action => 'hourly_trends'
-    info.hourly_trends 'hourly_trends.xml', :action => 'hourly_trends', :format => 'xml'
-    info.hourly_trends 'hourly_trends.json', :action => 'hourly_trends', :format => 'json'
+    info.hourly_trends 'hourly_trends', :action => 'hourly_trends' 
     info.auto_complete_for_search_query 'pages/auto_complete_for_search_query', :action => 'auto_complete_for_search_query'     
   end
   
+
   map.connect '/widgets/daily_chart_widget/:id', :controller => 'widgets', :action => 'daily_chart_widget'
   map.connect "sitemap.xml", :controller => "sitemap", :action => "sitemap"
 

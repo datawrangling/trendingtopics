@@ -11,7 +11,8 @@ class InfoController < ApplicationController
   
   def frames
     @page = Page.find_by_url(params[:url])
-  end 
+  end
+  
   
   def hourly_trends
     unless params[:page]
@@ -19,15 +20,14 @@ class InfoController < ApplicationController
     end    
     unless read_fragment({:page => params[:page]}) 
       @pages = Page.paginate(:page => params[:page], :joins => [ :hourly_trend ], :conditions => ["featured=0"], :order => 'hourly_trend DESC', :per_page => APP_CONFIG['articles_per_page'])   
-      @page = Page.find(:first, :joins => [ :hourly_trend ], :order => 'hourly_trend DESC' )
+      @page = Page.find(:first, :joins => [ :hourly_trend ], :conditions => ["featured=0"], :order => 'hourly_trend DESC' )
       if @page.nil?
         @page = Page.find(:first)
       end
     end
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @pages, :layout=>false }
-      format.json  { render :json => @pages, :layout=>false }      
+      format.xml  { render :xml => @pages }     
     end    
   end  
   
