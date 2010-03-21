@@ -45,7 +45,7 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   CURRENTDATE=`echo $LATESTFILE | cut -d "-" -f 2`
   YESTERDAY=`date --date "-d $CURRENTDATE -1 day" +"%Y%m%d"`
   CURRENTHOUR=`echo $LATESTFILE | cut -d "-" -f 3 | cut -c 1,2`
-  LASTWEEKDATE=`date --date "-d $CURRENTDATE -7 day" +"%Y%m%d"`
+  LASTWEEKDATE=`date --date "-d $CURRENTDATE -1 day" +"%Y%m%d"`
   LASTWEEKSTR=s3://trendingtopics/wikistats/pagecounts-$LASTWEEKDATE-$CURRENTHOUR*
   LASTWEEKFILE=`s3cmd ls --config=/root/.s3cfg -r $LASTWEEKSTR | cut -d " " -f 7`
 
