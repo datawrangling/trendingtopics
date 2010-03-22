@@ -112,12 +112,12 @@ if [ $HOURLYCOUNT -eq 24  ]; then
    
    
    # distcp new_daily_timelines and new_pages up to s3
-   echo running: hadoop distcp /user/root/new_pages s3n://$MYBUCKET/archive/$NEXTDATE/pages
-   hadoop distcp /user/root/new_pages s3n://$MYBUCKET/archive/$NEXTDATE/pages
-   echo running: hadoop distcp /user/root/new_daily_timelines s3n://$MYBUCKET/archive/$NEXTDATE/daily_timelines
-   hadoop distcp /user/root/new_daily_timelines s3n://$MYBUCKET/archive/$NEXTDATE/daily_timelines
-   echo running: hadoop distcp /user/root/new_hourly_timelines s3n://$MYBUCKET/archive/$NEXTDATE/hourly_timelines
-   hadoop distcp /user/root/new_hourly_timelines s3n://$MYBUCKET/archive/$NEXTDATE/hourly_timelines
+   echo running: hadoop distcp /user/root/new_pages/ s3n://$MYBUCKET/archive/$NEXTDATE/pages
+   hadoop distcp /user/root/new_pages/ s3n://$MYBUCKET/archive/$NEXTDATE/pages
+   echo running: hadoop distcp /user/root/new_daily_timelines/ s3n://$MYBUCKET/archive/$NEXTDATE/daily_timelines
+   hadoop distcp /user/root/new_daily_timelines/ s3n://$MYBUCKET/archive/$NEXTDATE/daily_timelines
+   echo running: hadoop distcp /user/root/new_hourly_timelines/ s3n://$MYBUCKET/archive/$NEXTDATE/hourly_timelines
+   hadoop distcp /user/root/new_hourly_timelines/ s3n://$MYBUCKET/archive/$NEXTDATE/hourly_timelines
    
 
    # # Spool the tab delimited data out of hive for bulk loading into MySQL
