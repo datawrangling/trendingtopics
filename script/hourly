@@ -18,9 +18,6 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   # upload to s3 bucket
   FILENAME=`ls pagecounts-$DATEHOUR*`
   s3cmd put --force /mnt/app/current/tmp/$FILENAME s3://$MYBUCKET/wikistats/$FILENAME 1> /dev/null
-  # wipe local copies of the pagecounts file
-  rm $FILENAME
-  rm robots.*
   # now do the hourly load...
   
   s3cmd get --force s3://$MYBUCKET/hourly_trend.py
@@ -32,13 +29,14 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   # s3cmd ls to get date-time of latest hourly file
   MYBUCKET=trendingtopics
   MYSERVER=db.trendingtopics.org
-  RESULTSET=`mysql -u root trendingtopics_production -e "select LEFT(RIGHT(dates,9),8) from daily_timelines where page_id=29812;"`
-  LASTDATE=`echo $RESULTSET | awk '{print $2}'`
-  NEXTDATE=`date --date "-d $LASTDATE +1 day" +"%Y%m"`
-  LATESTFILE=`s3cmd --config=/root/.s3cfg ls s3://$MYBUCKET/wikistats/pagecounts-$NEXTDATE* | tail -1 | cut -f 7 -d " "`
+  #RESULTSET=`mysql -u root trendingtopics_production -e "select LEFT(RIGHT(dates,9),8) from daily_timelines where page_id=29812;"`
+  #LASTDATE=`echo $RESULTSET | awk '{print $2}'`
+  #NEXTDATE=`date --date "-d $LASTDATE +1 day" +"%Y%m"`
+  #LATESTFILE=`s3cmd --config=/root/.s3cfg ls s3://$MYBUCKET/wikistats/pagecounts-$NEXTDATE* | tail -1 | cut -f 7 -d " "`
+  LATESTFILE=`s3cmd --config=/root/.s3cfg ls s3://$MYBUCKET/wikistats/$FILENAME | tail -1 | cut -f 7 -d " "`
 
   # s3cmd fetch to get latest hourly file from wikistats folder
-  s3cmd get --config=/root/.s3cfg -r $LATESTFILE
+  #s3cmd get --config=/root/.s3cfg -r $LATESTFILE
   LATESTFILE=`echo $LATESTFILE | cut -d '/' -f 5`
   gunzip $LATESTFILE
 
@@ -83,6 +81,10 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   rm en_$LASTWEEK
   rm $THISWEEK
   rm $LASTWEEK
+
+  # wipe local copies of the pagecounts file
+  rm $FILENAME
+  rm robots.*
 
   # purge cache  
   cd /mnt/app/current && RAILS_ENV=production rake purge_cache
