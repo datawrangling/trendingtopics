@@ -2,9 +2,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :hourly_timelines
 
   map.root :controller => "pages"    
-  map.resources :pages, :except => [:show], :member => {:csv => :get}, :collection => {:auto_complete_for_search_query => :get }
+  map.resources :pages, :except => [:show], :member => {:csv => :get, :image => :get}, :collection => {:auto_complete_for_search_query => :get }
   map.page 'page/*url', :controller => 'pages', :action => 'show'
-  map.resources :daily_timelines  
+  map.resources :daily_timelines
                                     
   map.with_options :controller => 'info' do |info|
     info.about 'about', :action => 'about'

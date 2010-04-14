@@ -14,6 +14,7 @@ class DailyTimelinesController < ApplicationController
 
   # GET /daily_timelines/1
   # GET /daily_timelines/Michael_Jackson.csv
+ 
   def show    
     @daily_timeline = DailyTimeline.find(params[:id])
     @page = @daily_timeline.page
@@ -29,7 +30,8 @@ class DailyTimelinesController < ApplicationController
         end
         send_data csv_array.join("\n"), :type => 'text/csv; charset=utf-8', :filename=>"#{@page.url}.csv",
         :disposition => 'attachment'
-      }
+      }          
+      
     end
   end
 

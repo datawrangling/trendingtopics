@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
   # GET /pages
   protect_from_forgery :only => [:create, :update, :destroy]
-  layout 'pages'#, :except => [:auto_complete_for_search_query]
+  layout 'pages', :except => [:image] #, :except => [:auto_complete_for_search_query]
   use_google_charts
 
   caches_page :show
@@ -15,6 +15,14 @@ class PagesController < ApplicationController
     end
     render :partial => "search_results"
   end  
+  
+  #[http://localhost:3000/pages/image?pageurl=LeBron_James
+  def image
+    @page = Page.find_by_url(params["pageurl"])
+    pic_url = @page.picture
+    send_data "#{pic_url}", :type => 'text/html; charset=utf-8'
+  end  
+  
     
   def index
     if params[:search]
@@ -39,6 +47,7 @@ class PagesController < ApplicationController
 
   # GET /pages/1
   # GET /pages/1.xml
+ 
   def show
     @range=60
     @page = Page.find_by_url(params[:url].join('/'))

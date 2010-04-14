@@ -64,6 +64,7 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   grep '^en ' $THISWEEK | ./clean_titles.py $THISWEEK > en_$THISWEEK
   grep '^en ' $LASTWEEK | ./clean_titles.py $LASTWEEK > en_$LASTWEEK
   cat en_$THISWEEK en_$LASTWEEK | sort | ./hourly_trend.py | sort -nr -k 2 > hourly_trends.txt
+  # TODO: cross check against twitter searches or gardenhose data
   
   mysql -u root trendingtopics_production -e "RENAME TABLE backup_hourly_trends TO new_hourly_trends;"
   mysql -u root trendingtopics_production -e "TRUNCATE TABLE new_hourly_trends;"
@@ -97,6 +98,9 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   echo $TRENDING_PAGE
   echo $TRENDING_TOPIC
   python /mnt/send_tweet.py -t "`echo Trending: $TRENDING_TOPIC $TRENDING_PAGE`"
+  # TODO: shorten link url with bit.ly API
+  # TODO: link to twitter search
+  # TODO: add "follow hourlytrends" widget on trendingtopics.org
   
   # Send an email signalling staging tables are ready
   MAILTO=pete@datawrangling.com
