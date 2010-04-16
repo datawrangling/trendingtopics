@@ -22,6 +22,7 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   
   s3cmd get --force s3://$MYBUCKET/hourly_trend.py
   s3cmd get --force s3://$MYBUCKET/clean_titles.py
+  s3cmd get --force s3://$MYBUCKET/bitly.py
   s3cmd get --force s3://$MYBUCKET/pageids.pkl  
   chmod +x hourly_trend.py
   chmod +x clean_titles.py
