@@ -4,7 +4,7 @@
         new TWTR.Widget({
           version: 2,
           type: 'search',
-          search: '"<%= @page.title %>"',
+          search: '<%= @page.title.split("(")[0].strip %>',
           interval: 6000,
           subject: '&quot;<%= @page.title %>&quot; on Twitter',
           width: 300,
