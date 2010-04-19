@@ -84,8 +84,7 @@ if [ $HOSTIP=$DATABASEIP ]; then {
   rm $THISWEEK
   rm $LASTWEEK
 
-  # wipe local copies of the pagecounts file
-  rm $FILENAME
+  # wipe local copies of the robots file
   rm robots.*
 
   # purge cache  
