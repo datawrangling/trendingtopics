@@ -123,31 +123,39 @@ class Page < ActiveRecord::Base
   
   
   def picture
-    boss = BOSSMan::Search.images(self.title, { :filter => "-porn"})
-    if boss.totalhits.to_i > 0
-      result = boss.results[0]
-      url = result.thumbnail_url      
-    else   
-      url = "White_square_with_question_mark.png"  
-    end  
+    ## TODO: Yahoo Boss is deprecated, switch to Bing API
+    # boss = BOSSMan::Search.images(self.title, { :filter => "-porn"})
+    # if boss.totalhits.to_i > 0
+    #   result = boss.results[0]
+    #   url = result.thumbnail_url      
+    # else   
+    #   url = "White_square_with_question_mark.png"  
+    # end  
+    url = "White_square_with_question_mark.png" 
   end  
   
   def picture_size(desired_height)
-    boss = BOSSMan::Search.images(self.title, { :filter => "-porn"})
-    if boss.totalhits.to_i > 0
-      result = boss.results[0]
-      height = result.thumbnail_height.to_i
-      width = result.thumbnail_width.to_i
-      width_scale_factor = 1.0*desired_height/height
-      new_width = width_scale_factor*width
-      "#{new_width.to_i}x#{desired_height.to_i}"      
-    else
-      height = 120
-      width = 120
-      width_scale_factor = 1.0*desired_height/height
-      new_width = width_scale_factor*width
-      "#{new_width.to_i}x#{desired_height.to_i}"        
-    end  
+    ## TODO: Yahoo Boss is deprecated, switch to Bing API    
+    # boss = BOSSMan::Search.images(self.title, { :filter => "-porn"})
+    # if boss.totalhits.to_i > 0
+    #   result = boss.results[0]
+    #   height = result.thumbnail_height.to_i
+    #   width = result.thumbnail_width.to_i
+    #   width_scale_factor = 1.0*desired_height/height
+    #   new_width = width_scale_factor*width
+    #   "#{new_width.to_i}x#{desired_height.to_i}"      
+    # else
+    #   height = 120
+    #   width = 120
+    #   width_scale_factor = 1.0*desired_height/height
+    #   new_width = width_scale_factor*width
+    #   "#{new_width.to_i}x#{desired_height.to_i}"        
+    # end  
+    height = 120
+    width = 120
+    width_scale_factor = 1.0*desired_height/height
+    new_width = width_scale_factor*width
+    "#{new_width.to_i}x#{desired_height.to_i}"    
   end      
   
   

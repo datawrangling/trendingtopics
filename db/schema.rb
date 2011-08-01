@@ -11,6 +11,15 @@
 
 ActiveRecord::Schema.define(:version => 20100316042802) do
 
+  create_table "backup_hourly_trends", :force => true do |t|
+    t.float    "hourly_trend"
+    t.integer  "page_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "backup_hourly_trends", ["page_id", "hourly_trend"], :name => "hourly_trend_index"
+
   create_table "companies", :force => true do |t|
     t.integer  "page_id"
     t.datetime "created_at"
@@ -97,15 +106,6 @@ ActiveRecord::Schema.define(:version => 20100316042802) do
   end
 
   add_index "new_hourly_timelines", ["page_id"], :name => "hourly_timelines_page_index"
-
-  create_table "new_hourly_trends", :force => true do |t|
-    t.float    "hourly_trend"
-    t.integer  "page_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "new_hourly_trends", ["page_id", "hourly_trend"], :name => "hourly_trend_index"
 
   create_table "new_pages", :force => true do |t|
     t.string  "url"
